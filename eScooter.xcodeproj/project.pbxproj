@@ -51,6 +51,9 @@
 		0921518C27EDFB14005947ED /* eScooter */ = {
 			isa = PBXGroup;
 			children = (
+				09EE35C427EE05FF00701877 /* ViewModel */,
+				09EE35C327EE05FA00701877 /* View */,
+				09EE35C227EE05F000701877 /* Model */,
 				0921518D27EDFB14005947ED /* eScooterApp.swift */,
 				0921518F27EDFB14005947ED /* ContentView.swift */,
 				0921519127EDFB18005947ED /* Assets.xcassets */,
@@ -65,6 +68,27 @@
 				0921519427EDFB18005947ED /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		09EE35C227EE05F000701877 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		09EE35C327EE05FA00701877 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		09EE35C427EE05FF00701877 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
