@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import NavigationStack
 
 struct ContentView: View {
+    var navigationViewModel: NavigationStack = NavigationStack(easing: Animation.linear)
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        CoordinatorView(navigationViewModel: navigationViewModel, onGetStarted: {})
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
