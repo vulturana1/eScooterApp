@@ -1,0 +1,20 @@
+PODS:
+  - Alamofire (5.5.0)
+  - NavigationStack (1.0.4)
+
+DEPENDENCIES:
+  - Alamofire (~> 5.5)
+  - NavigationStack (~> 1.0.2)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - NavigationStack
+
+SPEC CHECKSUMS:
+  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  NavigationStack: c2fb4c71b89659481e8e0dfb20e533681dce084f
+
+PODFILE CHECKSUM: 97f20bfcf0f3c5bbc3243e39ef9b9d7fcdc07f1b
+
+COCOAPODS: 1.11.3

@@ -13,68 +13,48 @@ struct RegistrationView: View {
     @State private var emailAddress: String = ""
     @State private var username: String = ""
     @State private var password: String = ""
+    @State var emailError: String = ""
+    @State var usernameError: String = ""
+    @State var passwordError: String = ""
     
     let onLogin: () -> Void
-    
-    private enum Fields {
-        case email, username, password
-    }
     
     var body: some View {
         ZStack {
             Color
-                .init(red: 0.227, green: 0.043, blue: 0.314)
+                .init(red: 0.231, green: 0.067, blue: 0.349)
                 .ignoresSafeArea()
-            VStack(alignment: .leading, spacing: 30) {
-                logo
-                Text("Let's get started")
-                    .font(.custom("BaiJamjuree-Bold", size: 32))
-                    .foregroundColor(.white)
-                Text("Sign up or login and start riding right away")
-                    .font(.custom("BaiJamjuree-Medium", size: 20))
-                    .foregroundColor(.white)
-                    .opacity(0.6)
-                
-                textField
-                termsAndConditions()
-                getStarted
-                alreadyHaveAnAccount {
-                    onLogin()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 30) {
+                    logo
+                    Text("Let's get started")
+                        .font(.custom("BaiJamjuree-Bold", size: 32))
+                        .foregroundColor(.white)
+                    Text("Sign up or login and start riding right away")
+                        .font(.custom("BaiJamjuree-Medium", size: 20))
+                        .foregroundColor(.white)
+                        .opacity(0.6)
+                    
+                    textField
+                    termsAndConditions()
+                    getStarted
+                    alreadyHaveAnAccount {
+                        onLogin()
+                    }
+                    Spacer()
                 }
-                Spacer()
+                .padding()
             }
-            .padding()
             
         }
     }
     
     var textField: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextField("Email address", text: $registerViewModel.email)
-                .font(.custom("BaiJamjuree-Medium", size: 16))
-                .foregroundColor(.white)
-                .frame(width: 254.5, height: 48)
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.white)
-            
-            TextField("Username", text: $registerViewModel.username)
-                .font(.custom("BaiJamjuree-Medium", size: 16))
-                .foregroundColor(.white)
-                .frame(width: 254.5, height: 48)
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.white)
-            
-            TextField("Password", text: $registerViewModel.password)
-                .font(.custom("BaiJamjuree-Medium", size: 16))
-                .foregroundColor(.white)
-                .frame(width: 254.5, height: 48)
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.white)
+            TextFieldView(text: $registerViewModel.email, placeholder: "Email address", color: .white, last: false)
+            TextFieldView(text: $registerViewModel.username, placeholder: "Username", color: .white, last: false)
+            SecureTextFieldView(text: $registerViewModel.password, placeholder: "Password", color: .white, last: true, secured: true)
         }
-        
     }
     
     var logo: some View {
@@ -86,19 +66,33 @@ struct RegistrationView: View {
     
     var getStarted: some View {
         Button {
-            
+            //validate fields
+            registerViewModel.register(email: registerViewModel.email, password: registerViewModel.password, username: registerViewModel.username)
         } label: {
-            Text("Get started")
-                .font(.custom("BaiJamjuree-SemiBold", size: 16))
-                .foregroundColor(.white)
-                .opacity(0.6)
-                .frame(maxWidth: .infinity, maxHeight: 56, alignment: .center)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 1)
-                )
+            HStack {
+                Text("Get started")
+                    .font(.custom("BaiJamjuree-SemiBold", size: 16))
+                    .foregroundColor(.white)
+                    .opacity(0.6)
+                    .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 2)
+                    )
+            }
+            .background(buttonColor)
+            .cornerRadius(20)
         }
-        .ignoresSafeArea(.keyboard)
+        .disabled(registerViewModel.email.isEmpty || registerViewModel.username.isEmpty || registerViewModel.password.isEmpty)
+        
+    }
+    
+    var buttonColor: Color {
+        if registerViewModel.email.isEmpty || registerViewModel.username.isEmpty || registerViewModel.password.isEmpty {
+            return Color.init(red: 0.231, green: 0.067, blue: 0.349)
+        } else {
+            return Color.init(red: 0.898, green: 0.188, blue: 0.384)
+        }
     }
 }
 

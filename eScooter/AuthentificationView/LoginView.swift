@@ -18,47 +18,36 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             Color
-                .init(red: 0.227, green: 0.043, blue: 0.314)
+                .init(red: 0.231, green: 0.067, blue: 0.349)
                 .ignoresSafeArea()
-            VStack(alignment: .leading, spacing: 30) {
-                logo
-                Text("Login")
-                    .font(.custom("BaiJamjuree-Bold", size: 32))
-                    .foregroundColor(.white)
-                Text("Enter your account credentials and start riding away")
-                    .font(.custom("BaiJamjuree-Medium", size: 20))
-                    .foregroundColor(.white)
-                    .opacity(0.5)
-                
-                textField
-                forgotYourPassword()
-                login
-                dontHaveAnAccount {
-                    onGetStarted()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 30) {
+                    logo
+                    Text("Login")
+                        .font(.custom("BaiJamjuree-Bold", size: 32))
+                        .foregroundColor(.white)
+                    Text("Enter your account credentials and start riding away")
+                        .font(.custom("BaiJamjuree-Medium", size: 20))
+                        .foregroundColor(.white)
+                        .opacity(0.5)
+                    
+                    textField
+                    forgotYourPassword()
+                    login
+                    dontHaveAnAccount {
+                        onGetStarted()
+                    }
+                    Spacer()
                 }
-                Spacer()
+                .padding()
             }
-            .padding()
         }
     }
     
     var textField: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            TextField("Email address", text: $loginViewModel.email)
-                .font(.custom("BaiJamjuree-Medium", size: 16))
-                .foregroundColor(.white)
-                .frame(width: 254.5, height: 48)
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.white)
-            
-            TextField("Password", text: $loginViewModel.password)
-                .font(.custom("BaiJamjuree-Medium", size: 16))
-                .foregroundColor(.white)
-                .frame(width: 254.5, height: 48)
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.white)
+        VStack {
+            TextFieldView(text: $loginViewModel.email, placeholder: "Email address", color: .white, last: false)
+            SecureTextFieldView(text: $loginViewModel.password, placeholder: "Password", color: .white, last: true, secured: true)
         }
     }
     
@@ -71,17 +60,27 @@ struct LoginView: View {
     
     var login: some View {
         Button {
-            
+            // validate fields
         } label: {
             Text("Login")
                 .font(.custom("BaiJamjuree-SemiBold", size: 16))
                 .foregroundColor(.white)
                 .opacity(0.5)
-                .frame(maxWidth: .infinity, maxHeight: 56, alignment: .center)
+                .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 1)
                 )
+        }
+        .background(buttonColor)
+        .disabled(loginViewModel.email.isEmpty ||  loginViewModel.password.isEmpty)
+    }
+    
+    var buttonColor: Color {
+        if loginViewModel.email.isEmpty || loginViewModel.password.isEmpty {
+            return Color.init(red: 0.231, green: 0.067, blue: 0.349)
+        } else {
+            return Color.init(red: 0.898, green: 0.188, blue: 0.384)
         }
     }
 }

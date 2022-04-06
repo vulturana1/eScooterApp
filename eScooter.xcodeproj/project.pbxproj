@@ -28,12 +28,18 @@
 		095A190E27F489F100A4E7D3 /* BaiJamjuree-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 095A190127F489F100A4E7D3 /* BaiJamjuree-BoldItalic.ttf */; };
 		095A190F27F489F100A4E7D3 /* BaiJamjuree-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 095A190227F489F100A4E7D3 /* BaiJamjuree-Bold.ttf */; };
 		095A191027F48C7B00A4E7D3 /* BaiJamjuree-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 095A18FB27F489F000A4E7D3 /* BaiJamjuree-SemiBold.ttf */; };
+		0982B2CA27FD80BB003D8B60 /* TextFieldViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0982B2C927FD80BB003D8B60 /* TextFieldViewModifier.swift */; };
+		0982B2CC27FD8B3D003D8B60 /* SecureTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0982B2CB27FD8B3D003D8B60 /* SecureTextFieldView.swift */; };
+		0982B2D227FD97DC003D8B60 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0982B2D127FD97DC003D8B60 /* ForgotPasswordView.swift */; };
+		0982B2D427FD9AD3003D8B60 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0982B2D327FD9AD3003D8B60 /* ResetPasswordView.swift */; };
+		0982B2D627FD9F24003D8B60 /* DrivingLicenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0982B2D527FD9F24003D8B60 /* DrivingLicenseView.swift */; };
 		0984226C27F6E13500361D60 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0984226B27F6E13500361D60 /* RegistrationView.swift */; };
 		0984226E27F6E14100361D60 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0984226D27F6E14100361D60 /* LoginView.swift */; };
 		0984227027F6EFB600361D60 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0984226F27F6EFB600361D60 /* RegisterViewModel.swift */; };
 		0991E8F527FAC89D00B8A525 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0991E8F427FAC89D00B8A525 /* LoginViewModel.swift */; };
 		0991E8F827FAD4D100B8A525 /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = 0991E8F727FAD4D100B8A525 /* NavigationStack */; };
 		0991E8FA27FAD9DA00B8A525 /* CoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0991E8F927FAD9DA00B8A525 /* CoordinatorView.swift */; };
+		09CAB60427FC329700A1735A /* TextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09CAB60327FC329700A1735A /* TextFieldView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,11 +66,17 @@
 		095A190027F489F000A4E7D3 /* BaiJamjuree-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BaiJamjuree-Light.ttf"; sourceTree = "<group>"; };
 		095A190127F489F100A4E7D3 /* BaiJamjuree-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BaiJamjuree-BoldItalic.ttf"; sourceTree = "<group>"; };
 		095A190227F489F100A4E7D3 /* BaiJamjuree-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BaiJamjuree-Bold.ttf"; sourceTree = "<group>"; };
+		0982B2C927FD80BB003D8B60 /* TextFieldViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldViewModifier.swift; sourceTree = "<group>"; };
+		0982B2CB27FD8B3D003D8B60 /* SecureTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureTextFieldView.swift; sourceTree = "<group>"; };
+		0982B2D127FD97DC003D8B60 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		0982B2D327FD9AD3003D8B60 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		0982B2D527FD9F24003D8B60 /* DrivingLicenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivingLicenseView.swift; sourceTree = "<group>"; };
 		0984226B27F6E13500361D60 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
 		0984226D27F6E14100361D60 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		0984226F27F6EFB600361D60 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		0991E8F427FAC89D00B8A525 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		0991E8F927FAD9DA00B8A525 /* CoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorView.swift; sourceTree = "<group>"; };
+		09CAB60327FC329700A1735A /* TextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldView.swift; sourceTree = "<group>"; };
 		B0F4BD2F1780E4218A691E3A /* Pods-eScooter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eScooter.release.xcconfig"; path = "Target Support Files/Pods-eScooter/Pods-eScooter.release.xcconfig"; sourceTree = "<group>"; };
 		B8287E38A9ECD107F45A2AD3 /* Pods_eScooter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_eScooter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -103,6 +115,11 @@
 		0921518C27EDFB14005947ED /* eScooter */ = {
 			isa = PBXGroup;
 			children = (
+				0982B2D027FD97BF003D8B60 /* MenuView */,
+				0982B2CF27FD97B3003D8B60 /* MapView */,
+				0982B2CE27FD9793003D8B60 /* DrivingLicenseView */,
+				0982B2CD27FD977D003D8B60 /* ForgotPasswordView */,
+				0982B2C827FD80A4003D8B60 /* ViewModifiers */,
 				095A18F527F489D200A4E7D3 /* Fonts */,
 				095A18F027F4764000A4E7D3 /* Info.plist */,
 				095A18F327F47DBC00A4E7D3 /* Launch Screen.storyboard */,
@@ -140,6 +157,8 @@
 			children = (
 				0984226B27F6E13500361D60 /* RegistrationView.swift */,
 				0984226D27F6E14100361D60 /* LoginView.swift */,
+				09CAB60327FC329700A1735A /* TextFieldView.swift */,
+				0982B2CB27FD8B3D003D8B60 /* SecureTextFieldView.swift */,
 			);
 			path = AuthentificationView;
 			sourceTree = "<group>";
@@ -162,6 +181,45 @@
 				095A18F627F489EF00A4E7D3 /* OFL.txt */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		0982B2C827FD80A4003D8B60 /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				0982B2C927FD80BB003D8B60 /* TextFieldViewModifier.swift */,
+			);
+			path = ViewModifiers;
+			sourceTree = "<group>";
+		};
+		0982B2CD27FD977D003D8B60 /* ForgotPasswordView */ = {
+			isa = PBXGroup;
+			children = (
+				0982B2D127FD97DC003D8B60 /* ForgotPasswordView.swift */,
+				0982B2D327FD9AD3003D8B60 /* ResetPasswordView.swift */,
+			);
+			path = ForgotPasswordView;
+			sourceTree = "<group>";
+		};
+		0982B2CE27FD9793003D8B60 /* DrivingLicenseView */ = {
+			isa = PBXGroup;
+			children = (
+				0982B2D527FD9F24003D8B60 /* DrivingLicenseView.swift */,
+			);
+			path = DrivingLicenseView;
+			sourceTree = "<group>";
+		};
+		0982B2CF27FD97B3003D8B60 /* MapView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MapView;
+			sourceTree = "<group>";
+		};
+		0982B2D027FD97BF003D8B60 /* MenuView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MenuView;
 			sourceTree = "<group>";
 		};
 		09EE35C227EE05F000701877 /* Model */ = {
@@ -335,11 +393,17 @@
 				095A18E927F1BE6700A4E7D3 /* OnboardingView.swift in Sources */,
 				0991E8FA27FAD9DA00B8A525 /* CoordinatorView.swift in Sources */,
 				0984226E27F6E14100361D60 /* LoginView.swift in Sources */,
+				09CAB60427FC329700A1735A /* TextFieldView.swift in Sources */,
+				0982B2D627FD9F24003D8B60 /* DrivingLicenseView.swift in Sources */,
 				095A18EE27F1F9B300A4E7D3 /* DataModel.swift in Sources */,
+				0982B2CA27FD80BB003D8B60 /* TextFieldViewModifier.swift in Sources */,
 				0984227027F6EFB600361D60 /* RegisterViewModel.swift in Sources */,
+				0982B2D227FD97DC003D8B60 /* ForgotPasswordView.swift in Sources */,
 				0991E8F527FAC89D00B8A525 /* LoginViewModel.swift in Sources */,
 				0984226C27F6E13500361D60 /* RegistrationView.swift in Sources */,
 				0921519027EDFB14005947ED /* ContentView.swift in Sources */,
+				0982B2D427FD9AD3003D8B60 /* ResetPasswordView.swift in Sources */,
+				0982B2CC27FD8B3D003D8B60 /* SecureTextFieldView.swift in Sources */,
 				0921518E27EDFB14005947ED /* eScooterApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
