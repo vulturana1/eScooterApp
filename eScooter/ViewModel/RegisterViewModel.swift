@@ -13,9 +13,8 @@ class RegisterViewModel: ObservableObject {
     @Published var username: String = ""
     @Published var password: String = ""
     
-    @Published var emailError: String = ""
-    @Published var usernameError: String = ""
-    @Published var passwordError: String = ""
+    var emailError: String = ""
+    var passwordError: String = ""
     
     func validateEmail(email: String) -> Bool{
         let emailPattern = #"^\S+@\S+\.\S+$"#
@@ -30,40 +29,31 @@ class RegisterViewModel: ObservableObject {
         return passwordPred.evaluate(with: password)
     }
     
-    func validateUser(email: String, password: String, username: String) -> Bool{
-        if email.isEmpty {
-            emailError = "Email is empty"
-            return false
-        } else if !validateEmail(email: email) {
-            emailError = "Email is invalid"
+    func validateUser(email: String, password: String) -> Bool{
+        if !validateEmail(email: email) {
+            self.emailError = "Email is invalid"
             return false
         }
-        
-        if username.isEmpty {
-            usernameError = "Username is empty"
-            return false
-        }
-        
-        if password.isEmpty {
-            passwordError = "Password is empty"
-            return false
-        } else if !validatePassword(password: password) {
-            passwordError = "Use a strong password(min. 8 characters, one capital letter, one lowercase letter, one digit and one special character)"
+
+        if !validatePassword(password: password) {
+            self.passwordError = "Use a strong password(min. 8 characters, one capital letter, one lowercase letter, one digit and one special character)"
             return false
         }
         
         return true
     }
     
-    func register(email: String, password: String, username: String) {
-        if validateUser(email: email, password: password, username: username) == true {
+    func register(email: String, password: String, username: String) -> String {
+        if validateUser(email: email, password: password) == true {
             //register
             print("ok")
+            return ""
         } else {
-            print(emailError + " " + passwordError + " " + usernameError)
-            emailError = ""
-            passwordError = ""
-            usernameError = ""
+            let err1 = emailError
+            let err2 = passwordError
+            self.emailError = ""
+            self.passwordError = ""
+            return err1 + " " + err2
         }
     }
     

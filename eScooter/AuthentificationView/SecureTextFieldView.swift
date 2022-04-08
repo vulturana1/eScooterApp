@@ -13,42 +13,37 @@ struct SecureTextFieldView: View {
     let color: Color
     let last: Bool
     @State var secured: Bool
+    @State var focused: Bool
+    let comment: String?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .leading) {
-                if text.isEmpty {
-                    Text(placeholder)
-                        .foregroundColor(color)
-                        .opacity(0.6)
-                        .font(.custom("BaiJamjuree-Medium", size: 16))
-                        .padding(.bottom, 10)
-                } else {
-                    Text(placeholder)
-                        .foregroundColor(color)
-                        .opacity(0.6)
-                        .font(.custom("BaiJamjuree-Medium", size: 12))
-                        .padding(.bottom, 45)
-                }
-                
-                VStack {
+                label
+                VStack() {
                     HStack {
-                        if secured == true {
-                            SecureField("", text: $text)
-                                .foregroundColor(color)
-                                .font(.custom("BaiJamjuree-Medium", size: 16))
-                                .submitLabel(.done)
-                        } else {
-                            TextField("", text: $text)
-                                .foregroundColor(color)
-                                .font(.custom("BaiJamjuree-Medium", size: 16))
-                                .submitLabel(.next)
+                        Group {
+                            if secured == true {
+                                SecureField("", text: $text, onCommit: {
+                                    focused = false
+                                })
+                            } else {
+                                TextField("", text: $text, onCommit: {
+                                    focused = false
+                                })
+                            }
                         }
+                        .onTapGesture {
+                            focused = true
+                        }
+                        .foregroundColor(color)
+                        .font(.custom("BaiJamjuree-Medium", size: 16))
+                        .submitLabel(.done)
                         Spacer()
                         if !text.isEmpty {
-                            Button(action: {
+                            Button {
                                 self.secured.toggle()
-                            }) {
+                            } label: {
                                 if secured {
                                     Image("eye-closed")
                                 } else {
@@ -59,21 +54,32 @@ struct SecureTextFieldView: View {
                     }
                     underline
                 }
-                
             }
             .padding(.vertical, 10)
         }
     }
-    var underline: some View {
-        Rectangle()
-            .frame(height: 1)
+    
+    var label: some View {
+        Text(placeholder)
             .foregroundColor(color)
+            .opacity(0.6)
+            .font(.custom("BaiJamjuree-Medium", size: text.isEmpty ? 16 : 12))
+            .padding(.bottom, text.isEmpty ? 25 : 60)
+            .animation(.easeInOut, value: text.isEmpty)
+    }
+    
+    var underline: some View {
+        VStack(alignment: .leading, spacing: 4){
+            Rectangle()
+                .frame(height: 1)
+                .foregroundColor(color)
+                .opacity(focused ? 1 : 0.3)
+            if let _comment = comment {
+                Text(focused ? _comment : "")
+                    .foregroundColor(.white)
+                    .font(.custom("BaiJamjuree-Medium", size: 12))
+            }
+        }
     }
 }
 
-
-//struct SecureTextFieldView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SecureTextFieldView()
-//    }
-//}

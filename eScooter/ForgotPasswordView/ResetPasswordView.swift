@@ -38,17 +38,15 @@ struct ResetPasswordView: View {
     
     var textField: some View {
         VStack {
-            SecureTextFieldView(text: $password, placeholder: "New password", color: .white, last: false, secured: true)
-            SecureTextFieldView(text: $newPassword, placeholder: "Confirm new password", color: .white, last: true, secured: true)
+            SecureTextFieldView(text: $password, placeholder: "New password", color: .white, last: false, secured: true, focused: false, comment: "")
+            SecureTextFieldView(text: $newPassword, placeholder: "Confirm new password", color: .white, last: true, secured: true, focused: false, comment: nil)
         }
-        
     }
     
     var resetPassword: some View {
         Button {
             
         } label: {
-            
             HStack {
                 Text("Reset password")
                     .font(.custom("BaiJamjuree-SemiBold", size: 16))

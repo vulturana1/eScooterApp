@@ -10,12 +10,8 @@ import SafariServices
 
 struct RegistrationView: View {
     @ObservedObject var registerViewModel = RegisterViewModel()
-    @State private var emailAddress: String = ""
-    @State private var username: String = ""
-    @State private var password: String = ""
-    @State var emailError: String = ""
-    @State var usernameError: String = ""
-    @State var passwordError: String = ""
+    @State var error: String = ""
+    @State private var showError: Bool = false
     
     let onLogin: () -> Void
     
@@ -51,9 +47,9 @@ struct RegistrationView: View {
     
     var textField: some View {
         VStack(alignment: .leading, spacing: 10) {
-            TextFieldView(text: $registerViewModel.email, placeholder: "Email address", color: .white, last: false)
-            TextFieldView(text: $registerViewModel.username, placeholder: "Username", color: .white, last: false)
-            SecureTextFieldView(text: $registerViewModel.password, placeholder: "Password", color: .white, last: true, secured: true)
+            TextFieldView(text: $registerViewModel.email, placeholder: "Email address", color: .white, last: false,  focused: false)
+            TextFieldView(text: $registerViewModel.username, placeholder: "Username", color: .white, last: false, focused: false)
+            SecureTextFieldView(text: $registerViewModel.password, placeholder: "Password", color: .white, last: true, secured: true, focused: false, comment: "Use a strong password(min.8 characters and use symbols)")
         }
     }
     
@@ -67,7 +63,8 @@ struct RegistrationView: View {
     var getStarted: some View {
         Button {
             //validate fields
-            registerViewModel.register(email: registerViewModel.email, password: registerViewModel.password, username: registerViewModel.username)
+            error = registerViewModel.register(email: registerViewModel.email, password: registerViewModel.password, username: registerViewModel.username)
+            showError = true
         } label: {
             HStack {
                 Text("Get started")
@@ -84,7 +81,19 @@ struct RegistrationView: View {
             .cornerRadius(20)
         }
         .disabled(registerViewModel.email.isEmpty || registerViewModel.username.isEmpty || registerViewModel.password.isEmpty)
+        .alert(isPresented: $showError) {
+            Alert(title: Text("Registration error"),
+                  message: message as? Text,
+                  dismissButton: .default(Text("Got it!")))
+        }
         
+    }
+    
+    var message: some View {
+        VStack {
+            Text(registerViewModel.emailError)
+            Text(registerViewModel.passwordError)
+        }
     }
     
     var buttonColor: Color {

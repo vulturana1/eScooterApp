@@ -12,53 +12,56 @@ struct TextFieldView: View {
     let placeholder: String
     let color: Color
     let last: Bool
+    @State var focused: Bool
+
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ZStack(alignment: .leading) {
-                if text.isEmpty {
-                    Text(placeholder)
-                        .foregroundColor(color)
-                        .opacity(0.6)
-                        .font(.custom("BaiJamjuree-Medium", size: 16))
-                        .padding(.bottom, 10)
-                } else {
-                    Text(placeholder)
-                        .foregroundColor(color)
-                        .opacity(0.6)
-                        .font(.custom("BaiJamjuree-Medium", size: 12))
-                        .padding(.bottom, 45)
-                }
+                label
                 VStack {
-                    if last == true {
-                        TextField("", text: $text)
-                            .foregroundColor(color)
-                            .font(.custom("BaiJamjuree-Medium", size: 16))
-                            .modifier(TextFieldClearButton(text: $text))
-                            .submitLabel(.done)
-                    } else {
-                        TextField("", text: $text)
-                            .foregroundColor(color)
-                            .font(.custom("BaiJamjuree-Medium", size: 16))
-                            .modifier(TextFieldClearButton(text: $text))
-                            .submitLabel(.next)
-                    }
+                    textField
                     underline
                 }
             }
         }
+        .autocapitalization(.none)
         .padding(.vertical, 10)
+    }
+    
+    var label: some View {
+        Text(placeholder)
+            .foregroundColor(color)
+            .opacity(0.6)
+            .font(.custom("BaiJamjuree-Medium", size: text.isEmpty ? 16 : 12))
+            .padding(.bottom, text.isEmpty ? 10 : 45)
+            .animation(.easeInOut, value: text.isEmpty)
+    }
+    
+    var textField: some View {
+        TextField("", text: $text,
+                  onCommit: {
+            focused = false
+        })
+        .onTapGesture {
+            focused = true
+        }
+        .foregroundColor(color)
+        .font(.custom("BaiJamjuree-Medium", size: 16))
+        .modifier(TextFieldClearButton(text: $text, focused: $focused))
+        .submitLabel(last == true ? .done : .next)
     }
     
     var underline: some View {
         Rectangle()
             .frame(height: 1)
             .foregroundColor(color)
+            .opacity(focused ? 1 : 0.3)
     }
 }
 
 struct TextFieldView_Previews: PreviewProvider {
     static var previews: some View {
-        TextFieldView(text: .constant(""), placeholder: "Email", color: .black, last: false)
+        TextFieldView(text: .constant(""), placeholder: "Email", color: .black, last: false, focused: false)
     }
 }

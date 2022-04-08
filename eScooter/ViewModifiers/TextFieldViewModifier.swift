@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TextFieldClearButton: ViewModifier {
     @Binding var text: String
+    @Binding var focused: Bool
     
     func body(content: Content) -> some View {
         HStack {
@@ -17,8 +18,10 @@ struct TextFieldClearButton: ViewModifier {
                 Button {
                     self.text = ""
                 } label: {
-                    Image("close-circle")
-                        .foregroundColor(Color(UIColor.opaqueSeparator))
+                    if focused {
+                        Image("close-circle")
+                            .foregroundColor(Color(UIColor.opaqueSeparator))
+                    }
                 }
             }
         }

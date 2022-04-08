@@ -25,7 +25,7 @@ struct ForgotPasswordView: View {
                         .foregroundColor(.white)
                         .opacity(0.5)
                     
-                    TextFieldView(text: $emailAddress, placeholder: "Email address", color: .white, last: false)
+                    TextFieldView(text: $emailAddress, placeholder: "Email address", color: .white, last: false, focused: false)
                     
                     sendResetLink
                    

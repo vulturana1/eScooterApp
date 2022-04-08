@@ -31,6 +31,7 @@ struct DrivingLicenseView: View {
             Spacer()
             
             addDrivingLicense
+            
         }.padding()
     }
     

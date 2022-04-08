@@ -46,8 +46,8 @@ struct LoginView: View {
     
     var textField: some View {
         VStack {
-            TextFieldView(text: $loginViewModel.email, placeholder: "Email address", color: .white, last: false)
-            SecureTextFieldView(text: $loginViewModel.password, placeholder: "Password", color: .white, last: true, secured: true)
+            TextFieldView(text: $loginViewModel.email, placeholder: "Email address", color: .white, last: false, focused: false)
+            SecureTextFieldView(text: $loginViewModel.password, placeholder: "Password", color: .white, last: true, secured: true, focused: false, comment: "")
         }
     }
     
