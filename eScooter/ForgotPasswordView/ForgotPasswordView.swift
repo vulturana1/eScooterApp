@@ -9,14 +9,19 @@ import SwiftUI
 
 struct ForgotPasswordView: View {
     @State private var emailAddress: String = ""
+    let onLogin: () -> Void
     
     var body: some View {
         ZStack {
-            Color
-                .init(red: 0.231, green: 0.067, blue: 0.349)
-                .ignoresSafeArea()
+            Image("background")
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
             ScrollView {
+                backButtonBar
+                
                 VStack(alignment: .leading, spacing: 30) {
+                    
                     Text("Forgot password")
                         .font(.custom("BaiJamjuree-Bold", size: 32))
                         .foregroundColor(.white)
@@ -28,12 +33,22 @@ struct ForgotPasswordView: View {
                     TextFieldView(text: $emailAddress, placeholder: "Email address", color: .white, last: false, focused: false)
                     
                     sendResetLink
-                   
+                    
                     Spacer()
                 }
-                .padding()
-            }
+            }.padding()
         }
+    }
+    
+    var backButtonBar: some View {
+        HStack{
+            Button {
+                onLogin()
+            } label: {
+                Image("left-arrow")
+            }
+            Spacer()
+        }.padding(.top, 30)
     }
     
     var sendResetLink: some View {
@@ -60,6 +75,7 @@ struct ForgotPasswordView: View {
     var buttonColor: Color {
         if emailAddress.isEmpty {
             return Color.init(red: 0.231, green: 0.067, blue: 0.349)
+                .opacity(0)
         } else {
             return Color.init(red: 0.898, green: 0.188, blue: 0.384)
         }
@@ -69,6 +85,6 @@ struct ForgotPasswordView: View {
 
 struct ForgotPasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        ForgotPasswordView()
+        ForgotPasswordView(onLogin: {})
     }
 }

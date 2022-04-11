@@ -23,11 +23,27 @@ struct CoordinatorView: View {
     func registration() {
         navigationViewModel.push(RegistrationView(onLogin: {
             login()
+        }, onDrivingLicenseVerification: {
+            drivingLicenseVerification()
         }))
     }
     
     func login() {
         navigationViewModel.push(LoginView(onGetStarted: {
+            registration()
+        }, onForgotPassword: {
+            forgotPassword()
+        }))
+    }
+    
+    func forgotPassword() {
+        navigationViewModel.push(ForgotPasswordView(onLogin: {
+            login()
+        }))
+    }
+    
+    func drivingLicenseVerification() {
+        navigationViewModel.push(DrivingLicenseView(onBack: {
             registration()
         }))
     }

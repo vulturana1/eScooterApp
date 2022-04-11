@@ -134,6 +134,7 @@ struct OnboardingView: View {
         } label: {
             HStack {
                 Text("Get started")
+                    .font(.custom("BaiJamjuree-Bold", size: 16))
                 Image("arrow")
                     .renderingMode(.template)
                     .foregroundColor(.white)

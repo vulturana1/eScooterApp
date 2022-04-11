@@ -12,15 +12,20 @@ struct RegistrationView: View {
     @ObservedObject var registerViewModel = RegisterViewModel()
     @State var error: String = ""
     @State private var showError: Bool = false
-    
+
     let onLogin: () -> Void
+    let onDrivingLicenseVerification: () -> Void
     
     var body: some View {
         ZStack {
-            Color
-                .init(red: 0.231, green: 0.067, blue: 0.349)
+            Image("background")
+                .resizable()
+                .scaledToFill()
                 .ignoresSafeArea()
+                .edgesIgnoringSafeArea(.all)
+            
             ScrollView {
+                
                 VStack(alignment: .leading, spacing: 30) {
                     logo
                     Text("Let's get started")
@@ -57,14 +62,18 @@ struct RegistrationView: View {
         ZStack {
             Image("logo")
             Image("name")
-        }
+        }.padding(.top)
     }
     
     var getStarted: some View {
         Button {
             //validate fields
             error = registerViewModel.register(email: registerViewModel.email, password: registerViewModel.password, username: registerViewModel.username)
-            showError = true
+            if !error.isEmpty {
+                showError = true
+            } else {
+                onDrivingLicenseVerification()
+            }
         } label: {
             HStack {
                 Text("Get started")
@@ -83,22 +92,16 @@ struct RegistrationView: View {
         .disabled(registerViewModel.email.isEmpty || registerViewModel.username.isEmpty || registerViewModel.password.isEmpty)
         .alert(isPresented: $showError) {
             Alert(title: Text("Registration error"),
-                  message: message as? Text,
+                  message: Text(error),
                   dismissButton: .default(Text("Got it!")))
         }
         
     }
     
-    var message: some View {
-        VStack {
-            Text(registerViewModel.emailError)
-            Text(registerViewModel.passwordError)
-        }
-    }
-    
     var buttonColor: Color {
         if registerViewModel.email.isEmpty || registerViewModel.username.isEmpty || registerViewModel.password.isEmpty {
             return Color.init(red: 0.231, green: 0.067, blue: 0.349)
+                .opacity(0)
         } else {
             return Color.init(red: 0.898, green: 0.188, blue: 0.384)
         }
@@ -183,6 +186,6 @@ struct SafariView: UIViewControllerRepresentable {
 
 struct RegistrationView_Previews: PreviewProvider {
     static var previews: some View {
-        RegistrationView(onLogin: {})
+        RegistrationView(onLogin: {}, onDrivingLicenseVerification: {})
     }
 }

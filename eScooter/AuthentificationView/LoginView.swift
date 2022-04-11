@@ -14,12 +14,15 @@ struct LoginView: View {
     @State private var password: String = ""
     
     let onGetStarted: () -> Void
+    let onForgotPassword: () -> Void
     
     var body: some View {
         ZStack {
-            Color
-                .init(red: 0.231, green: 0.067, blue: 0.349)
+            Image("background")
+                .resizable()
+                .scaledToFill()
                 .ignoresSafeArea()
+                .edgesIgnoringSafeArea(.all)
             ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
                     logo
@@ -32,7 +35,9 @@ struct LoginView: View {
                         .opacity(0.5)
                     
                     textField
-                    forgotYourPassword()
+                    forgotYourPassword() {
+                        onForgotPassword()
+                    }
                     login
                     dontHaveAnAccount {
                         onGetStarted()
@@ -55,7 +60,7 @@ struct LoginView: View {
         ZStack {
             Image("logo")
             Image("name")
-        }
+        }.padding(.top)
     }
     
     var login: some View {
@@ -79,6 +84,7 @@ struct LoginView: View {
     var buttonColor: Color {
         if loginViewModel.email.isEmpty || loginViewModel.password.isEmpty {
             return Color.init(red: 0.231, green: 0.067, blue: 0.349)
+                .opacity(0)
         } else {
             return Color.init(red: 0.898, green: 0.188, blue: 0.384)
         }
@@ -106,19 +112,23 @@ struct dontHaveAnAccount: View {
 }
 
 struct forgotYourPassword: View {
+    let onForgotPassword: () -> Void
     var body: some View{
         VStack(alignment: .leading) {
             Text("Forgot your password?")
                 .font(.custom("BaiJamjuree-SemiBold", size: 12))
                 .foregroundColor(.white)
                 .underline()
-                .opacity(0.5)
+                .opacity(0.8)
+                .onTapGesture {
+                    onForgotPassword()
+                }
         }
     }
 }
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(onGetStarted: {})
+        LoginView(onGetStarted: {}, onForgotPassword: {})
     }
 }
