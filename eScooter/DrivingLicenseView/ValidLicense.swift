@@ -11,10 +11,7 @@ struct ValidLicense: View {
     let onMap: () -> Void
     var body: some View {
         ZStack() {
-            Image("background")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
+            BackgroundView()
             VStack {
                 Spacer()
                 Image("check")
@@ -31,7 +28,7 @@ struct ValidLicense: View {
     }
     var findScootersButton: some View {
         Button {
-            
+            onMap()
         } label: {
             HStack {
                 Text("Find scooters")
@@ -42,6 +39,7 @@ struct ValidLicense: View {
             .background(Color.init(red: 0.898, green: 0.188, blue: 0.384))
             .cornerRadius(20)
         }
+        .padding(.bottom)
     }
 }
 

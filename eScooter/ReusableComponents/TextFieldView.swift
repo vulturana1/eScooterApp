@@ -13,7 +13,6 @@ struct TextFieldView: View {
     let color: Color
     let last: Bool
     @State var focused: Bool
-
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -39,7 +38,7 @@ struct TextFieldView: View {
     }
     
     var textField: some View {
-        TextField("", text: $text,
+        TextField("", text: $text ,
                   onCommit: {
             focused = false
         })
@@ -49,7 +48,8 @@ struct TextFieldView: View {
         .foregroundColor(color)
         .font(.custom("BaiJamjuree-Medium", size: 16))
         .modifier(TextFieldClearButton(text: $text, focused: $focused))
-        .submitLabel(last == true ? .done : .next)
+
+        //.submitLabel(last == true ? .done : .next)
     }
     
     var underline: some View {

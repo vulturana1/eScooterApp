@@ -1,20 +1,26 @@
 PODS:
   - Alamofire (5.5.0)
   - NavigationStack (1.0.4)
+  - SwiftMessages (9.0.6):
+    - SwiftMessages/App (= 9.0.6)
+  - SwiftMessages/App (9.0.6)
 
 DEPENDENCIES:
   - Alamofire (~> 5.5)
   - NavigationStack (~> 1.0.2)
+  - SwiftMessages
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - NavigationStack
+    - SwiftMessages
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   NavigationStack: c2fb4c71b89659481e8e0dfb20e533681dce084f
+  SwiftMessages: f0c7ef4705a570ad6c5e208b611f4333e660ed92
 
-PODFILE CHECKSUM: 97f20bfcf0f3c5bbc3243e39ef9b9d7fcdc07f1b
+PODFILE CHECKSUM: f98122710d6153f541c8adbc32b15a721cf47d41
 
 COCOAPODS: 1.11.3

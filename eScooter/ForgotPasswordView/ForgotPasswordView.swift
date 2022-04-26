@@ -9,19 +9,16 @@ import SwiftUI
 
 struct ForgotPasswordView: View {
     @State private var emailAddress: String = ""
+    @State private var showError: Bool = false
     let onLogin: () -> Void
+    let onReset: () -> Void
     
     var body: some View {
         ZStack {
-            Image("background")
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
+            BackgroundView()
             ScrollView {
                 backButtonBar
-                
                 VStack(alignment: .leading, spacing: 30) {
-                    
                     Text("Forgot password")
                         .font(.custom("BaiJamjuree-Bold", size: 32))
                         .foregroundColor(.white)
@@ -53,7 +50,7 @@ struct ForgotPasswordView: View {
     
     var sendResetLink: some View {
         Button {
-            
+            showError = true
         } label: {
             HStack {
                 Text("Send Reset Link")
@@ -70,6 +67,9 @@ struct ForgotPasswordView: View {
             .cornerRadius(20)
         }
         .disabled(emailAddress.isEmpty)
+        .alert(isPresented: $showError) {
+            Alert(title: Text("Password reset link send"), message: Text("Please check your inbox or spam for the email containing the password rest link"), dismissButton: .default(Text("Ok")))
+        }
     }
     
     var buttonColor: Color {
@@ -85,6 +85,6 @@ struct ForgotPasswordView: View {
 
 struct ForgotPasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        ForgotPasswordView(onLogin: {})
+        ForgotPasswordView(onLogin: {}, onReset: {})
     }
 }

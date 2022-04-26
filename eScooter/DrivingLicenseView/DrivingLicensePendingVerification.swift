@@ -10,10 +10,7 @@ import SwiftUI
 struct DrivingLicensePendingVerification: View {
     var body: some View {
         ZStack() {
-            Image("background")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
+            BackgroundView()
             VStack {
                 Spacer()
                 Text("We are currently verifying your driving license")

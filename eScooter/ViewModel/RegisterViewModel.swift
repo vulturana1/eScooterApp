@@ -12,6 +12,7 @@ class RegisterViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var username: String = ""
     @Published var password: String = ""
+    @Published var waiting = false
     
     var emailError: String = ""
     var passwordError: String = ""
@@ -23,7 +24,6 @@ class RegisterViewModel: ObservableObject {
     }
     
     func validatePassword(password: String) -> Bool{
-        //let passwordPattern = #"(?=.{8,})"# + #"(?=.*[A-Z])"# + #"(?=.*[a-z])"# + #"(?=.*\d)"# + #"(?=.*[ !$%&?._-])"#
         let passwordPattern = "^.*(?=.{8,})(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*\\d)|(?=.*[!#*$%&? ]).*$"
         let passwordPred = NSPredicate(format:"SELF MATCHES %@", passwordPattern)
         return passwordPred.evaluate(with: password)
@@ -43,10 +43,8 @@ class RegisterViewModel: ObservableObject {
         return true
     }
     
-    func register(email: String, password: String, username: String) -> String {
+    func validate(email: String, password: String, username: String) -> String {
         if validateUser(email: email, password: password) == true {
-            //register
-            print("ok")
             return ""
         } else {
             let err1 = emailError
@@ -54,6 +52,24 @@ class RegisterViewModel: ObservableObject {
             self.emailError = ""
             self.passwordError = ""
             return err1 + " " + err2
+        }
+    }
+    
+    func register(callbackSuccess: @escaping () -> Void, callbackFailure: @escaping () -> Void) {
+        if validateUser(email: email, password: password) == true {
+            waiting = true
+            API.register(email: self.email, username: self.username, password: self.password) { (result) in
+                switch result {
+                case .success(let authResult):
+                    Session.shared.authToken = authResult.token
+                    callbackSuccess()
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    showError(error: error.localizedDescription)
+                    callbackFailure()
+                }
+            }
+            waiting = false
         }
     }
     

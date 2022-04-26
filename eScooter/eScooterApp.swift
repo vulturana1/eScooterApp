@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct eScooterApp: App {
+    @UIApplicationDelegateAdaptor var delegate: AppDelegate
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

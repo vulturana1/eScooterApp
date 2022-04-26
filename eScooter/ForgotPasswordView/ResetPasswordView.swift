@@ -12,14 +12,11 @@ struct ResetPasswordView: View {
     @State private var password: String = ""
     
     let onForgotPassword: () -> Void
+    let onLogin: () -> Void
     
     var body: some View {
         ZStack {
-            Image("background")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-                .edgesIgnoringSafeArea(.all)
+            BackgroundView()
             ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
                     Text("Reset password")
@@ -60,7 +57,7 @@ struct ResetPasswordView: View {
     
     var resetPassword: some View {
         Button {
-            
+            onLogin()
         } label: {
             HStack {
                 Text("Reset password")
@@ -91,6 +88,6 @@ struct ResetPasswordView: View {
 
 struct ResetPasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        ResetPasswordView(onForgotPassword: {})
+        ResetPasswordView(onForgotPassword: {}, onLogin: {})
     }
 }

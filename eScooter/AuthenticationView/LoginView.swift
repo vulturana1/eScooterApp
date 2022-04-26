@@ -12,17 +12,21 @@ struct LoginView: View {
     @State private var emailAddress: String = ""
     @State private var username: String = ""
     @State private var password: String = ""
+    @State var waiting = false
+    
+    private enum Field: Int, Hashable {
+        case email, password
+    }
+    @FocusState private var focusedField: Field?
     
     let onGetStarted: () -> Void
     let onForgotPassword: () -> Void
+    let onMap: () -> Void
+    let onDrivingLicenseVerification: () -> Void
     
     var body: some View {
         ZStack {
-            Image("background")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-                .edgesIgnoringSafeArea(.all)
+            BackgroundView()
             ScrollView {
                 VStack(alignment: .leading, spacing: 30) {
                     logo
@@ -52,7 +56,14 @@ struct LoginView: View {
     var textField: some View {
         VStack {
             TextFieldView(text: $loginViewModel.email, placeholder: "Email address", color: .white, last: false, focused: false)
+                .focused($focusedField, equals: .email)
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .password
+                }
             SecureTextFieldView(text: $loginViewModel.password, placeholder: "Password", color: .white, last: true, secured: true, focused: false, comment: "")
+                .focused($focusedField, equals: .password)
+                .submitLabel(.done)
         }
     }
     
@@ -65,19 +76,30 @@ struct LoginView: View {
     
     var login: some View {
         Button {
-            // validate fields
+            loginViewModel.login {
+                onMap()
+                waiting = true
+            } failure: {
+                //showError(error: "Invalid email or password")
+                waiting = false
+            } verification: {
+                onDrivingLicenseVerification()
+            }
         } label: {
-            Text("Login")
-                .font(.custom("BaiJamjuree-SemiBold", size: 16))
-                .foregroundColor(.white)
-                .opacity(0.5)
-                .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 1)
-                )
+            HStack {
+                Text("Login")
+                    .font(.custom("BaiJamjuree-SemiBold", size: 16))
+                    .foregroundColor(.white)
+                    .opacity(0.5)
+                    .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 1)
+                    )
+            }
+            .background(buttonColor)
+            .cornerRadius(20)
         }
-        .background(buttonColor)
         .disabled(loginViewModel.email.isEmpty ||  loginViewModel.password.isEmpty)
     }
     
@@ -129,6 +151,6 @@ struct forgotYourPassword: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(onGetStarted: {}, onForgotPassword: {})
+        LoginView(onGetStarted: {}, onForgotPassword: {}, onMap: {}, onDrivingLicenseVerification: {})
     }
 }

@@ -52,12 +52,14 @@ struct OnboardingView: View {
                     Button {
                         
                     } label: {
-                        Text("Skip")
-                            .font(.custom("BaiJamjuree-SemiBold", size: 14))
-                            .foregroundColor(Color.init(red: 0.698, green: 0.667, blue: 0.761))
-                            .onTapGesture {
-                                getStarted()
-                            }
+                        if page != 4 {
+                            Text("Skip")
+                                .font(.custom("BaiJamjuree-SemiBold", size: 14))
+                                .foregroundColor(Color.init(red: 0.698, green: 0.667, blue: 0.761))
+                                .onTapGesture {
+                                    getStarted()
+                                }
+                        }
                     }
                 }.padding()
                 Text(onboardingData[page].text)

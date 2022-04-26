@@ -8,5 +8,6 @@ target 'eScooter' do
   # Pods for eScooter
   pod 'NavigationStack', '~> 1.0.2'
   pod 'Alamofire', '~> 5.5'
+  pod 'SwiftMessages'
 
 end

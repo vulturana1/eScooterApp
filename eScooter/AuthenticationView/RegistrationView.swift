@@ -12,20 +12,20 @@ struct RegistrationView: View {
     @ObservedObject var registerViewModel = RegisterViewModel()
     @State var error: String = ""
     @State private var showError: Bool = false
-
+    @State var waiting = false
+    
+    private enum Field: Int, Hashable {
+        case email, username, password
+    }
+    @FocusState private var focusedField: Field?
+    
     let onLogin: () -> Void
     let onDrivingLicenseVerification: () -> Void
     
     var body: some View {
         ZStack {
-            Image("background")
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
-                .edgesIgnoringSafeArea(.all)
-            
+            BackgroundView()
             ScrollView {
-                
                 VStack(alignment: .leading, spacing: 30) {
                     logo
                     Text("Let's get started")
@@ -46,15 +46,26 @@ struct RegistrationView: View {
                 }
                 .padding()
             }
-            
         }
     }
     
     var textField: some View {
         VStack(alignment: .leading, spacing: 10) {
             TextFieldView(text: $registerViewModel.email, placeholder: "Email address", color: .white, last: false,  focused: false)
+                .focused($focusedField, equals: .email)
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .username
+                }
             TextFieldView(text: $registerViewModel.username, placeholder: "Username", color: .white, last: false, focused: false)
+                .focused($focusedField, equals: .username)
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .password
+                }
             SecureTextFieldView(text: $registerViewModel.password, placeholder: "Password", color: .white, last: true, secured: true, focused: false, comment: "Use a strong password(min.8 characters and use symbols)")
+                .focused($focusedField, equals: .password)
+                .submitLabel(.done)
         }
     }
     
@@ -66,36 +77,48 @@ struct RegistrationView: View {
     }
     
     var getStarted: some View {
-        Button {
-            //validate fields
-            error = registerViewModel.register(email: registerViewModel.email, password: registerViewModel.password, username: registerViewModel.username)
-            if !error.isEmpty {
-                showError = true
-            } else {
-                onDrivingLicenseVerification()
+        ZStack {
+            Button {
+                error = registerViewModel.validate(email: registerViewModel.email, password: registerViewModel.password, username: registerViewModel.username)
+                if !error.isEmpty {
+                    showError = true
+                } else {
+                    registerViewModel.register(callbackSuccess: {
+                        onDrivingLicenseVerification()
+                        waiting = true
+                    }
+                                               , callbackFailure: {
+                        //eScooter.showError(error: "A user with the same email or username already exists")
+                        waiting = false
+                    })
+                }
+                
+            } label: {
+                HStack {
+                    Text("Get started")
+                        .font(.custom("BaiJamjuree-SemiBold", size: 16))
+                        .foregroundColor(.white)
+                        .opacity(0.6)
+                        .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 2)
+                        )
+                }
+                .background(buttonColor)
+                .cornerRadius(20)
             }
-        } label: {
-            HStack {
-                Text("Get started")
-                    .font(.custom("BaiJamjuree-SemiBold", size: 16))
-                    .foregroundColor(.white)
-                    .opacity(0.6)
-                    .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 2)
-                    )
+            .disabled(registerViewModel.email.isEmpty || registerViewModel.username.isEmpty || registerViewModel.password.isEmpty || registerViewModel.waiting)
+            .alert(isPresented: $showError) {
+                Alert(title: Text("Registration error"),
+                      message: Text(error),
+                      dismissButton: .default(Text("Got it!")))
             }
-            .background(buttonColor)
-            .cornerRadius(20)
+            if registerViewModel.waiting {
+                ProgressView()
+                    .padding()
+            }
         }
-        .disabled(registerViewModel.email.isEmpty || registerViewModel.username.isEmpty || registerViewModel.password.isEmpty)
-        .alert(isPresented: $showError) {
-            Alert(title: Text("Registration error"),
-                  message: Text(error),
-                  dismissButton: .default(Text("Got it!")))
-        }
-        
     }
     
     var buttonColor: Color {
@@ -171,21 +194,4 @@ struct termsAndConditions: View {
     }
 }
 
-struct SafariView: UIViewControllerRepresentable {
-    typealias UIViewControllerType = SFSafariViewController
-    
-    var url: URL
-    
-    func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
-        return SFSafariViewController(url: url)
-    }
-    
-    func updateUIViewController(_ safariViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {
-    }
-}
 
-struct RegistrationView_Previews: PreviewProvider {
-    static var previews: some View {
-        RegistrationView(onLogin: {}, onDrivingLicenseVerification: {})
-    }
-}

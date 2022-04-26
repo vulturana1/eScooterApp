@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct DrivingLicenseView: View {
-    @State var showingOptions = false
     @State private var shouldPresentImagePicker = false
     @State private var shouldPresentActionScheet = false
     @State private var shouldPresentCamera = false
     @State private var image: Image? = Image("")
-    @State private var recognizedText = "Tap button to start scanning"
+    @State var waiting = false
     
     let onBack: () -> Void
+    let onVerification: (Image) -> Void
     
     var body: some View {
         ZStack {
@@ -46,9 +46,20 @@ struct DrivingLicenseView: View {
         }
     }
     
+    var imageBinding: Binding<Image?> {
+        return Binding(get: {
+            Image("")
+        }, set: { newImage in
+            if let image = newImage {
+                waiting = true
+                onVerification(image)
+            }
+        })
+    }
+    
     var addDrivingLicenseButton: some View {
         Button {
-            showingOptions = true
+            shouldPresentActionScheet = true
         } label: {
             HStack {
                 Text("Add driving license")
@@ -64,40 +75,34 @@ struct DrivingLicenseView: View {
             .cornerRadius(20)
         }
         .padding()
-//        .actionSheet(isPresented: $showingOptions) {
-//                        ActionSheet(
-//                            title: Text("Select one method"),
-//                            buttons: [
-//                                .default(Text("Take a picture")) {
-//                                    //ScanDocumentView(recognizedText: self.$recognizedText)
-//                                },
-//                                .default(Text("Upload a picture")) {
-//
-//                                },
-//                            ]
-//                        )
-//                    }
-        
-        .sheet(isPresented: $showingOptions) {
-                        ScanDocumentView(recognizedText: self.$recognizedText)
-            
-                    }
-//        .sheet(isPresented: $showingOptions) {
-//                        SUImagePickerView(sourceType: self.shouldPresentCamera ? .camera : .photoLibrary, image: self.$image, isPresented: self.$shouldPresentImagePicker)
-//                }.actionSheet(isPresented: $shouldPresentActionScheet) { () -> ActionSheet in
-//                    ActionSheet(title: Text("Choose mode"), message: Text("Please choose your preferred mode to set your profile image"), buttons: [ActionSheet.Button.default(Text("Camera"), action: {
-//                        self.shouldPresentImagePicker = true
-//                        self.shouldPresentCamera = true
-//                    }), ActionSheet.Button.default(Text("Photo Library"), action: {
-//                        self.shouldPresentImagePicker = true
-//                        self.shouldPresentCamera = false
-//                    }), ActionSheet.Button.cancel()])
-//                }
+        .sheet(isPresented: $shouldPresentImagePicker) {
+            SUImagePickerView(sourceType: .photoLibrary,
+                              image: imageBinding, isPresented: $shouldPresentImagePicker)
+        }
+        .sheet(isPresented: $shouldPresentCamera) {
+            ScanDocumentView(isPresented: $shouldPresentCamera, image: imageBinding)
+        }
+        .actionSheet(isPresented: $shouldPresentActionScheet) {
+            actionSheet
+        }
+    }
+    
+    var actionSheet: ActionSheet {
+        ActionSheet(title: Text("Select one method"),
+                    buttons: [ActionSheet.Button.default(Text("Camera"), action: {
+            self.shouldPresentImagePicker = false
+            self.shouldPresentCamera = true
+        }), ActionSheet.Button.default(Text("Photo Library"), action: {
+            self.shouldPresentImagePicker = true
+            self.shouldPresentCamera = false
+        }), ActionSheet.Button.cancel({
+            showError(error: "Please try again")
+        })])
     }
 }
 
 struct DrivingLicenseView_Previews: PreviewProvider {
     static var previews: some View {
-        DrivingLicenseView(onBack: {})
+        DrivingLicenseView(onBack: {}, onVerification: {_ in })
     }
 }

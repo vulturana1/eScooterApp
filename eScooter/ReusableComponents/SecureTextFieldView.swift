@@ -38,7 +38,7 @@ struct SecureTextFieldView: View {
                         }
                         .foregroundColor(color)
                         .font(.custom("BaiJamjuree-Medium", size: 16))
-                        .submitLabel(.done)
+                        //.submitLabel(.done)
                         Spacer()
                         if !text.isEmpty {
                             Button {
