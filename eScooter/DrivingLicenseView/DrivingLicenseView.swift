@@ -14,7 +14,6 @@ struct DrivingLicenseView: View {
     @State private var image: Image? = Image("")
     @State var waiting = false
     
-    let onBack: () -> Void
     let onVerification: (Image) -> Void
     
     var body: some View {
@@ -23,9 +22,7 @@ struct DrivingLicenseView: View {
                 .ignoresSafeArea()
             VStack(alignment: .leading, spacing: 20) {
                 Spacer()
-                BackButtonTopBar(title: "Driving License", color: .init(red: 0.129, green: 0.043, blue: 0.314)) {
-                    onBack()
-                }
+                TopBar(title: "Driving License", color: .init(red: 0.129, green: 0.043, blue: 0.314))
                 Image("driving-license")
                     .resizable()
                     .scaledToFill()
@@ -103,6 +100,6 @@ struct DrivingLicenseView: View {
 
 struct DrivingLicenseView_Previews: PreviewProvider {
     static var previews: some View {
-        DrivingLicenseView(onBack: {}, onVerification: {_ in })
+        DrivingLicenseView(onVerification: {_ in })
     }
 }

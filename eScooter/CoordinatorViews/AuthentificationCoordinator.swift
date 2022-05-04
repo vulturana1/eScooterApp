@@ -10,7 +10,6 @@ import NavigationStack
 
 struct AuthentificationCoordinator: View {
     @StateObject var navigationViewModel = NavigationStack(easing: Animation.linear)
-    @StateObject var imageCoordinator: ImageCoordinator = ImageCoordinator()
     let onNext: () -> Void
     
     var body: some View {
@@ -42,17 +41,15 @@ struct AuthentificationCoordinator: View {
     }
     
     func drivingLicenseVerification() {
-        navigationViewModel.push(DrivingLicenseView(onBack: {
-            //trebuie sa scot butonul de back
-        }, onVerification: { image in
+        navigationViewModel.push(DrivingLicenseView( onVerification: { image in
             handleVerification(image: image)
         }))
     }
     
     func handleVerification(image: Image) {
+        navigationViewModel.push(DrivingLicensePendingVerification())
         API.uploadPicture(image: image, { response in
             print(response)
-            //navigationViewModel.push(DrivingLicensePendingVerification())
             switch response {
             case .success:
                 print("Success")
@@ -68,7 +65,6 @@ struct AuthentificationCoordinator: View {
     
     func forgotPassword() {
         navigationViewModel.push(ForgotPasswordView(onLogin: {
-            //login()
             navigationViewModel.pop()
         }, onReset: {
             handleResetPassword()
@@ -77,7 +73,6 @@ struct AuthentificationCoordinator: View {
     
     func handleResetPassword() {
         navigationViewModel.push(ResetPasswordView(onForgotPassword: {
-            //forgotPassword()
             navigationViewModel.pop()
         }, onLogin: {
             login()
@@ -100,34 +95,6 @@ struct AuthentificationCoordinator: View {
             onNext()
         }))
     }
-    
-//    func handleMap() {
-//        navigationViewModel.push(MapViewWithLocation(onMenu: {
-//            handleMenu()
-//        }))
-//    }
-    
-//    func handleMenu() {
-//        navigationViewModel.push(MenuView(onBack: {
-//            handleMap()
-//        }, onAccountSettings: {
-//            handleAccount()
-//        }, onChangePassword: {
-//            handlePassword()
-//        }))
-//    }
-//
-//    func handleAccount() {
-//        navigationViewModel.push(AccountSettingsView(onBack: {
-//            navigationViewModel.pop()
-//        }))
-//    }
-//
-//    func handlePassword() {
-//        navigationViewModel.push(ChangePasswordView(onBack: {
-//            navigationViewModel.pop()
-//        }))
-//    }
     
 }
 

@@ -83,30 +83,40 @@ struct RegistrationView: View {
                 if !error.isEmpty {
                     showError = true
                 } else {
+                    waiting = true
                     registerViewModel.register(callbackSuccess: {
                         onDrivingLicenseVerification()
-                        waiting = true
+                        
                     }
                                                , callbackFailure: {
-                        //eScooter.showError(error: "A user with the same email or username already exists")
                         waiting = false
+                        eScooter.showError(error: "A user with the same email or username already exists")
                     })
                 }
-                
             } label: {
-                HStack {
-                    Text("Get started")
-                        .font(.custom("BaiJamjuree-SemiBold", size: 16))
-                        .foregroundColor(.white)
-                        .opacity(0.6)
+                if waiting {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
                         .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 2)
-                        )
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384).opacity(0.3), lineWidth: 1))
+                        .padding(4)
+                } else {
+                    HStack {
+                        Text("Get started")
+                            .font(.custom("BaiJamjuree-SemiBold", size: 16))
+                            .foregroundColor(.white)
+                            .opacity(0.6)
+                            .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 2)
+                            )
+                    }
+                    .background(buttonColor)
+                    .cornerRadius(20)
                 }
-                .background(buttonColor)
-                .cornerRadius(20)
             }
             .disabled(registerViewModel.email.isEmpty || registerViewModel.username.isEmpty || registerViewModel.password.isEmpty || registerViewModel.waiting)
             .alert(isPresented: $showError) {

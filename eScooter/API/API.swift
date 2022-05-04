@@ -134,5 +134,102 @@ struct API {
             callback(result)
         }
     }
+    
+    static func getScooters(_ callback: @escaping (Result<[Scooter]>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        AF.request("\(URLString)/scooter", method: .get, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<[Scooter]> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func getScootersWithin4km(latitude: Double, longitude: Double, _ callback: @escaping (Result<[Scooter]>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let params: [String: Any] = ["coordX": latitude, "coordY": longitude]
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        AF.request("\(URLString)/scooter/nearby", method: .get, parameters: params, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<[Scooter]> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func changePassword(oldPassword: String, newPassword: String, _ callback: @escaping (Result<Message>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization": "Bearer " + token]
+        let params = ["oldPassword": oldPassword, "newPassword": newPassword]
+        AF.request("\(URLString)/customer/reset", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response {
+            response in
+            debugPrint(response)
+            let result: Result<Message> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func serialNumberUnlock(internalId: Int, _ callback: @escaping (Result<Scooter>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization": "Bearer " + token]
+        let params = ["scooterInternalId": internalId]
+        AF.request("\(URLString)/scooter/unlock", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response {
+            response in
+            debugPrint(response)
+            let result: Result<Scooter> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func getScooterById(scooterId: String, _ callback: @escaping (Result<Scooter>) -> Void) {
+        guard let token = Session.shared.authToken else { return }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        let params = ["id": scooterId]
+        AF.request("\(URLString)/scooter/device", method: .get, parameters: params, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<Scooter> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func getAllTrips(start: Int, length: Int, callback: @escaping (Result<AllTrips>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        let params = ["start": start, "length": length]
+        AF.request("\(URLString)/customer/history", method: .get, parameters: params, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<AllTrips> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func pingScooter(scooterInternalId: Int, coordX: Double, coordY: Double, callback: @escaping (Result<Message>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        let params: [String: Any] = ["scooterInternalId": scooterInternalId, "coordX": coordX, "coordY": coordY]
+        AF.request("\(URLString)/scooter/ping", method: .post, parameters: params, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<Message> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
 }
 

@@ -8,50 +8,50 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Combine
 
 class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     
-    @Published var region = MKCoordinateRegion()
-    @Published var manager = CLLocationManager()
-    private var geoCoder = CLGeocoder()
+    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 46.7712, longitude: 23.6236), latitudinalMeters: CLLocationDistance.init(4000), longitudinalMeters: CLLocationDistance.init(4000))
+    
+    var manager = CLLocationManager()
     @Published var city: String
-    @Published var location: CLLocation?
+    @Published var lastLocation: CLLocation?
+    @Published var enabled: Bool
+    private var geoCoder = CLGeocoder()
     
     override init() {
-        self.city = "Cluj-Napoca"
+        self.city = "Allow location"
+        self.enabled = false
         super.init()
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.requestWhenInUseAuthorization()
-        manager.startUpdatingLocation()
-        if let location = manager.location {
-            self.getCityName(location: location)
+        self.manager.desiredAccuracy = kCLLocationAccuracyBest
+        self.manager.distanceFilter = kCLDistanceFilterNone
+        self.manager.requestWhenInUseAuthorization()
+        self.manager.startUpdatingLocation()
+        self.manager.delegate = self
+        self.checkLocationAuthotization()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.setCurrentLocation()
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        locations.last.map {
-            let center = CLLocationCoordinate2D(latitude: $0.coordinate.latitude, longitude: $0.coordinate.longitude)
-            let span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
-            region = MKCoordinateRegion(center: center, span: span)
-        }
+        guard let location = locations.last else { return }
+        self.lastLocation = location
+        self.getCityName(location: location)
     }
     
     func getCityName(location: CLLocation){
-        geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, _) -> Void in
-            placemarks?.forEach { (placemark) in
-                if let city = placemark.locality {
-                    print(city)
-                    self.city = city
-                }
+        geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
+            guard let placemark = placemarks?.last else { return }
+            if let cityName = placemark.locality {
+                self.city = cityName
             }
         })
     }
     
-    func checkIfLocationServicesIsEnabled() {
-        //daca locatia iphone-ului este enable
+    func checkIfLocationServicesIsEnabled(){
         if CLLocationManager.locationServicesEnabled() {
-            manager = CLLocationManager()
             manager.delegate = self
         }
         else {
@@ -60,16 +60,20 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     }
     
     func checkLocationAuthotization() {
-        //pt permisia aplicatiei
         switch manager.authorizationStatus {
         case .notDetermined:
+            enabled = false
             manager.requestWhenInUseAuthorization()
         case .restricted:
             showError(error: "Your location is restricted likely due to parental controls.")
+            enabled = false
         case .denied:
+            enabled = false
             showError(error: "You have denied this app location permission. Go into settings to change it.")
         case .authorizedAlways, .authorizedWhenInUse:
-            break
+            guard let location = manager.location else { return }
+            getCityName(location: location)
+            enabled = true
         @unknown default:
             break
         }
@@ -77,6 +81,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationAuthotization()
+    }
+    
+    func setCurrentLocation() {
+        if let location = self.lastLocation {
+            self.region = MKCoordinateRegion(center: location.coordinate , latitudinalMeters: 400, longitudinalMeters: 400)
+        }
     }
     
     

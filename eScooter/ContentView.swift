@@ -23,19 +23,14 @@ struct ContentView: View {
                     print(Session.shared.authToken ?? "No token")
                 }
         }
-        //AuthentificationCoordinator(navigationViewModel: navigationViewModel, onGetStarted: {})
-        //        MenuCoordinator(navigationViewModel: navigationViewModel)
-        //handleAuthentification()
     }
     
     func handleAuthentification() -> some View {
-        //NavigationStackView(transitionType: .default, navigationStack: navigationViewModel) {
-            AuthentificationCoordinator(navigationViewModel: navigationViewModel,
-                                        onNext: {
-                navigationViewModel.push(MapCoordinator(navigationViewModel: navigationViewModel,
-                                                        onMenu: handleMenu))
-            })
-        //}
+        AuthentificationCoordinator(navigationViewModel: navigationViewModel,
+                                    onNext: {
+            navigationViewModel.push(MapCoordinator(navigationViewModel: navigationViewModel,
+                                                    onMenu: handleMenu))
+        })
     }
     
     func handleMap() -> some View{

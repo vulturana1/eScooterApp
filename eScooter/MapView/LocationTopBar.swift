@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct LocationTopBar: View {
-    @State var location: String
-    @State var enabled: Bool
+    let location: String
+    let enabled: Bool
     
     let onMenu: () -> Void
     
@@ -20,33 +20,15 @@ struct LocationTopBar: View {
                 .mask(
                     LinearGradient(gradient: Gradient(colors: [Color.white, Color.white.opacity(0)]), startPoint: .top, endPoint: .bottom)
                 )
-//            Image("Rectangle")
-//                .resizable()
-//                .scaledToFit()
-//                .ignoresSafeArea()
-                
             VStack {
                 HStack {
-                    Button {
-                        onMenu()
-                    } label: {
-                        Image("menu-button")
-                    }
-                    
+                    menuButton
                     Spacer()
                     Text(location)
                         .font(.custom("BaiJamjuree-SemiBold", size: 17))
                         .foregroundColor(Color.init(red: 0.129, green: 0.043, blue: 0.314))
                     Spacer()
-                    Button {
-                        self.enabled.toggle()
-                    } label: {
-                        if enabled {
-                            Image("gps")
-                        } else {
-                            Image("no-gps")
-                        }
-                    }
+                    locationButton
                 }
                 Spacer()
             }
@@ -54,6 +36,35 @@ struct LocationTopBar: View {
         }
         .ignoresSafeArea()
         .frame(maxHeight: 140)
+    }
+    
+    var menuButton: some View {
+        Button {
+            onMenu()
+        } label: {
+            Image("menu-button")
+        }
+    }
+    
+    var locationButton: some View {
+        Button {
+            //self.enabled.toggle()
+        } label: {
+            if enabled {
+                Image("gps")
+            } else {
+                Image("no-gps")
+                    .onTapGesture {
+                        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+                            return
+                        }
+                        UIApplication.shared.open(settingsUrl, completionHandler: { success in
+                            print("Settings opened: \(success)")
+                        })
+                    }
+                
+            }
+        }
     }
 }
 

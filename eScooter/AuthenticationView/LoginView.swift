@@ -9,9 +9,6 @@ import SwiftUI
 
 struct LoginView: View {
     @ObservedObject var loginViewModel = LoginViewModel()
-    @State private var emailAddress: String = ""
-    @State private var username: String = ""
-    @State private var password: String = ""
     @State var waiting = false
     
     private enum Field: Int, Hashable {
@@ -76,29 +73,39 @@ struct LoginView: View {
     
     var login: some View {
         Button {
+            waiting = true
             loginViewModel.login {
                 onMap()
-                waiting = true
             } failure: {
-                //showError(error: "Invalid email or password")
+                showError(error: "Invalid email or password")
                 waiting = false
             } verification: {
                 onDrivingLicenseVerification()
             }
         } label: {
-            HStack {
-                Text("Login")
-                    .font(.custom("BaiJamjuree-SemiBold", size: 16))
-                    .foregroundColor(.white)
-                    .opacity(0.5)
+            if waiting {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .black))
                     .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 1)
-                    )
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384).opacity(0.3), lineWidth: 1))
+                    .padding(4)
+            } else {
+                HStack {
+                    Text("Login")
+                        .font(.custom("BaiJamjuree-SemiBold", size: 16))
+                        .foregroundColor(.white)
+                        .opacity(0.5)
+                        .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.init(red: 0.898, green: 0.188, blue: 0.384), lineWidth: 1)
+                        )
+                }
+                .background(buttonColor)
+                .cornerRadius(20)
             }
-            .background(buttonColor)
-            .cornerRadius(20)
         }
         .disabled(loginViewModel.email.isEmpty ||  loginViewModel.password.isEmpty)
     }

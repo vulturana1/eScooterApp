@@ -8,10 +8,17 @@
 import SwiftUI
 
 struct ChangePasswordView: View {
-    @State private var newPassword: String = ""
-    @State private var oldPassword: String = ""
-    @State private var confirmNewPassword: String = ""
+    @State private var showErr = false
+    @State var error: String = ""
+    @ObservedObject var changePasswordViewModel = ChangePasswordViewModel()
+    
+    private enum Field: Int, Hashable {
+        case oldPassword, newPassword, confirmNewPassword
+    }
+    @FocusState private var focusedField: Field?
+    
     let onBack: () -> Void
+    
     var body: some View {
         ZStack {
             Color
@@ -31,15 +38,36 @@ struct ChangePasswordView: View {
     
     var textFields: some View {
         VStack {
-            SecureTextFieldView(text: $oldPassword, placeholder: "Old password", color: .init(red: 0.129, green: 0.043, blue: 0.314), last: false, secured: true, focused: false, comment: "")
-            SecureTextFieldView(text: $newPassword, placeholder: "New password", color: .init(red: 0.129, green: 0.043, blue: 0.314), last: true, secured: true, focused: false, comment: "")
-            SecureTextFieldView(text: $confirmNewPassword, placeholder: "Confirm new password", color: .init(red: 0.129, green: 0.043, blue: 0.314), last: true, secured: true, focused: false, comment: "")
+            SecureTextFieldView(text: $changePasswordViewModel.oldPassword, placeholder: "Old password", color: .init(red: 0.129, green: 0.043, blue: 0.314), last: false, secured: true, focused: false, comment: "")
+                .focused($focusedField, equals: .oldPassword)
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .newPassword
+                }
+            SecureTextFieldView(text: $changePasswordViewModel.newPassword, placeholder: "New password", color: .init(red: 0.129, green: 0.043, blue: 0.314), last: false, secured: true, focused: false, comment: "")
+                .focused($focusedField, equals: .newPassword)
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .confirmNewPassword
+                }
+            SecureTextFieldView(text: $changePasswordViewModel.confirmNewPassword, placeholder: "Confirm new password", color: .init(red: 0.129, green: 0.043, blue: 0.314), last: true, secured: true, focused: false, comment: "")
+                .focused($focusedField, equals: .confirmNewPassword)
+                .submitLabel(.done)
         }
     }
     
     var saveEditsButton: some View {
         Button {
-            // validate fields
+            if changePasswordViewModel.confirmNewPassword == changePasswordViewModel.newPassword {
+                error = changePasswordViewModel.validate(password: changePasswordViewModel.newPassword)
+                if !error.isEmpty {
+                    showErr = true
+                } else {
+                    changePasswordViewModel.changePassword()
+                }
+            } else {
+                showError(error: "New password and confirm new password is not the same")
+            }
         } label: {
             Text("Save edits")
                 .font(.custom("BaiJamjuree-SemiBold", size: 16))
@@ -52,11 +80,17 @@ struct ChangePasswordView: View {
                 )
         }
         .background(buttonColor)
-        .disabled(newPassword.isEmpty ||  oldPassword.isEmpty || confirmNewPassword.isEmpty)
+        .cornerRadius(20)
+        .disabled(changePasswordViewModel.newPassword.isEmpty ||  changePasswordViewModel.oldPassword.isEmpty || changePasswordViewModel.confirmNewPassword.isEmpty)
+        .alert(isPresented: $showErr) {
+            Alert(title: Text("Change password error"),
+                  message: Text(error),
+                  dismissButton: .default(Text("Got it!")))
+        }
     }
     
     var buttonColor: Color {
-        if newPassword.isEmpty ||  oldPassword.isEmpty || confirmNewPassword.isEmpty {
+        if changePasswordViewModel.newPassword.isEmpty ||  changePasswordViewModel.oldPassword.isEmpty || changePasswordViewModel.confirmNewPassword.isEmpty {
             return Color.init(red: 0.231, green: 0.067, blue: 0.349)
                 .opacity(0)
         } else {

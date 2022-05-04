@@ -13,6 +13,7 @@ struct MenuView: View {
     let onBack: () -> Void
     let onAccountSettings: () -> Void
     let onChangePassword: () -> Void
+    let onHistory: () -> Void
     
     var body: some View {
         ZStack {
@@ -78,7 +79,7 @@ struct MenuView: View {
     
     var seeAllButton: some View {
         Button {
-            
+            onHistory()
         } label: {
             HStack {
                 Text("See all")
@@ -169,6 +170,6 @@ struct legal: View {
 
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuView(onBack: {}, onAccountSettings: {}, onChangePassword: {})
+        MenuView(onBack: {}, onAccountSettings: {}, onChangePassword: {}, onHistory: {})
     }
 }

@@ -33,6 +33,7 @@ struct ResetPasswordView: View {
                     Spacer()
                 }
                 .padding()
+                .padding(.top, 40)
             }
         }
     }

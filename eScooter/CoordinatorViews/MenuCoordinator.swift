@@ -18,6 +18,8 @@ struct MenuCoordinator: View {
             handleAccount()
         } onChangePassword: {
             handlePassword()
+        }  onHistory: {
+            handleHistory()
         }
         .onReceive(Session.shared.objectWillChange, perform: { _ in
             navigationViewModel.pop(to: .root)
@@ -34,6 +36,12 @@ struct MenuCoordinator: View {
     
     func handlePassword() {
         navigationViewModel.push(ChangePasswordView(onBack: {
+            navigationViewModel.pop()
+        }))
+    }
+    
+    func handleHistory() {
+        navigationViewModel.push(HistoryView(onBack: {
             navigationViewModel.pop()
         }))
     }

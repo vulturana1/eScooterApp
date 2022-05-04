@@ -18,7 +18,9 @@ struct DrivingLicensePendingVerification: View {
                     .font(.custom("BaiJamjuree-Bold", size: 32))
                     .multilineTextAlignment(.center)
                     .padding()
-                Image("loading")
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(1.5)
                 Spacer()
             }
         }

@@ -51,6 +51,7 @@ struct ForgotPasswordView: View {
     var sendResetLink: some View {
         Button {
             showError = true
+            onReset()
         } label: {
             HStack {
                 Text("Send Reset Link")

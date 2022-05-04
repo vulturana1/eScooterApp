@@ -20,7 +20,6 @@ struct BackButtonTopBar: View {
                 Image("left-arrow")
                     .renderingMode(.template)
                     .foregroundColor(color)
-                    //.padding()
             }
             HStack {
                 Spacer()
@@ -29,7 +28,7 @@ struct BackButtonTopBar: View {
                     .foregroundColor(color)
                 Spacer()
             }
-        }//.padding(.top, 30)
+        }
     }
 }
 
