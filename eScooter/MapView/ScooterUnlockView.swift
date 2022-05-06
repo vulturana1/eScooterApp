@@ -10,7 +10,6 @@ import SwiftUI
 struct ScooterUnlockView: View {
     
     @ObservedObject var viewModel: ScooterCardViewModel
-//    @State var scooter: Scooter = Scooter(id: "knsok1o3k2nrokv", number: 5, battery: 50, locked: false, booked: false, internalId: 1222, location: Location(type: "Point", coordinates: [23.5, 45.1]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE")
     let onRing: () -> Void
     let dragDown: () -> Void
     let onVerifySerialNumber: () -> Void

@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (5.5.0)
+  - Introspect (0.1.4)
   - NavigationStack (1.0.4)
   - SwiftMessages (9.0.6):
     - SwiftMessages/App (= 9.0.6)
@@ -7,20 +8,23 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (~> 5.5)
+  - Introspect
   - NavigationStack (~> 1.0.2)
   - SwiftMessages
 
 SPEC REPOS:
   trunk:
     - Alamofire
+    - Introspect
     - NavigationStack
     - SwiftMessages
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  Introspect: b62c4dd2063072327c21d618ef2bedc3c87bc366
   NavigationStack: c2fb4c71b89659481e8e0dfb20e533681dce084f
   SwiftMessages: f0c7ef4705a570ad6c5e208b611f4333e660ed92
 
-PODFILE CHECKSUM: f98122710d6153f541c8adbc32b15a721cf47d41
+PODFILE CHECKSUM: 1d8383e531b94c36b181a86dadf9a5d9e10ed3e4
 
 COCOAPODS: 1.11.3

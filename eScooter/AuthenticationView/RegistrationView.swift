@@ -90,7 +90,6 @@ struct RegistrationView: View {
                     }
                                                , callbackFailure: {
                         waiting = false
-                        eScooter.showError(error: "A user with the same email or username already exists")
                     })
                 }
             } label: {

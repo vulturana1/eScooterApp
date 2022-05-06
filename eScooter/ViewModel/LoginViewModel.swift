@@ -27,7 +27,7 @@ class LoginViewModel: ObservableObject {
                 
             case .failure(let error):
                 print(error)
-                showError(error: error.localizedDescription)
+                showError(error: error)
                 callbackFailure()
             }
         }

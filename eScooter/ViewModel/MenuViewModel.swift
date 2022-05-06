@@ -17,7 +17,7 @@ class MenuViewModel: ObservableObject {
                 self.customer = customer
                 break
             case .failure(let error):
-                showError(error: error.localizedDescription)
+                showError(error: error)
                 break
             }
         })

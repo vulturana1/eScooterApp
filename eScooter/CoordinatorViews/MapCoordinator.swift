@@ -14,6 +14,7 @@ struct MapCoordinator: View {
     @State var detailShow = false
     @State var unlockShow = false
     @StateObject var viewModel = MapCoordinatorViewModel()
+    let defaultLocation = [47.25368173443409, 23.881470551690658]
     
     var body: some View {
         MapView(onMenu: {
@@ -23,12 +24,14 @@ struct MapCoordinator: View {
             detailShow = true
         })
         .overlay(handleScooter(show: detailShow))
-        .overlay(showUnlockTypes(scooter: viewModel.currentScooter ?? Scooter(id: "knsok1o3k2nrokv", number: 5, battery: 50, locked: false, booked: false, internalId: 1222, location: Location(type: "Point", coordinates: [23.5, 45.1]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE"), unlockShow: unlockShow))
+        .overlay(showUnlockTypes(scooter: viewModel.currentScooter, unlockShow: unlockShow))
     }
     
     func handleScooter(show: Bool) -> AnyView {
         if detailShow {
-            return AnyView(ScooterCardView(scooter: viewModel.currentScooter ?? Scooter(id: "knsok1o3k2nrokv", number: 5, battery: 50, locked: false, booked: false, internalId: 1222, location: Location(type: "Point", coordinates: [23.5, 45.1]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE"), currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? 47.25368173443409, viewModel.locationManager.lastLocation?.coordinate.latitude ?? 23.881470551690658] , onRing: {}, onUnlock: {
+            return AnyView(ScooterCardView(scooter: viewModel.currentScooter, currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? defaultLocation[0], viewModel.locationManager.lastLocation?.coordinate.latitude ?? defaultLocation[1]] , onRing: {
+                
+            }, onUnlock: {
                 self.unlockShow = true
                 self.detailShow = false
                 
@@ -41,10 +44,10 @@ struct MapCoordinator: View {
     func showUnlockTypes(scooter: Scooter, unlockShow: Bool) -> AnyView {
         if unlockShow {
             return AnyView(
-                ScooterUnlockView(scooter: scooter, currentLocation: [23.5, 45.1], onRing: {
-        
+                ScooterUnlockView(scooter: scooter, currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? defaultLocation[0], viewModel.locationManager.lastLocation?.coordinate.latitude ?? defaultLocation[1]], onRing: {
+                    
                 }, dragDown: {
-
+                    
                     self.unlockShow = false
                 }, onVerifySerialNumber: {
                     handleSerialNumberUnlock()
@@ -59,12 +62,14 @@ struct MapCoordinator: View {
     }
     
     func handleSerialNumberUnlock() {
-        navigationViewModel.push(UnlockViewSerialNumber(onClose: {
+        navigationViewModel.push(UnlockViewSerialNumber(scooter: viewModel.currentScooter, currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? defaultLocation[0], viewModel.locationManager.lastLocation?.coordinate.latitude ?? defaultLocation[1]], onClose: {
             navigationViewModel.pop()
         }, onQr: {
             
         }, onNFC: {
             handleNFCUnlock()
+        }, onStartRide: {
+            
         }))
     }
     

@@ -20,13 +20,13 @@ public func showSuccess(message: String) {
     SwiftMessages.show(view: view)
 }
 
-public func showError(error: String) {
+public func showError(error: Error) {
     SwiftMessages.show {
         let view = MessageView.viewFromNib(layout: .cardView)
         view.configureTheme(.error)
         view.configureDropShadow()
         view.layoutMargins = UIEdgeInsets(top: 24, left: 24, bottom: 24, right: 24)
-        view.configureContent(title: "Error", body: error, iconImage: nil, iconText: nil, buttonImage: nil, buttonTitle: "Dismiss", buttonTapHandler: { _ in
+        view.configureContent(title: "Error", body: (error as? APIError)?.localizedDescription ?? "", iconImage: nil, iconText: nil, buttonImage: nil, buttonTitle: "Dismiss", buttonTapHandler: { _ in
             SwiftMessages.hide()
         })
         return view

@@ -28,17 +28,16 @@ class MapViewModel: ObservableObject {
             //self.locationManager.objectWillChange.send()
             
             self.currentLocation = self.locationManager.lastLocation?.coordinate
-            //cuurentLocation ca sa pot sa caut in zona aia doar
-            //self.locationManager.setCurrentLocation()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            if let lastLocation = self.locationManager.lastLocation {
-                self.locationManager.getCityName(location: lastLocation)
-                self.city = self.locationManager.city
-            }
-            }
+            
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if let lastLocation = self.locationManager.lastLocation {
+                    self.locationManager.getCityName(location: lastLocation)
+                    self.city = self.locationManager.city
+                }
+//            }
             
         }.store(in: &disposeBag)
-        
+                
         self.loadData()
     }
     

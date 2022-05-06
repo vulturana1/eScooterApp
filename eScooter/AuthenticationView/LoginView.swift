@@ -77,7 +77,6 @@ struct LoginView: View {
             loginViewModel.login {
                 onMap()
             } failure: {
-                showError(error: "Invalid email or password")
                 waiting = false
             } verification: {
                 onDrivingLicenseVerification()

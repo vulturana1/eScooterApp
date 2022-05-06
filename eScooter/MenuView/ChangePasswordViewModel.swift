@@ -19,8 +19,8 @@ class ChangePasswordViewModel: ObservableObject {
                 showSuccess(message: "Password changed")
                 self.reset()
                 break
-            case .failure(_):
-                showError(error: "Old password doesn't match")
+            case .failure(let error):
+                showError(error: error)
                 break
             }
         })

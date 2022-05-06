@@ -93,7 +93,7 @@ struct DrivingLicenseView: View {
             self.shouldPresentImagePicker = true
             self.shouldPresentCamera = false
         }), ActionSheet.Button.cancel({
-            showError(error: "Please try again")
+            //showError(error: Error("Please try again"))
         })])
     }
 }

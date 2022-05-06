@@ -79,15 +79,8 @@ struct AuthentificationCoordinator: View {
         }))
     }
     
-    //    func handleVerification() { //primesc imaginea
-    //        //fac un alt coordinator care imi trimite imaginea(primeste parametru un NavigationStack)
-    //        navigationViewModel.push(ValidLicense(onMap: {
-    //            handleMap()
-    //        }))
-    //    }
-    
     func failedToUpload(error: Error) {
-        showError(error: "Failed to upload" + error.localizedDescription)
+        showError(error: error)
     }
     
     func loadingImage() {

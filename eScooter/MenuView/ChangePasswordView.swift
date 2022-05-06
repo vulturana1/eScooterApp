@@ -66,7 +66,7 @@ struct ChangePasswordView: View {
                     changePasswordViewModel.changePassword()
                 }
             } else {
-                showError(error: "New password and confirm new password is not the same")
+                //showError(error: "New password and confirm new password is not the same")
             }
         } label: {
             Text("Save edits")

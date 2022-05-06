@@ -231,5 +231,19 @@ struct API {
         }
     }
     
+    static func unlockScooterSerialNumber(internalId: Int, coordX: Double, coordY: Double, unlockCode: Int, callback: @escaping (Result<UnlockResponse>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY, "unlockCode": unlockCode]
+        AF.request("\(URLString)/scooter/unlock", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<UnlockResponse> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
 }
 

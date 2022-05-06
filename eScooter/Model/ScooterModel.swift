@@ -27,6 +27,7 @@ struct Scooter: Codable, Identifiable {
     let location: Location
     let lastSeen: String
     let status: String
+    let unlockCode: Int
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -38,5 +39,16 @@ struct Scooter: Codable, Identifiable {
         case location = "location"
         case lastSeen = "lastSeen"
         case status = "status"
+        case unlockCode = "unlockCode"
+    }
+}
+
+struct UnlockResponse: Codable {
+    let message: String
+    let scooter: Scooter
+    
+    enum CodingKeys: String, CodingKey {
+        case message = "message"
+        case scooter = "scooter"
     }
 }

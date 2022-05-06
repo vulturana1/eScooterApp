@@ -64,8 +64,7 @@ class RegisterViewModel: ObservableObject {
                     Session.shared.authToken = authResult.token
                     callbackSuccess()
                 case .failure(let error):
-                    print(error.localizedDescription)
-                    showError(error: error.localizedDescription)
+                    showError(error: error)
                     callbackFailure()
                 }
             }

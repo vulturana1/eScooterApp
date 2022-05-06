@@ -6,18 +6,25 @@
 //
 
 import SwiftUI
+import Introspect
 
 struct UnlockViewSerialNumber: View {
     
-    @ObservedObject var viewModel = SerialNumberViewModel()
+    @ObservedObject var viewModel: SerialNumberViewModel
     let onClose: () -> Void
     let onQr: () -> Void
     let onNFC: () -> Void
+    let onStartRide: () -> Void
+    let scooter: Scooter
     
-    private enum Field: Int, Hashable {
-        case first, second, third, forth
+    init(scooter: Scooter, currentLocation: [Double], onClose: @escaping () -> Void, onQr: @escaping () -> Void, onNFC: @escaping () -> Void, onStartRide: @escaping () -> Void) {
+        viewModel = SerialNumberViewModel(scooter: scooter, location: currentLocation)
+        self.onClose = onClose
+        self.onQr = onQr
+        self.onNFC = onNFC
+        self.onStartRide = onStartRide
+        self.scooter = scooter
     }
-    @FocusState private var focusedField: Field?
     
     var body: some View {
         ZStack {
@@ -63,51 +70,30 @@ struct UnlockViewSerialNumber: View {
             .padding(.top, 30)
             .padding()
         }
+        .onTapGesture {
+            //hide keyboard
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     }
-    
-//    var textField: some View {
-//        TextField("", text: $number)
-//            .frame(width: 52, height: 52)
-//            .foregroundColor(Color.init(red: 0.129, green: 0.043, blue: 0.314))
-//            .background(.white)
-//            .cornerRadius(15)
-//            .font(.custom("BaiJamjuree-Medium", size: 20))
-//            .multilineTextAlignment(.center)
-//    }
     
     var textFields: some View {
         HStack(spacing: 10) {
-            TextFieldNumber(number: $viewModel.first)
-                .focused($focusedField, equals: .first)
-                .submitLabel(.next)
-                .onSubmit {
-                    focusedField = .second
-                }
-            TextFieldNumber(number: $viewModel.second)
-                .focused($focusedField, equals: .second)
-                .submitLabel(.next)
-                .onSubmit {
-                    focusedField = .third
-                }
-            TextFieldNumber(number: $viewModel.third)
-                .focused($focusedField, equals: .third)
-                .submitLabel(.next)
-                .onSubmit {
-                    focusedField = .forth
-                }
-            TextFieldNumber(number: $viewModel.forth)
-                .focused($focusedField, equals: .forth)
-                .submitLabel(.done)
-                .onSubmit {
-//                    guard viewModel.validate() else { return }
-//                        viewModel.login()
-                }
+            TextFieldNumber(number: $viewModel.first, isFirstResponder: viewModel.first.isEmpty)
+            TextFieldNumber(number: $viewModel.second, isFirstResponder: (!viewModel.first.isEmpty && viewModel.second.isEmpty))
+            TextFieldNumber(number: $viewModel.third, isFirstResponder: (!viewModel.first.isEmpty && !viewModel.second.isEmpty && viewModel.third.isEmpty))
+            TextFieldNumber(number: $viewModel.forth, isFirstResponder: (!viewModel.first.isEmpty && !viewModel.second.isEmpty && !viewModel.third.isEmpty && viewModel.forth.isEmpty))
+                .onChange(of: viewModel.forth, perform: { value in
+                    if !(viewModel.first.isEmpty && viewModel.second.isEmpty && viewModel.third.isEmpty && viewModel.forth.isEmpty) {
+                        viewModel.unlockScooterSerialNumber()
+                    }
+                })
         }
-        
     }
 }
 struct TextFieldNumber: View {
     @Binding var number: String
+    var isFirstResponder: Bool
+    
     var body: some View {
         TextField("", text: $number)
             .frame(width: 52, height: 52)
@@ -116,13 +102,20 @@ struct TextFieldNumber: View {
             .cornerRadius(15)
             .font(.custom("BaiJamjuree-Medium", size: 20))
             .multilineTextAlignment(.center)
+            .introspectTextField { textfield in
+                if isFirstResponder {
+                    textfield.becomeFirstResponder()
+                } else {
+                    textfield.resignFirstResponder()
+                }
+            }
             .keyboardType(.numberPad)
     }
 }
 
 
-struct UnlockViewSerialNumber_Previews: PreviewProvider {
-    static var previews: some View {
-        UnlockViewSerialNumber(onClose: {}, onQr: {}, onNFC: {})
-    }
-}
+//struct UnlockViewSerialNumber_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UnlockViewSerialNumber(onClose: {}, onQr: {}, onNFC: {})
+//    }
+//}

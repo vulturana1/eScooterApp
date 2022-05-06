@@ -24,7 +24,7 @@ class ScooterCardViewModel: ObservableObject {
                 showSuccess(message: message.message)
                 break
             case .failure(let error):
-                showError(error: error.localizedDescription)
+                showError(error: error)
                 break
             }
         }
