@@ -57,7 +57,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
             manager.delegate = self
         }
         else {
-            //showError(error: "Turn on your location")
+            showError(error: APIError(message: "Turn on your location"))
         }
     }
     
@@ -67,11 +67,11 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
             enabled = false
             manager.requestWhenInUseAuthorization()
         case .restricted:
-            //showError(error: "Your location is restricted likely due to parental controls.")
+            showError(error: APIError(message: "Your location is restricted likely due to parental controls."))
             enabled = false
         case .denied:
             enabled = false
-            //showError(error: "You have denied this app location permission. Go into settings to change it.")
+            showError(error: APIError(message: "You have denied this app location permission. Go into settings to change it."))
         case .authorizedAlways, .authorizedWhenInUse:
             guard let location = manager.location else { return }
             getCityName(location: location)

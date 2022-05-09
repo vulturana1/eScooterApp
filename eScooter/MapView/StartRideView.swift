@@ -8,9 +8,17 @@
 import SwiftUI
 
 struct StartRideView: View {
-    let scooter: Scooter = Scooter(id: "knsok1o3k2nrokv", number: 5, battery: 50, locked: false, booked: false, internalId: 1222, location: Location(type: "Point", coordinates: [23.5, 45.1]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE", unlockCode: 1234)
+
+    @ObservedObject var viewModel: ScooterCardViewModel
     @State var offset = CGFloat(200.0)
     let dragDown: () -> Void
+    let onTripDetails: () -> Void
+    
+    init(scooter: Scooter, currentLocation: [Double], dragDown: @escaping () -> Void, onTripDetails: @escaping () -> Void) {
+        viewModel = ScooterCardViewModel(scooter: scooter, location: currentLocation)
+        self.dragDown = dragDown
+        self.onTripDetails = onTripDetails
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -61,7 +69,8 @@ struct StartRideView: View {
     
     var startRideButton: some View {
         Button {
-            
+            viewModel.startRide()
+            onTripDetails()
         } label: {
             HStack {
                 Text("Start ride")
@@ -84,16 +93,16 @@ struct StartRideView: View {
                 .font(.custom("BaiJamjuree-Medium", size: 14))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                 .opacity(0.7)
-            Text("#" + "\(self.scooter.internalId)")
+            Text("#" + "\(viewModel.scooter.internalId)")
                 .font(.custom("BaiJamjuree-Bold", size: 20))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-            BatteryView(batteryLevel: self.scooter.battery)
+            BatteryView(batteryLevel: viewModel.scooter.battery)
         }
     }
 }
 
-struct StartRideView_Previews: PreviewProvider {
-    static var previews: some View {
-        StartRideView(dragDown: {})
-    }
-}
+//struct StartRideView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        StartRideView(dragDown: {}, onStartRide: {})
+//    }
+//}

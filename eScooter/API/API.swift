@@ -177,21 +177,6 @@ struct API {
         }
     }
     
-    static func serialNumberUnlock(internalId: Int, _ callback: @escaping (Result<Scooter>) -> Void) {
-        guard let token = Session.shared.authToken else {
-            callback(.failure(APIError.init(message: "Invalid token")))
-            return
-        }
-        let header: HTTPHeaders = ["Authorization": "Bearer " + token]
-        let params = ["scooterInternalId": internalId]
-        AF.request("\(URLString)/scooter/unlock", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response {
-            response in
-            debugPrint(response)
-            let result: Result<Scooter> = handleResponse(response: response)
-            callback(result)
-        }
-    }
-    
     static func getScooterById(scooterId: String, _ callback: @escaping (Result<Scooter>) -> Void) {
         guard let token = Session.shared.authToken else { return }
         let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
@@ -241,6 +226,62 @@ struct API {
         AF.request("\(URLString)/scooter/unlock", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
             debugPrint(response)
             let result: Result<UnlockResponse> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func lockScooter(internalId: Int, coordX: Double, coordY: Double, callback: @escaping (Result<UnlockResponse>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY]
+        AF.request("\(URLString)/scooter/lock", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<UnlockResponse> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func startRide(internalId: Int, coordX: Double, coordY: Double, callback: @escaping (Result<TripResponse>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY]
+        AF.request("\(URLString)/scooter/start", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<TripResponse> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func endRide(internalId: Int, coordX: Double, coordY: Double, callback: @escaping (Result<TripResponse>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY]
+        AF.request("\(URLString)/scooter/end", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<TripResponse> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func getOngoingTrip(internalId: Int, coordX: Double, coordY: Double,_ callback: @escaping (Result<Ongoing>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError(message: "Not valid session")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization": "Bearer " + token]
+        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY]
+        AF.request("\(URLString)/scooter/ongoing", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<Ongoing> = handleResponse(response: response)
             callback(result)
         }
     }

@@ -15,7 +15,6 @@ struct UnlockViewSerialNumber: View {
     let onQr: () -> Void
     let onNFC: () -> Void
     let onStartRide: () -> Void
-    let scooter: Scooter
     
     init(scooter: Scooter, currentLocation: [Double], onClose: @escaping () -> Void, onQr: @escaping () -> Void, onNFC: @escaping () -> Void, onStartRide: @escaping () -> Void) {
         viewModel = SerialNumberViewModel(scooter: scooter, location: currentLocation)
@@ -23,7 +22,6 @@ struct UnlockViewSerialNumber: View {
         self.onQr = onQr
         self.onNFC = onNFC
         self.onStartRide = onStartRide
-        self.scooter = scooter
     }
     
     var body: some View {
@@ -82,9 +80,17 @@ struct UnlockViewSerialNumber: View {
             TextFieldNumber(number: $viewModel.second, isFirstResponder: (!viewModel.first.isEmpty && viewModel.second.isEmpty))
             TextFieldNumber(number: $viewModel.third, isFirstResponder: (!viewModel.first.isEmpty && !viewModel.second.isEmpty && viewModel.third.isEmpty))
             TextFieldNumber(number: $viewModel.forth, isFirstResponder: (!viewModel.first.isEmpty && !viewModel.second.isEmpty && !viewModel.third.isEmpty && viewModel.forth.isEmpty))
-                .onChange(of: viewModel.forth, perform: { value in
+                .onChange(of: viewModel.forth, perform: { _ in
                     if !(viewModel.first.isEmpty && viewModel.second.isEmpty && viewModel.third.isEmpty && viewModel.forth.isEmpty) {
-                        viewModel.unlockScooterSerialNumber()
+                        viewModel.unlockScooterSerialNumber({ scooter in
+                            onStartRide()
+                        }, { error in
+                            viewModel.first = ""
+                            viewModel.second = ""
+                            viewModel.third = ""
+                            viewModel.forth = ""
+                            showError(error: error)
+                        })
                     }
                 })
         }

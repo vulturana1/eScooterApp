@@ -10,22 +10,18 @@ import SwiftUI
 struct ScooterUnlockView: View {
     
     @ObservedObject var viewModel: ScooterCardViewModel
-    let onRing: () -> Void
     let dragDown: () -> Void
     let onVerifySerialNumber: () -> Void
     let onVerifyNfc: () -> Void
     let onVerifyQr: () -> Void
-    let scooter: Scooter
     @State var offset = CGFloat(200.0)
     
-    init(scooter: Scooter, currentLocation: [Double], onRing: @escaping () -> Void, dragDown: @escaping () -> Void, onVerifySerialNumber: @escaping () -> Void, onVerifyNfc: @escaping () -> Void, onVerifyQr: @escaping () -> Void) {
+    init(scooter: Scooter, currentLocation: [Double], dragDown: @escaping () -> Void, onVerifySerialNumber: @escaping () -> Void, onVerifyNfc: @escaping () -> Void, onVerifyQr: @escaping () -> Void) {
         viewModel = ScooterCardViewModel(scooter: scooter, location: currentLocation)
-        self.onRing = onRing
         self.dragDown = dragDown
         self.onVerifySerialNumber = onVerifySerialNumber
         self.onVerifyQr = onVerifyQr
         self.onVerifyNfc = onVerifyNfc
-        self.scooter = scooter
     }
     
     var body: some View {
@@ -83,10 +79,10 @@ struct ScooterUnlockView: View {
                 .font(.custom("BaiJamjuree-Medium", size: 14))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                 .opacity(0.7)
-            Text("#" + "\(self.scooter.internalId)")
+            Text("#" + "\(viewModel.scooter.internalId)")
                 .font(.custom("BaiJamjuree-Bold", size: 20))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-            BatteryView(batteryLevel: self.scooter.battery)
+            BatteryView(batteryLevel: viewModel.scooter.battery)
             ringButton
             missingButton
         }
@@ -121,7 +117,7 @@ struct ScooterUnlockView: View {
                     .shadow(color: Color.black.opacity(0.20), radius: 13, x: 7, y: 7)
                 Image("ring1")
                     .onTapGesture {
-                        onRing()
+                        viewModel.pingScooter()
                     }
             }
             Text("Ring")

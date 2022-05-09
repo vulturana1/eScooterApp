@@ -12,7 +12,6 @@ struct ScooterCardView: View {
     
     @ObservedObject var viewModel: ScooterCardViewModel
     @State var street: String = ""
-    let scooter: Scooter
     
     let onRing: () -> Void
     let onUnlock: () -> Void
@@ -23,7 +22,6 @@ struct ScooterCardView: View {
         self.onRing = onRing
         self.onUnlock = onUnlock
         self.onLocation = onLocation
-        self.scooter = scooter
     }
     
     var body: some View {
@@ -41,27 +39,29 @@ struct ScooterCardView: View {
                         .scaledToFit()
                 }
             }
-            .onAppear {
-                lookUpCurrentLocation()
-            }
-        }.padding()
+//            .onAppear {
+//                lookUpCurrentLocation()
+//            }
+        }
+        .padding()
     }
     
     var details: some View {
-        VStack {
+        VStack(alignment: .trailing) {
             Text("Scooter")
                 .font(.custom("BaiJamjuree-Medium", size: 14))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                 .opacity(0.7)
-            Text("#" + "\(self.scooter.internalId)")
+            Text("#" + "\(viewModel.scooter.internalId)")
                 .font(.custom("BaiJamjuree-Bold", size: 20))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-            BatteryView(batteryLevel: self.scooter.battery)
+            BatteryView(batteryLevel: viewModel.scooter.battery)
             HStack(spacing: 20) {
                 ringButton
                 locationButton
             }
         }
+        .padding(.trailing, 15)
     }
     
     var ringButton: some View {
@@ -94,7 +94,7 @@ struct ScooterCardView: View {
     var location: some View {
         HStack {
             Image("pin")
-            Text("\(self.street)")
+            Text("\(self.viewModel.address)")
                 .font(.custom("BaiJamjuree-Medium", size: 14))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
         }
@@ -123,7 +123,7 @@ struct ScooterCardView: View {
     
     func lookUpCurrentLocation() {
         // Use the last reported location.
-        let lastLocation = self.scooter.location
+        let lastLocation = viewModel.scooter.location
         let geocoder = CLGeocoder()
         // Look up the location
         geocoder.reverseGeocodeLocation(CLLocation(latitude: lastLocation.coordinates[0], longitude: lastLocation.coordinates[1]),

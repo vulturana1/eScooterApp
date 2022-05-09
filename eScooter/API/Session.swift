@@ -23,6 +23,16 @@ class Session: ObservableObject {
     }
     
     var isValidSession: Bool {
+        API.getCurrentCustomer { response in
+            switch response {
+            case .success(let user):
+                if user.customer.drivingLicense == "" {
+                    self.authToken = nil
+                }
+            case .failure:
+                break
+            }
+        }
         return authToken != nil
     }
     

@@ -43,3 +43,13 @@ class AllTrips: Codable {
         case trips = "trips"
     }
 }
+
+struct TripResponse: Codable {
+    let message: String
+    let trip: Trip
+    
+    enum CodingKeys: String, CodingKey {
+        case message = "message"
+        case trip = "trip"
+    }
+}
