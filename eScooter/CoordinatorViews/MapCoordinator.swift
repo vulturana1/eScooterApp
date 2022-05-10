@@ -23,7 +23,7 @@ struct MapCoordinator: View {
         MapView(onMenu: {
             onMenu()
         }, showScooter: { scooter in
-            viewModel.currentScooter = scooter
+            viewModel.selectScooter(scooter: scooter)
             detailShow = true
             if scooter.locked == false {
                 startRideShow = true
@@ -35,60 +35,59 @@ struct MapCoordinator: View {
                 detailShow = false
                 tripDetailsShow = true
             }
-            
         })
         .overlay(handleScooter())
         .overlay(showUnlockTypes())
         .overlay(handleStartRide())
-        .onTapGesture {
-            detailShow = false
-        }
+        //        .onTapGesture {
+        //            viewModel.current = nil
+        //        }
         .overlay(handleOngoingRide())
     }
     
-    func handleScooter() -> AnyView {
+    @ViewBuilder
+    func handleScooter() -> some View {
         if detailShow {
-            return AnyView(ScooterCardView(scooter: viewModel.currentScooter, currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? defaultLocation[0], viewModel.locationManager.lastLocation?.coordinate.latitude ?? defaultLocation[1]] , onRing: {
-                
-            }, onUnlock: {
-                self.unlockShow = true
-                self.detailShow = false
-            }, onLocation: {}))
-        } else {
-            return AnyView(EmptyView())
+            if let currentScooter = viewModel.currentScooter {
+                ScooterCardView(viewModel: currentScooter) {
+                    self.unlockShow = true
+                    self.detailShow = false
+                }
+            }
         }
     }
     
-    func showUnlockTypes() -> AnyView {
+    @ViewBuilder
+    func showUnlockTypes() -> some View {
         if unlockShow {
-            return AnyView(
-                ScooterUnlockView(scooter: viewModel.currentScooter, currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? defaultLocation[0], viewModel.locationManager.lastLocation?.coordinate.latitude ?? defaultLocation[1]], dragDown: {
+            if let currentScooter = viewModel.currentScooter {
+                ScooterUnlockView(viewModel: currentScooter) {
                     self.unlockShow = false
-                }, onVerifySerialNumber: {
+                } onVerifySerialNumber: {
                     handleSerialNumberUnlock()
-                }, onVerifyNfc: {
+                } onVerifyNfc: {
                     handleNFCUnlock()
-                }, onVerifyQr: {
-    
-                }))
-        } else {
-            return AnyView(EmptyView())
+                } onVerifyQr: {
+                    
+                }
+            }
         }
     }
     
     func handleSerialNumberUnlock() {
-        loading = true
-        navigationViewModel.push(UnlockViewSerialNumber(scooter: viewModel.currentScooter, currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? defaultLocation[0], viewModel.locationManager.lastLocation?.coordinate.latitude ?? defaultLocation[1]], onClose: {
-            navigationViewModel.pop()
-        }, onQr: {
-            
-        }, onNFC: {
-            handleNFCUnlock()
-        }, onStartRide: {
-            self.startRideShow = true
-            navigationViewModel.pop()
-            
-        }))
+        if let currentUnlockScooter = viewModel.currentUnlockScooter {
+            navigationViewModel.push(UnlockViewSerialNumber(viewModel: currentUnlockScooter, onClose: {
+                navigationViewModel.pop()
+            }, onQr: {
+                
+            }, onNFC: {
+                handleNFCUnlock()
+            }, onStartRide: {
+                self.startRideShow = true
+                navigationViewModel.pop()
+                
+            }))
+        }
     }
     
     func handleNFCUnlock() {
@@ -101,31 +100,34 @@ struct MapCoordinator: View {
         }))
     }
     
-    func handleStartRide() -> AnyView {
+    @ViewBuilder
+    func handleStartRide() -> some View {
         if self.startRideShow {
-            return AnyView(StartRideView(scooter: viewModel.currentScooter, currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? defaultLocation[0], viewModel.locationManager.lastLocation?.coordinate.latitude ?? defaultLocation[1]], dragDown: {
-                self.startRideShow = false
-            }, onTripDetails: {
-                self.startRideShow = false
-                self.tripDetailsShow = true
-            }))
-        } else {
-            return AnyView(EmptyView())
+            if let currentScooter = viewModel.currentScooter {
+                StartRideView(viewModel: currentScooter) {
+                    self.startRideShow = false
+                } onTripDetails: { result in
+                    viewModel.setTrip(trip: result)
+                    self.startRideShow = false
+                    self.tripDetailsShow = true
+                }
+            }
         }
     }
     
-    func handleOngoingRide() -> AnyView {
+    @ViewBuilder
+    func handleOngoingRide() -> some View {
         if self.tripDetailsShow {
-            return AnyView(TripDetailsView(scooter: viewModel.currentScooter, trip: viewModel.ongoingTrip, currentLocation: [viewModel.locationManager.lastLocation?.coordinate.longitude ?? defaultLocation[0], viewModel.locationManager.lastLocation?.coordinate.latitude ?? defaultLocation[1]], onEndRide: {
-                handleTripSummary()
-            }))
-        } else {
-            return AnyView(EmptyView())
+            if let currentTrip = viewModel.currentTrip {
+                TripDetailsView(viewModel: currentTrip, onEndRide: { result in
+                handleTripSummary(trip: result.trip)
+            })
+            }
         }
     }
     
-    func handleTripSummary() {
-        navigationViewModel.push(TripSummaryView())
+    func handleTripSummary(trip: Trip) {
+        navigationViewModel.push(TripSummaryView(trip: trip))
     }
 }
 

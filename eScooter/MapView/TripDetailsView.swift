@@ -12,12 +12,15 @@ struct TripDetailsView: View {
     @ObservedObject var viewModel: TripDetailsViewModel
     @State var offset = CGFloat(200.0)
     @State var lock = false
-    let onEndRide: () -> Void
-    //    let trip = Trip(id: "dkdjnkf", coordinatesArray: [Coordinates(latitude: 46.75358699624089, longitude: 23.584379549927743, id: "dnovjnodfjw")], totalTime: 10, distance: 20, cost: 20)
-    //    let scooter = Scooter(id: "knsok1o3k2nrokv", number: 1, battery: 0, locked: false, booked: false, internalId: 0000, location: Location(type: "Point", coordinates: [23.5, 45.1]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE", unlockCode: 0000)
+    let onEndRide: (TripResponse) -> Void
     
-    init(scooter: Scooter, trip: Ongoing, currentLocation: [Double], onEndRide: @escaping () -> Void) {
-        viewModel = TripDetailsViewModel(scooter: scooter, trip: trip, location: currentLocation)
+    //    init(scooter: Scooter, trip: Ongoing, currentLocation: [Double], onEndRide: @escaping (TripResponse) -> Void) {
+    //        viewModel = TripDetailsViewModel(scooter: scooter, trip: trip, location: currentLocation)
+    //        self.onEndRide = onEndRide
+    //    }
+    
+    init(viewModel: TripDetailsViewModel, onEndRide: @escaping (TripResponse) -> Void) {
+        self.viewModel = viewModel
         self.onEndRide = onEndRide
     }
     
@@ -99,8 +102,17 @@ struct TripDetailsView: View {
     
     var endRideButton: some View {
         Button {
-            viewModel.endRide()
-            onEndRide()
+            viewModel.endRide { result in
+                switch result {
+                case .success(let result):
+                    onEndRide(result)
+                    break
+                case .failure(let error):
+                    showError(error: error)
+                    break
+                }
+            }
+            //onEndRide()
         } label: {
             HStack {
                 Text("End ride")
@@ -169,12 +181,14 @@ struct TripDetailsView: View {
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                     .opacity(0.7)
             }
-            Text("\(viewModel.trip.time)")
-                .font(.custom("BaiJamjuree-Bold", size: 30))
-                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-            Text("  min")
-                .font(.custom("BaiJamjuree-Bold", size: 20))
-                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+            HStack {
+                Text(String(format: "%02d:%02d", viewModel.trip.time / 3600, viewModel.trip.time / 60))
+                    .font(.custom("BaiJamjuree-Bold", size: 30))
+                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                Text("  min")
+                    .font(.custom("BaiJamjuree-Bold", size: 20))
+                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+            }
         }
     }
     
@@ -187,12 +201,14 @@ struct TripDetailsView: View {
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                     .opacity(0.7)
             }
-            Text("\(viewModel.trip.distance)")
-                .font(.custom("BaiJamjuree-Bold", size: 30))
-                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-            Text("  km")
-                .font(.custom("BaiJamjuree-Bold", size: 20))
-                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+            HStack {
+                Text(String(format: "%.1f", viewModel.trip.distance))
+                    .font(.custom("BaiJamjuree-Bold", size: 30))
+                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                Text("  km")
+                    .font(.custom("BaiJamjuree-Bold", size: 20))
+                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+            }
         }
     }
     
@@ -219,6 +235,41 @@ struct TripDetailsView: View {
         }
     }
     
+    var time: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Image("time")
+                Text("Travel time")
+                    .font(.custom("BaiJamjuree-Medium", size: 14))
+                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                    .opacity(0.7)
+            }
+            Text(String(format: "%02d:%02d:%02d", viewModel.trip.time / 3600, viewModel.trip.time / 60 % 60, viewModel.trip.time % 60))
+                .font(.custom("BaiJamjuree-Bold", size: 44))
+                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+        }
+    }
+    
+    var distance: some View {
+        VStack(alignment: .center) {
+            HStack {
+                Image("map")
+                Text("Distance")
+                    .font(.custom("BaiJamjuree-Medium", size: 14))
+                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                    .opacity(0.7)
+            }
+            
+            Text(String(format: "%.1f", viewModel.trip.distance))
+                .font(.custom("BaiJamjuree-Bold", size: 44))
+                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+            Text("  km")
+                .font(.custom("BaiJamjuree-Medium", size: 16))
+                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+            
+        }
+    }
+    
     var extendedViewContent: some View {
         VStack {
             RoundedRectangle(cornerRadius: 29)
@@ -228,14 +279,13 @@ struct TripDetailsView: View {
             
             RoundedRectangle(cornerRadius: 29)
                 .stroke(Color.black.opacity(0.5), lineWidth: 1)
-                .overlay(detailsLeft)
+                .overlay(time)
                 .padding()
             
             RoundedRectangle(cornerRadius: 29)
                 .stroke(Color.black.opacity(0.5), lineWidth: 1)
-                .overlay(detailsRight)
+                .overlay(distance)
                 .padding()
-            
         }
     }
 }

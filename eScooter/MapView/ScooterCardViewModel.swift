@@ -12,12 +12,20 @@ class ScooterCardViewModel: ObservableObject {
     
     let scooter: Scooter
     let location: [Double]
-    var address: String = ""
+    @Published var placemark: CLPlacemark?
+    
+    var address: String? {
+        guard let placemark = placemark else {
+            return nil
+        }
+        let street = placemark.thoroughfare ?? "N/A"
+        let number = placemark.subThoroughfare ?? ""
+        return "\(street) \(number)"
+    }
     
     init(scooter: Scooter, location: [Double]) {
         self.scooter = scooter
         self.location = location
-        lookUpCurrentLocation()
     }
     
     func pingScooter() {
@@ -33,37 +41,50 @@ class ScooterCardViewModel: ObservableObject {
         }
     }
     
-    func startRide() {
+    func startRide(_ callback: @escaping (Result<Ongoing>) -> Void) {
         API.startRide(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
             switch result {
             case .success(let message):
                 showSuccess(message: message.message)
+                API.getOngoingTrip(internalId: self.scooter.internalId, coordX: self.location[1], coordY: self.location[0]) { result in
+                    callback(result)
+                }
                 break
             case .failure(let error):
                 showError(error: error)
                 break
             }
+            
         }
     }
     
-    func lookUpCurrentLocation() {
-        // Use the last reported location.
-        let lastLocation = scooter.location
+    //    func startRide() {
+    //        API.startRide(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
+    //            switch result {
+    //            case .success(let message):
+    //                showSuccess(message: message.message)
+    //                break
+    //            case .failure(let error):
+    //                showError(error: error)
+    //                break
+    //            }
+    //        }
+    //    }
+    
+    func computeAddressIfNeeded() {
+        print("compute address for scooter" + scooter.id)
+        if address != nil { return }
         let geocoder = CLGeocoder()
-        // Look up the location
-        geocoder.reverseGeocodeLocation(CLLocation(latitude: lastLocation.coordinates[0], longitude: lastLocation.coordinates[1]),
-                                        completionHandler: { (placemarks, error) in
-            guard let placemark = placemarks?.last else {
-                return
+        geocoder.reverseGeocodeLocation(CLLocation(latitude: scooter.location.coordinates[0], longitude: scooter.location.coordinates[1]), completionHandler: { (places, error) in
+            print("finished computed address")
+            if error == nil {
+                self.placemark = places?[0]
+                print("succesfully retrieved placemark")
             }
-            if let street = placemark.thoroughfare {
-                self.address = street
+            if let error = error {
+                print(error.localizedDescription)
             }
-            if let number = placemark.subThoroughfare {
-                self.address  += ", \(number)"
-            }
-            print(self.address)
         })
     }
-
+    
 }

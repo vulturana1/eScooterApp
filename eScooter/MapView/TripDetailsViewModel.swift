@@ -13,6 +13,7 @@ class TripDetailsViewModel: ObservableObject {
     let scooter: Scooter
     let trip: Ongoing
     let location: [Double]
+    //var tripCompleted: Trip?
     
     init(scooter: Scooter, trip: Ongoing, location: [Double]) {
         self.scooter = scooter
@@ -20,16 +21,18 @@ class TripDetailsViewModel: ObservableObject {
         self.location = location
     }
     
-    func endRide() {
+    func endRide(_ callback: @escaping (Result<TripResponse>) -> Void) {
         API.endRide(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
             switch result {
             case .success(let response):
+                //self.tripCompleted = response.trip
                 showSuccess(message: response.message)
                 break
             case .failure(let error):
                 showError(error: error)
                 break
             }
+            callback(result)
         }
     }
     

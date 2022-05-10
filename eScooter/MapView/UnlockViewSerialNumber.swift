@@ -16,8 +16,8 @@ struct UnlockViewSerialNumber: View {
     let onNFC: () -> Void
     let onStartRide: () -> Void
     
-    init(scooter: Scooter, currentLocation: [Double], onClose: @escaping () -> Void, onQr: @escaping () -> Void, onNFC: @escaping () -> Void, onStartRide: @escaping () -> Void) {
-        viewModel = SerialNumberViewModel(scooter: scooter, location: currentLocation)
+    init(viewModel: SerialNumberViewModel, onClose: @escaping () -> Void, onQr: @escaping () -> Void, onNFC: @escaping () -> Void, onStartRide: @escaping () -> Void) {
+        self.viewModel = viewModel
         self.onClose = onClose
         self.onQr = onQr
         self.onNFC = onNFC

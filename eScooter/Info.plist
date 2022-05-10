@@ -14,5 +14,9 @@
 	<string>We need to use the camera to scan the driving license</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location will be displayed on the map and used for directions</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>comgooglemaps</string>
+	</array>
 </dict>
 </plist>

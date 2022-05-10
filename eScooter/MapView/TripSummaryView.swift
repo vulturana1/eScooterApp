@@ -9,7 +9,9 @@ import SwiftUI
 import CoreLocation
 
 struct TripSummaryView: View {
-    let trip: Trip = Trip(id: "235kna", coordinatesArray: [Coordinates(latitude: 46.99378173443409, longitude: 23.969880551690657, id: "626fe36687242a28bbd70054")], totalTime: 12, distance: 10, cost: 10)
+    
+    let trip: Trip
+    //@ObservedObject var viewModel: TripDetailsViewModel
     
     var body: some View {
         ZStack {
@@ -22,7 +24,7 @@ struct TripSummaryView: View {
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                     .padding()
                 //map
-                SectionFromTo(trip: self.trip)
+                SectionFromTo(trip: trip)
                 
                 HStack {
                     detailsLeft
@@ -161,8 +163,8 @@ struct SectionFromTo: View {
     }
 }
 
-struct TripSummaryView_Previews: PreviewProvider {
-    static var previews: some View {
-        TripSummaryView()
-    }
-}
+//struct TripSummaryView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TripSummaryView()
+//    }
+//}

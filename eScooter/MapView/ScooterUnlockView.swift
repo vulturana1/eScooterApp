@@ -16,8 +16,8 @@ struct ScooterUnlockView: View {
     let onVerifyQr: () -> Void
     @State var offset = CGFloat(200.0)
     
-    init(scooter: Scooter, currentLocation: [Double], dragDown: @escaping () -> Void, onVerifySerialNumber: @escaping () -> Void, onVerifyNfc: @escaping () -> Void, onVerifyQr: @escaping () -> Void) {
-        viewModel = ScooterCardViewModel(scooter: scooter, location: currentLocation)
+    init(viewModel: ScooterCardViewModel, dragDown: @escaping () -> Void, onVerifySerialNumber: @escaping () -> Void, onVerifyNfc: @escaping () -> Void, onVerifyQr: @escaping () -> Void) {
+        self.viewModel = viewModel
         self.dragDown = dragDown
         self.onVerifySerialNumber = onVerifySerialNumber
         self.onVerifyQr = onVerifyQr
@@ -63,7 +63,7 @@ struct ScooterUnlockView: View {
                         }
                         buttons
                     }
-                    .padding()                    
+                    .padding()
                 }
                 .offset(y: offset)
                 .onAppear {

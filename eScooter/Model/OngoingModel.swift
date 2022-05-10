@@ -8,7 +8,7 @@
 import Foundation
 
 struct Ongoing: Codable {
-    let time: Double
+    let time: Int
     let distance: Double
     let price: Double
     

@@ -10,6 +10,7 @@ import CoreLocation
 
 struct Trip: Codable {
     let id: String
+    let scooterId: Int
     let coordinatesArray: [Coordinates]
     let totalTime: Int
     let distance: Int
@@ -17,6 +18,7 @@ struct Trip: Codable {
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
+        case scooterId = "scooterId"
         case coordinatesArray = "coordinatesArray"
         case distance = "distance"
         case totalTime = "totalTime"

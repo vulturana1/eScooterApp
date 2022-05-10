@@ -12,10 +12,10 @@ struct StartRideView: View {
     @ObservedObject var viewModel: ScooterCardViewModel
     @State var offset = CGFloat(200.0)
     let dragDown: () -> Void
-    let onTripDetails: () -> Void
+    let onTripDetails: (Ongoing) -> Void
     
-    init(scooter: Scooter, currentLocation: [Double], dragDown: @escaping () -> Void, onTripDetails: @escaping () -> Void) {
-        viewModel = ScooterCardViewModel(scooter: scooter, location: currentLocation)
+    init(viewModel: ScooterCardViewModel, dragDown: @escaping () -> Void, onTripDetails: @escaping (Ongoing) -> Void) {
+        self.viewModel = viewModel
         self.dragDown = dragDown
         self.onTripDetails = onTripDetails
     }
@@ -69,8 +69,18 @@ struct StartRideView: View {
     
     var startRideButton: some View {
         Button {
-            viewModel.startRide()
-            onTripDetails()
+            viewModel.startRide { result in
+                switch result {
+                case .success(let result):
+                    onTripDetails(result)
+                    break
+                case .failure(let error):
+                    showError(error: error)
+                    break
+                }
+            }
+            //viewModel.startRide()
+            //onTripDetails()
         } label: {
             HStack {
                 Text("Start ride")

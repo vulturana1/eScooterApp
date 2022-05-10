@@ -7,21 +7,16 @@
 
 import SwiftUI
 import CoreLocation
+import MapKit
 
 struct ScooterCardView: View {
     
     @ObservedObject var viewModel: ScooterCardViewModel
-    @State var street: String = ""
-    
-    let onRing: () -> Void
     let onUnlock: () -> Void
-    let onLocation: () -> Void
     
-    init(scooter: Scooter, currentLocation: [Double], onRing: @escaping () -> Void, onUnlock: @escaping () -> Void, onLocation: @escaping () -> Void) {
-        viewModel = ScooterCardViewModel(scooter: scooter, location: currentLocation)
-        self.onRing = onRing
+    init(viewModel: ScooterCardViewModel, onUnlock: @escaping () -> Void) {
+        self.viewModel = viewModel
         self.onUnlock = onUnlock
-        self.onLocation = onLocation
     }
     
     var body: some View {
@@ -39,9 +34,6 @@ struct ScooterCardView: View {
                         .scaledToFit()
                 }
             }
-//            .onAppear {
-//                lookUpCurrentLocation()
-//            }
         }
         .padding()
     }
@@ -87,6 +79,17 @@ struct ScooterCardView: View {
                 .shadow(color: Color.black.opacity(0.20), radius: 13, x: 7, y: 7)
             Image("location")
                 .onTapGesture {
+                    let latitude = viewModel.scooter.location.coordinates[0]
+                    let longitude = viewModel.scooter.location.coordinates[1]
+                    let url = URL(string: "comgooglemaps://?saddr=&daddr=\(latitude),\(longitude)&directionsmode=driving")
+                    if UIApplication.shared.canOpenURL(url!) {
+                        UIApplication.shared.open(url!, options: [:], completionHandler: nil)
+                    }
+                    else{
+                        let urlBrowser = URL(string: "https://www.google.co.in/maps/dir/??saddr=&daddr=\(latitude),\(longitude)&directionsmode=driving")
+                        
+                        UIApplication.shared.open(urlBrowser!, options: [:], completionHandler: nil)
+                    }
                 }
         }
     }
@@ -94,9 +97,15 @@ struct ScooterCardView: View {
     var location: some View {
         HStack {
             Image("pin")
-            Text("\(self.viewModel.address)")
-                .font(.custom("BaiJamjuree-Medium", size: 14))
-                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+            Group {
+                if let address = viewModel.address {
+                    Text("\(address)")
+                } else {
+                    Text("loading address...")
+                }
+            }
+            .font(.custom("BaiJamjuree-Medium", size: 14))
+            .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
         }
         .padding()
     }
@@ -119,26 +128,6 @@ struct ScooterCardView: View {
             .cornerRadius(20)
             .frame(width: 200)
         }
-    }
-    
-    func lookUpCurrentLocation() {
-        // Use the last reported location.
-        let lastLocation = viewModel.scooter.location
-        let geocoder = CLGeocoder()
-        // Look up the location
-        geocoder.reverseGeocodeLocation(CLLocation(latitude: lastLocation.coordinates[0], longitude: lastLocation.coordinates[1]),
-                                        completionHandler: { (placemarks, error) in
-            guard let placemark = placemarks?.last else {
-                return
-            }
-            if let street = placemark.thoroughfare {
-                self.street = street
-            }
-            if let number = placemark.subThoroughfare {
-                self.street  += ", \(number)"
-            }
-            print(self.street)
-        })
     }
 }
 
