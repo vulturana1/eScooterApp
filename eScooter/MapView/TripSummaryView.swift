@@ -7,8 +7,16 @@
 
 import SwiftUI
 import CoreLocation
+import MapKit
+import PassKit
 
 struct TripSummaryView: View {
+    
+    @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(), span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+    @State private var location = CLLocationCoordinate2D(latitude: 46.75618, longitude: 23.5948)
+    let paymentHandler = PaymentHandler()
+    let onNext: () -> Void
+    @State var showAlert = false
     
     let trip: Trip
     //@ObservedObject var viewModel: TripDetailsViewModel
@@ -23,7 +31,12 @@ struct TripSummaryView: View {
                     .font(.custom("BaiJamjuree-Bold", size: 16))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                     .padding()
-                //map
+                
+                MapPolylineView(centerCoordinate: $location, locations: getCoordinates())
+                    .frame(maxWidth: .infinity, maxHeight: 172)
+                    .clipShape(RoundedRectangle(cornerRadius: 29))
+                    .padding(.horizontal, 22)
+                
                 SectionFromTo(trip: trip)
                 
                 HStack {
@@ -35,6 +48,17 @@ struct TripSummaryView: View {
                 applePayButton
             }
         }
+        .onAppear {
+            region.center = CLLocationCoordinate2D(latitude: CLLocationDegrees(trip.coordinatesArray[0].latitude), longitude: CLLocationDegrees(trip.coordinatesArray[0].longitude))
+        }
+    }
+    
+    func getCoordinates() -> [CLLocationCoordinate2D] {
+        var coordinates: [CLLocationCoordinate2D] = []
+        for index in 0..<trip.coordinatesArray.count {
+            coordinates.append(CLLocationCoordinate2D(latitude: trip.coordinatesArray[index].latitude, longitude: trip.coordinatesArray[index].longitude))
+        }
+        return coordinates
     }
     
     var detailsLeft: some View {
@@ -47,7 +71,7 @@ struct TripSummaryView: View {
                     .opacity(0.7)
             }
             HStack {
-                Text("\(trip.totalTime)")
+                Text(String(format: "%02d:%02d", trip.totalTime / 3600, trip.totalTime / 60))
                     .font(.custom("BaiJamjuree-Bold", size: 16))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                 Text("  min")
@@ -83,7 +107,19 @@ struct TripSummaryView: View {
     
     var applePayButton: some View {
         Button {
-            
+            self.paymentHandler.startPayment(price: "\(trip.cost)") { success in
+                if success {
+                    
+                    showSuccess(message: "You can find your recipt in your mail")
+                    onNext()
+                    
+                } else {
+//                    showError(error: Error( "We couln't process your payment"))
+                    print("Eroare plata")
+                    showAlert = true
+                    //onNext()
+                }
+            }
         } label: {
             HStack {
                 Text("Pay with Pay")
@@ -98,6 +134,7 @@ struct TripSummaryView: View {
             .background(Color.black)
             .cornerRadius(20)
         }
+        
         .padding()
     }
 }
@@ -144,7 +181,7 @@ struct SectionFromTo: View {
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.init(red: 0.129, green: 0.043, blue: 0.314))
         )
-        .frame(width: 327, height: 160)
+        .frame(width: 327, height: 175)
     }
     
     func lookUpCurrentLocation(trip: Trip, location: Coordinates, completionHandler: @escaping (CLPlacemark?)

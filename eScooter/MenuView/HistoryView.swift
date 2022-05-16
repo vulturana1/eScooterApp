@@ -60,7 +60,7 @@ struct HistoryView: View {
 }
 
 struct Section: View {
-    let trip: Trip
+    let trip: HistoryTrip
     @State private var from: String?
     @State private var to: String?
     
@@ -125,7 +125,7 @@ struct Section: View {
         .frame(width: 327, height: 160)
     }
     
-    func lookUpCurrentLocation(trip: Trip, location: Coordinates, completionHandler: @escaping (CLPlacemark?)
+    func lookUpCurrentLocation(trip: HistoryTrip, location: Coordinates, completionHandler: @escaping (CLPlacemark?)
                                -> Void) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(CLLocation(latitude: location.latitude, longitude: location.longitude),

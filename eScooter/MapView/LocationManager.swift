@@ -39,7 +39,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
         guard let location = locations.last else { return }
         self.lastLocation = location
         self.getCityName(location: location)
-        //print(self.lastLocation)
+        //print(self.lastLocation?.coordinate)
         print(self.city)
     }
     

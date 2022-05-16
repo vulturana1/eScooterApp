@@ -188,7 +188,7 @@ struct API {
         }
     }
     
-    static func getAllTrips(start: Int, length: Int, callback: @escaping (Result<AllTrips>) -> Void) {
+    static func getAllTrips(start: Int, length: Int, callback: @escaping (Result<AllTripsHistory>) -> Void) {
         guard let token = Session.shared.authToken else {
             callback(.failure(APIError.init(message: "Invalid token")))
             return
@@ -197,7 +197,7 @@ struct API {
         let params = ["start": start, "length": length]
         AF.request("\(URLString)/customer/history", method: .get, parameters: params, headers: header).response { response in
             debugPrint(response)
-            let result: Result<AllTrips> = handleResponse(response: response)
+            let result: Result<AllTripsHistory> = handleResponse(response: response)
             callback(result)
         }
     }
@@ -282,6 +282,20 @@ struct API {
         AF.request("\(URLString)/scooter/ongoing", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
             debugPrint(response)
             let result: Result<Ongoing> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
+    static func move(internalId: Int, coordX: Double, coordY: Double,_ callback: @escaping (Result<Message>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError(message: "Not valid session")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization": "Bearer " + token]
+        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY]
+        AF.request("\(URLString)/scooter/move", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<Message> = handleResponse(response: response)
             callback(result)
         }
     }

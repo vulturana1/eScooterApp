@@ -51,7 +51,6 @@ struct UnlockViewQr: View {
                 }
                 .padding()
                 Spacer()
-                
             }
             .padding(.top, 30)
             .padding()

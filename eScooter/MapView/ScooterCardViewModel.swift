@@ -13,6 +13,7 @@ class ScooterCardViewModel: ObservableObject {
     let scooter: Scooter
     let location: [Double]
     @Published var placemark: CLPlacemark?
+    @Published var disablePing = false
     
     var address: String? {
         guard let placemark = placemark else {
@@ -29,6 +30,10 @@ class ScooterCardViewModel: ObservableObject {
     }
     
     func pingScooter() {
+        if(checkDistance() > 0.4) {
+            disablePing = true
+            return
+        }
         API.pingScooter(scooterInternalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
             switch result {
             case .success(let message):
@@ -41,11 +46,26 @@ class ScooterCardViewModel: ObservableObject {
         }
     }
     
+    func checkDistance() -> Double {
+        // Haversine formula
+        let R: Double = 6371 // Radius of the earth in km
+        let dLat = deg2rad(scooter.location.coordinates[1] - location[0])
+        let dLon = deg2rad(scooter.location.coordinates[0] - location[1])
+        let a = sin(dLat/2) * sin(dLat/2) + cos(deg2rad(location[0])) * cos(deg2rad(scooter.location.coordinates[1])) * sin(dLon/2) * sin(dLon/2)
+        let c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        let d = R * c
+        return d
+    }
+    
+    func deg2rad(_ number: Double) -> Double {
+        return number * .pi / 180
+    }
+    
     func startRide(_ callback: @escaping (Result<Ongoing>) -> Void) {
         API.startRide(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
             switch result {
-            case .success(let message):
-                showSuccess(message: message.message)
+            case .success(let _):
+                //showSuccess(message: message.message)
                 API.getOngoingTrip(internalId: self.scooter.internalId, coordX: self.location[1], coordY: self.location[0]) { result in
                     callback(result)
                 }
@@ -54,6 +74,7 @@ class ScooterCardViewModel: ObservableObject {
                 showError(error: error)
                 break
             }
+            //callback(result)
             
         }
     }

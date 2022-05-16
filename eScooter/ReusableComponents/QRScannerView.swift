@@ -4,6 +4,7 @@
 //
 //  Created by Ana Vultur on 04.05.2022.
 //
+
 import Foundation
 import UIKit
 import AVFoundation
@@ -47,7 +48,7 @@ extension QRScannerView {
     }
     
     func startScanning() {
-       captureSession?.startRunning()
+        captureSession?.startRunning()
     }
     
     func stopScanning() {

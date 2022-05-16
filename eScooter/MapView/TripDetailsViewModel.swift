@@ -11,21 +11,20 @@ import CoreLocation
 class TripDetailsViewModel: ObservableObject {
     
     let scooter: Scooter
-    let trip: Ongoing
     let location: [Double]
-    //var tripCompleted: Trip?
+    @Published var trip: Ongoing
     
     init(scooter: Scooter, trip: Ongoing, location: [Double]) {
         self.scooter = scooter
         self.trip = trip
         self.location = location
+        self.loadData()
     }
     
     func endRide(_ callback: @escaping (Result<TripResponse>) -> Void) {
         API.endRide(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
             switch result {
             case .success(let response):
-                //self.tripCompleted = response.trip
                 showSuccess(message: response.message)
                 break
             case .failure(let error):
@@ -61,5 +60,24 @@ class TripDetailsViewModel: ObservableObject {
             }
         }
     }
-
+    
+    func getOngoingTrip() {
+        API.getOngoingTrip(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
+            switch result {
+            case .success(let ongoingTrip):
+                self.trip = ongoingTrip
+                break
+            case .failure(let error):
+                showError(error: error)
+                break
+            }
+        }
+    }
+    
+    func loadData() {
+        self.getOngoingTrip()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
+            self.loadData()
+        }
+    }
 }

@@ -79,8 +79,6 @@ struct StartRideView: View {
                     break
                 }
             }
-            //viewModel.startRide()
-            //onTripDetails()
         } label: {
             HStack {
                 Text("Start ride")

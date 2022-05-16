@@ -52,6 +52,11 @@
 		0984226E27F6E14100361D60 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0984226D27F6E14100361D60 /* LoginView.swift */; };
 		0984227027F6EFB600361D60 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0984226F27F6EFB600361D60 /* RegisterViewModel.swift */; };
 		098F97E228283631003DC53F /* OngoingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098F97E128283631003DC53F /* OngoingModel.swift */; };
+		099114B5282BDDA00048A850 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099114B4282BDDA00048A850 /* HistoryModel.swift */; };
+		099114B7282CEE110048A850 /* MapPolylineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099114B6282CEE100048A850 /* MapPolylineView.swift */; };
+		099114B9282CF2E20048A850 /* PaymentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099114B8282CF2E20048A850 /* PaymentHandler.swift */; };
+		099114BF282D77630048A850 /* PaymentConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099114BE282D77630048A850 /* PaymentConfiguration.swift */; };
+		099114C3282D7B2A0048A850 /* QrUnlockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 099114C2282D7B2A0048A850 /* QrUnlockViewModel.swift */; };
 		0991E8F527FAC89D00B8A525 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0991E8F427FAC89D00B8A525 /* LoginViewModel.swift */; };
 		0991E8F827FAD4D100B8A525 /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = 0991E8F727FAD4D100B8A525 /* NavigationStack */; };
 		0991E8FA27FAD9DA00B8A525 /* AuthentificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0991E8F927FAD9DA00B8A525 /* AuthentificationCoordinator.swift */; };
@@ -80,9 +85,8 @@
 		09D2AAA3280DA17A00FF659B /* ErrorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D2AAA2280DA17A00FF659B /* ErrorMessageView.swift */; };
 		09D2AAA5280DA46D00FF659B /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D2AAA4280DA46D00FF659B /* Message.swift */; };
 		09DE7744281BDE190008B4E9 /* ScooterUnlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09DE7743281BDE190008B4E9 /* ScooterUnlockView.swift */; };
-		09F4D547281986C600B19962 /* ShowScootersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4D546281986C600B19962 /* ShowScootersView.swift */; };
 		09F4D54928199E8500B19962 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4D54828199E8500B19962 /* HistoryView.swift */; };
-		09F4D54B281A6AC200B19962 /* UnlockViewSerialNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4D54A281A6AC200B19962 /* UnlockViewSerialNumber.swift */; };
+		09F4D54B281A6AC200B19962 /* SerialNumberUnlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4D54A281A6AC200B19962 /* SerialNumberUnlockView.swift */; };
 		09F4D54D281A6AD400B19962 /* ValidCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4D54C281A6AD400B19962 /* ValidCodeView.swift */; };
 		09F4D54F281A6AE400B19962 /* UnlockViewNFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4D54E281A6AE400B19962 /* UnlockViewNFC.swift */; };
 		09F4D551281A6E4400B19962 /* CloseButtonTopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4D550281A6E4400B19962 /* CloseButtonTopBar.swift */; };
@@ -139,6 +143,11 @@
 		0984226D27F6E14100361D60 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		0984226F27F6EFB600361D60 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		098F97E128283631003DC53F /* OngoingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OngoingModel.swift; sourceTree = "<group>"; };
+		099114B4282BDDA00048A850 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
+		099114B6282CEE100048A850 /* MapPolylineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPolylineView.swift; sourceTree = "<group>"; };
+		099114B8282CF2E20048A850 /* PaymentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentHandler.swift; sourceTree = "<group>"; };
+		099114BE282D77630048A850 /* PaymentConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentConfiguration.swift; sourceTree = "<group>"; };
+		099114C2282D7B2A0048A850 /* QrUnlockViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrUnlockViewModel.swift; sourceTree = "<group>"; };
 		0991E8F427FAC89D00B8A525 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		0991E8F927FAD9DA00B8A525 /* AuthentificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthentificationCoordinator.swift; sourceTree = "<group>"; };
 		099655AF281FD2620079D47F /* MapCoordinatorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCoordinatorViewModel.swift; sourceTree = "<group>"; };
@@ -166,9 +175,8 @@
 		09D2AAA2280DA17A00FF659B /* ErrorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessageView.swift; sourceTree = "<group>"; };
 		09D2AAA4280DA46D00FF659B /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		09DE7743281BDE190008B4E9 /* ScooterUnlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScooterUnlockView.swift; sourceTree = "<group>"; };
-		09F4D546281986C600B19962 /* ShowScootersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowScootersView.swift; sourceTree = "<group>"; };
 		09F4D54828199E8500B19962 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		09F4D54A281A6AC200B19962 /* UnlockViewSerialNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockViewSerialNumber.swift; sourceTree = "<group>"; };
+		09F4D54A281A6AC200B19962 /* SerialNumberUnlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialNumberUnlockView.swift; sourceTree = "<group>"; };
 		09F4D54C281A6AD400B19962 /* ValidCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidCodeView.swift; sourceTree = "<group>"; };
 		09F4D54E281A6AE400B19962 /* UnlockViewNFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockViewNFC.swift; sourceTree = "<group>"; };
 		09F4D550281A6E4400B19962 /* CloseButtonTopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButtonTopBar.swift; sourceTree = "<group>"; };
@@ -327,10 +335,10 @@
 				092672822806C63100AEB331 /* LocationTopBar.swift */,
 				09A3A35F2812B9B500D82368 /* ScooterCardView.swift */,
 				099655B3282102410079D47F /* ScooterCardViewModel.swift */,
-				09F4D546281986C600B19962 /* ShowScootersView.swift */,
-				09F4D54A281A6AC200B19962 /* UnlockViewSerialNumber.swift */,
+				09F4D54A281A6AC200B19962 /* SerialNumberUnlockView.swift */,
 				09F4D552281A9EC900B19962 /* SerialNumberViewModel.swift */,
 				09F4D54E281A6AE400B19962 /* UnlockViewNFC.swift */,
+				099114C2282D7B2A0048A850 /* QrUnlockViewModel.swift */,
 				09A4E51F28225AB1006EC785 /* UnlockViewQr.swift */,
 				09DE7743281BDE190008B4E9 /* ScooterUnlockView.swift */,
 				09F4D54C281A6AD400B19962 /* ValidCodeView.swift */,
@@ -358,6 +366,7 @@
 		0982B2D728040C7A003D8B60 /* ReusableComponents */ = {
 			isa = PBXGroup;
 			children = (
+				099114B6282CEE100048A850 /* MapPolylineView.swift */,
 				09BF6F392817FA9400032B0D /* BatteryView.swift */,
 				09CAB60327FC329700A1735A /* TextFieldView.swift */,
 				0982B2CB27FD8B3D003D8B60 /* SecureTextFieldView.swift */,
@@ -372,6 +381,8 @@
 				09F4D550281A6E4400B19962 /* CloseButtonTopBar.swift */,
 				09A4E51D2821B44F006EC785 /* RefreshableScrollView.swift */,
 				09A4E5212822A054006EC785 /* QRScannerView.swift */,
+				099114B8282CF2E20048A850 /* PaymentHandler.swift */,
+				099114BE282D77630048A850 /* PaymentConfiguration.swift */,
 			);
 			path = ReusableComponents;
 			sourceTree = "<group>";
@@ -395,6 +406,7 @@
 				09BF6F332817E32800032B0D /* ScooterModel.swift */,
 				09F4D556281ACDB600B19962 /* TripModel.swift */,
 				098F97E128283631003DC53F /* OngoingModel.swift */,
+				099114B4282BDDA00048A850 /* HistoryModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -563,7 +575,7 @@
 			files = (
 				09F4D54D281A6AD400B19962 /* ValidCodeView.swift in Sources */,
 				095A18E927F1BE6700A4E7D3 /* OnboardingView.swift in Sources */,
-				09F4D54B281A6AC200B19962 /* UnlockViewSerialNumber.swift in Sources */,
+				09F4D54B281A6AC200B19962 /* SerialNumberUnlockView.swift in Sources */,
 				0991E8FA27FAD9DA00B8A525 /* AuthentificationCoordinator.swift in Sources */,
 				09A4E5222822A054006EC785 /* QRScannerView.swift in Sources */,
 				0982B2E92804453C003D8B60 /* AccountSettingsView.swift in Sources */,
@@ -577,10 +589,12 @@
 				09CAB60427FC329700A1735A /* TextFieldView.swift in Sources */,
 				0997F6BC280EA68400B32C96 /* ImageToUIImage.swift in Sources */,
 				0982B2D627FD9F24003D8B60 /* DrivingLicenseView.swift in Sources */,
+				099114B5282BDDA00048A850 /* HistoryModel.swift in Sources */,
 				0982B2E52804451A003D8B60 /* MenuView.swift in Sources */,
 				092672852806CE5B00AEB331 /* MapView.swift in Sources */,
 				099655B0281FD2620079D47F /* MapCoordinatorViewModel.swift in Sources */,
 				095A18EE27F1F9B300A4E7D3 /* OnBoardingModel.swift in Sources */,
+				099114B7282CEE110048A850 /* MapPolylineView.swift in Sources */,
 				09F4D553281A9EC900B19962 /* SerialNumberViewModel.swift in Sources */,
 				09BF6F3A2817FA9400032B0D /* BatteryView.swift in Sources */,
 				0982B2D928040D53003D8B60 /* BackButtonTopBar.swift in Sources */,
@@ -603,11 +617,13 @@
 				09F4D551281A6E4400B19962 /* CloseButtonTopBar.swift in Sources */,
 				092672832806C63100AEB331 /* LocationTopBar.swift in Sources */,
 				09267290280B02A600AEB331 /* MenuCoordinator.swift in Sources */,
+				099114BF282D77630048A850 /* PaymentConfiguration.swift in Sources */,
 				09A4E5282825206D006EC785 /* TripSummaryView.swift in Sources */,
 				0984226C27F6E13500361D60 /* RegistrationView.swift in Sources */,
 				0982B2DF28041E30003D8B60 /* ValidLicense.swift in Sources */,
 				09A3A3602812B9B500D82368 /* ScooterCardView.swift in Sources */,
 				09BF6F342817E32800032B0D /* ScooterModel.swift in Sources */,
+				099114B9282CF2E20048A850 /* PaymentHandler.swift in Sources */,
 				098F97E228283631003DC53F /* OngoingModel.swift in Sources */,
 				0997F6C428106E4000B32C96 /* Links.swift in Sources */,
 				09F4D54F281A6AE400B19962 /* UnlockViewNFC.swift in Sources */,
@@ -618,12 +634,12 @@
 				0982B2D427FD9AD3003D8B60 /* ResetPasswordView.swift in Sources */,
 				092672872806DE6000AEB331 /* LocationManager.swift in Sources */,
 				09D2AA9D280D547600FF659B /* CustomerModel.swift in Sources */,
+				099114C3282D7B2A0048A850 /* QrUnlockViewModel.swift in Sources */,
 				0982B2DD28041E24003D8B60 /* DrivingLicensePendingVerification.swift in Sources */,
 				099655B4282102410079D47F /* ScooterCardViewModel.swift in Sources */,
 				0982B2CC27FD8B3D003D8B60 /* SecureTextFieldView.swift in Sources */,
 				09D2AA9B280D4F8500FF659B /* API.swift in Sources */,
 				0921518E27EDFB14005947ED /* eScooterApp.swift in Sources */,
-				09F4D547281986C600B19962 /* ShowScootersView.swift in Sources */,
 				09A4E51E2821B44F006EC785 /* RefreshableScrollView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

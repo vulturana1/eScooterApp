@@ -14,11 +14,6 @@ struct TripDetailsView: View {
     @State var lock = false
     let onEndRide: (TripResponse) -> Void
     
-    //    init(scooter: Scooter, trip: Ongoing, currentLocation: [Double], onEndRide: @escaping (TripResponse) -> Void) {
-    //        viewModel = TripDetailsViewModel(scooter: scooter, trip: trip, location: currentLocation)
-    //        self.onEndRide = onEndRide
-    //    }
-    
     init(viewModel: TripDetailsViewModel, onEndRide: @escaping (TripResponse) -> Void) {
         self.viewModel = viewModel
         self.onEndRide = onEndRide

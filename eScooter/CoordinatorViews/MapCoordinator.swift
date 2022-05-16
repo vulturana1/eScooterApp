@@ -127,7 +127,9 @@ struct MapCoordinator: View {
     }
     
     func handleTripSummary(trip: Trip) {
-        navigationViewModel.push(TripSummaryView(trip: trip))
+        navigationViewModel.push(TripSummaryView(onNext: {
+            onMenu()
+        }, trip: trip))
     }
 }
 

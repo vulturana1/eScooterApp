@@ -17,7 +17,7 @@ class HistoryViewModel: ObservableObject {
         }
     }
     
-    @Published var trips: [Trip] = []
+    @Published var trips: [HistoryTrip] = []
     var length: Int = 10
     var start: Int = 0
     
