@@ -22,7 +22,7 @@ class TripDetailsViewModel: ObservableObject {
     }
     
     func endRide(_ callback: @escaping (Result<TripResponse>) -> Void) {
-        API.endRide(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
+        API.endRide(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success(let response):
                 showSuccess(message: response.message)
@@ -36,7 +36,7 @@ class TripDetailsViewModel: ObservableObject {
     }
     
     func lockScooter() {
-        API.lockScooter(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
+        API.lockScooter(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success(let response):
                 showSuccess(message: response.message)
@@ -49,7 +49,7 @@ class TripDetailsViewModel: ObservableObject {
     }
     
     func unlockScooter() {
-        API.unlockScooterSerialNumber(internalId: scooter.internalId, coordX: location[1], coordY: location[0], unlockCode: scooter.unlockCode) { result in
+        API.unlockScooterSerialNumber(internalId: scooter.internalId, coordX: location[0], coordY: location[1], unlockCode: scooter.unlockCode) { result in
             switch result {
             case .success(let response):
                 showSuccess(message: response.message)
@@ -62,13 +62,14 @@ class TripDetailsViewModel: ObservableObject {
     }
     
     func getOngoingTrip() {
-        API.getOngoingTrip(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
+        //sa nu se mai apeleze dupa end ride
+        API.getOngoingTrip(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success(let ongoingTrip):
                 self.trip = ongoingTrip
                 break
             case .failure(let error):
-                showError(error: error)
+                //showError(error: error)
                 break
             }
         }

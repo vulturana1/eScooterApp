@@ -18,5 +18,7 @@
 	<array>
 		<string>comgooglemaps</string>
 	</array>
+	<key>CFBundleIdentifier</key>
+	<string></string>
 </dict>
 </plist>

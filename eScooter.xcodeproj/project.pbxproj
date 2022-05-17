@@ -74,6 +74,9 @@
 		09A4E5222822A054006EC785 /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A4E5212822A054006EC785 /* QRScannerView.swift */; };
 		09A4E52628252026006EC785 /* TripDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A4E52528252026006EC785 /* TripDetailsViewModel.swift */; };
 		09A4E5282825206D006EC785 /* TripSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A4E5272825206D006EC785 /* TripSummaryView.swift */; };
+		09AF946D2832383800C6DB2C /* QRData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AF946C2832383800C6DB2C /* QRData.swift */; };
+		09AF946F283238F200C6DB2C /* QRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AF946E283238F200C6DB2C /* QRScannerViewController.swift */; };
+		09AF947528327F5B00C6DB2C /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 09AF947428327F5B00C6DB2C /* CodeScanner */; };
 		09BF6F342817E32800032B0D /* ScooterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BF6F332817E32800032B0D /* ScooterModel.swift */; };
 		09BF6F382817F31100032B0D /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BF6F372817F31100032B0D /* TopBar.swift */; };
 		09BF6F3A2817FA9400032B0D /* BatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BF6F392817FA9400032B0D /* BatteryView.swift */; };
@@ -164,6 +167,8 @@
 		09A4E5212822A054006EC785 /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
 		09A4E52528252026006EC785 /* TripDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailsViewModel.swift; sourceTree = "<group>"; };
 		09A4E5272825206D006EC785 /* TripSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripSummaryView.swift; sourceTree = "<group>"; };
+		09AF946C2832383800C6DB2C /* QRData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRData.swift; sourceTree = "<group>"; };
+		09AF946E283238F200C6DB2C /* QRScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerViewController.swift; sourceTree = "<group>"; };
 		09BF6F332817E32800032B0D /* ScooterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScooterModel.swift; sourceTree = "<group>"; };
 		09BF6F372817F31100032B0D /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 		09BF6F392817FA9400032B0D /* BatteryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryView.swift; sourceTree = "<group>"; };
@@ -194,6 +199,7 @@
 			files = (
 				0991E8F827FAD4D100B8A525 /* NavigationStack in Frameworks */,
 				009D43C94467E151F9C3F42E /* Pods_eScooter.framework in Frameworks */,
+				09AF947528327F5B00C6DB2C /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,9 +386,10 @@
 				09BF6F372817F31100032B0D /* TopBar.swift */,
 				09F4D550281A6E4400B19962 /* CloseButtonTopBar.swift */,
 				09A4E51D2821B44F006EC785 /* RefreshableScrollView.swift */,
-				09A4E5212822A054006EC785 /* QRScannerView.swift */,
 				099114B8282CF2E20048A850 /* PaymentHandler.swift */,
 				099114BE282D77630048A850 /* PaymentConfiguration.swift */,
+				09A4E5212822A054006EC785 /* QRScannerView.swift */,
+				09AF946E283238F200C6DB2C /* QRScannerViewController.swift */,
 			);
 			path = ReusableComponents;
 			sourceTree = "<group>";
@@ -407,6 +414,7 @@
 				09F4D556281ACDB600B19962 /* TripModel.swift */,
 				098F97E128283631003DC53F /* OngoingModel.swift */,
 				099114B4282BDDA00048A850 /* HistoryModel.swift */,
+				09AF946C2832383800C6DB2C /* QRData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -459,6 +467,7 @@
 			name = eScooter;
 			packageProductDependencies = (
 				0991E8F727FAD4D100B8A525 /* NavigationStack */,
+				09AF947428327F5B00C6DB2C /* CodeScanner */,
 			);
 			productName = eScooter;
 			productReference = 0921518A27EDFB14005947ED /* eScooter.app */;
@@ -490,6 +499,7 @@
 			mainGroup = 0921518127EDFB14005947ED;
 			packageReferences = (
 				0991E8F627FAD4D100B8A525 /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
+				09AF947328327F5B00C6DB2C /* XCRemoteSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = 0921518B27EDFB14005947ED /* Products */;
 			projectDirPath = "";
@@ -593,6 +603,7 @@
 				0982B2E52804451A003D8B60 /* MenuView.swift in Sources */,
 				092672852806CE5B00AEB331 /* MapView.swift in Sources */,
 				099655B0281FD2620079D47F /* MapCoordinatorViewModel.swift in Sources */,
+				09AF946F283238F200C6DB2C /* QRScannerViewController.swift in Sources */,
 				095A18EE27F1F9B300A4E7D3 /* OnBoardingModel.swift in Sources */,
 				099114B7282CEE110048A850 /* MapPolylineView.swift in Sources */,
 				09F4D553281A9EC900B19962 /* SerialNumberViewModel.swift in Sources */,
@@ -631,6 +642,7 @@
 				09D2AAA1280D99D200FF659B /* AuthenticationModel.swift in Sources */,
 				09D2AAA5280DA46D00FF659B /* Message.swift in Sources */,
 				0921519027EDFB14005947ED /* ContentView.swift in Sources */,
+				09AF946D2832383800C6DB2C /* QRData.swift in Sources */,
 				0982B2D427FD9AD3003D8B60 /* ResetPasswordView.swift in Sources */,
 				092672872806DE6000AEB331 /* LocationManager.swift in Sources */,
 				09D2AA9D280D547600FF659B /* CustomerModel.swift in Sources */,
@@ -855,6 +867,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		09AF947328327F5B00C6DB2C /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -862,6 +882,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0991E8F627FAD4D100B8A525 /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
 			productName = NavigationStack;
+		};
+		09AF947428327F5B00C6DB2C /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 09AF947328327F5B00C6DB2C /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

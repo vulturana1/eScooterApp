@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CodeScanner
 
 struct UnlockViewQr: View {
     
@@ -26,6 +27,10 @@ struct UnlockViewQr: View {
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding()
+//                QrCodeScannerView()
+//                .found(r: self.viewModel.onFoundQrCode)
+//                .torchLight(isOn: self.viewModel.torchIsOn)
+//                .interval(delay: self.viewModel.scanInterval)
                 Text("You can find it on the scooter's front panel")
                     .font(.custom("BaiJamjuree-Medium", size: 16))
                     .foregroundColor(.white)

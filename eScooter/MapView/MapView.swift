@@ -22,14 +22,13 @@ struct MapView: View {
     var body: some View {
         ZStack {
             Map(coordinateRegion: $mapViewModel.locationManager.region, interactionModes: .all, showsUserLocation: true, annotationItems: mapViewModel.scooters) { scooter in
-                MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: scooter.location.coordinates[0], longitude: scooter.location.coordinates[1])) {
+                MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: scooter.location.coordinates[1], longitude: scooter.location.coordinates[0])) {
                     Image("pin-map")
                         .onTapGesture {
                             print("scooter")
                             showScooter(scooter)
                         }
                 }
-                
             }
             .ignoresSafeArea()
             .onAppear {
@@ -43,7 +42,6 @@ struct MapView: View {
             }
         }
     }
-    
 }
 
 //struct MapView_Previews: PreviewProvider {

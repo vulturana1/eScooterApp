@@ -81,6 +81,7 @@ struct AuthentificationCoordinator: View {
     
     func failedToUpload(error: Error) {
         showError(error: error)
+        Session.shared.invalidateSession()
     }
     
     func loadingImage() {

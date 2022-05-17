@@ -12,7 +12,7 @@ struct MapCoordinator: View {
     let navigationViewModel: NavigationStack
     let onMenu: () -> Void
     @State var detailShow = false
-    @State var unlockShow = false
+    @State var unlockShow = false //setez de pe backend
     @State var startRideShow = false
     @State var tripDetailsShow = false
     @State var loading = false
@@ -78,6 +78,7 @@ struct MapCoordinator: View {
         if let currentUnlockScooter = viewModel.currentUnlockScooter {
             navigationViewModel.push(UnlockViewSerialNumber(viewModel: currentUnlockScooter, onClose: {
                 navigationViewModel.pop()
+                //navigationViewModel.pop(to: .view(withId: "MapView"))
             }, onQr: {
                 
             }, onNFC: {
@@ -85,7 +86,6 @@ struct MapCoordinator: View {
             }, onStartRide: {
                 self.startRideShow = true
                 navigationViewModel.pop()
-                
             }))
         }
     }
@@ -128,7 +128,7 @@ struct MapCoordinator: View {
     
     func handleTripSummary(trip: Trip) {
         navigationViewModel.push(TripSummaryView(onNext: {
-            onMenu()
+            navigationViewModel.pop(to: .view(withId: "map"))
         }, trip: trip))
     }
 }

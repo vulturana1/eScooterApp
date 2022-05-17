@@ -30,11 +30,7 @@ class ScooterCardViewModel: ObservableObject {
     }
     
     func pingScooter() {
-        if(checkDistance() > 0.4) {
-            disablePing = true
-            return
-        }
-        API.pingScooter(scooterInternalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
+        API.pingScooter(scooterInternalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success(let message):
                 showSuccess(message: message.message)
@@ -53,7 +49,7 @@ class ScooterCardViewModel: ObservableObject {
         let dLon = deg2rad(scooter.location.coordinates[0] - location[1])
         let a = sin(dLat/2) * sin(dLat/2) + cos(deg2rad(location[0])) * cos(deg2rad(scooter.location.coordinates[1])) * sin(dLon/2) * sin(dLon/2)
         let c = 2 * atan2(sqrt(a), sqrt(1 - a))
-        let d = R * c
+        let d = R * c  //in km
         return d
     }
     
@@ -62,11 +58,11 @@ class ScooterCardViewModel: ObservableObject {
     }
     
     func startRide(_ callback: @escaping (Result<Ongoing>) -> Void) {
-        API.startRide(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
+        API.startRide(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
-            case .success(let _):
+            case .success( _):
                 //showSuccess(message: message.message)
-                API.getOngoingTrip(internalId: self.scooter.internalId, coordX: self.location[1], coordY: self.location[0]) { result in
+                API.getOngoingTrip(internalId: self.scooter.internalId, coordX: self.location[0], coordY: self.location[1]) { result in
                     callback(result)
                 }
                 break
@@ -75,22 +71,8 @@ class ScooterCardViewModel: ObservableObject {
                 break
             }
             //callback(result)
-            
         }
     }
-    
-    //    func startRide() {
-    //        API.startRide(internalId: scooter.internalId, coordX: location[1], coordY: location[0]) { result in
-    //            switch result {
-    //            case .success(let message):
-    //                showSuccess(message: message.message)
-    //                break
-    //            case .failure(let error):
-    //                showError(error: error)
-    //                break
-    //            }
-    //        }
-    //    }
     
     func computeAddressIfNeeded() {
         print("compute address for scooter" + scooter.id)

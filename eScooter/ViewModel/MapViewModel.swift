@@ -25,19 +25,12 @@ class MapViewModel: ObservableObject {
             guard let self = self else {
                 return
             }
-            //self.locationManager.objectWillChange.send()
-            
             self.currentLocation = self.locationManager.lastLocation?.coordinate
-            
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if let lastLocation = self.locationManager.lastLocation {
-                    self.locationManager.getCityName(location: lastLocation)
-                    self.city = self.locationManager.city
-                }
-//            }
-            
+            if let lastLocation = self.locationManager.lastLocation {
+                self.locationManager.getCityName(location: lastLocation)
+                self.city = self.locationManager.city
+            }
         }.store(in: &disposeBag)
-                
         self.loadData()
     }
     
@@ -51,6 +44,20 @@ class MapViewModel: ObservableObject {
             }
         }
     }
+    
+    func getScootersWithin4km()  {
+        if let location = locationManager.lastLocation {
+            API.getScootersWithin4km(latitude: location.coordinate.latitude, longitude: location.coordinate.latitude) { result in
+                switch result {
+                case .success(let scooters):
+                    self.scooters = scooters
+                case .failure:
+                    break
+                }
+            }
+        }
+    }
+    
     
     func scootersResult() -> [Scooter] {
         getScooters()

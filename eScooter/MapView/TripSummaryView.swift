@@ -107,19 +107,20 @@ struct TripSummaryView: View {
     
     var applePayButton: some View {
         Button {
-            self.paymentHandler.startPayment(price: "\(trip.cost)") { success in
-                if success {
-                    
-                    showSuccess(message: "You can find your recipt in your mail")
-                    onNext()
-                    
-                } else {
-//                    showError(error: Error( "We couln't process your payment"))
-                    print("Eroare plata")
-                    showAlert = true
-                    //onNext()
-                }
-            }
+            onNext()
+//            self.paymentHandler.startPayment(price: "\(trip.cost)") { success in
+//                if success {
+//
+//                    showSuccess(message: "You can find your recipt in your mail")
+//                    onNext()
+//
+//                } else {
+////                    showError(error: Error( "We couln't process your payment"))
+//                    print("Eroare plata")
+//                    showAlert = true
+//                    //onNext()
+//                }
+//            }
         } label: {
             HStack {
                 Text("Pay with Pay")
