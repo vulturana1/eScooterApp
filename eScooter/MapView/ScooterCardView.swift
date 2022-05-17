@@ -65,9 +65,9 @@ struct ScooterCardView: View {
                 .shadow(color: Color.black.opacity(0.20), radius: 13, x: 7, y: 7)
             Image("ring1")
                 .onTapGesture {
-                    if viewModel.checkDistance() <= 0.4 {
+                    //if viewModel.checkDistance() <= 0.4 {
                         viewModel.pingScooter()
-                    }
+                    //}
                 }
         }
     }

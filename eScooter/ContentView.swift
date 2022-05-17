@@ -29,7 +29,7 @@ struct ContentView: View {
         AuthentificationCoordinator(navigationViewModel: navigationViewModel,
                                     onNext: {
             navigationViewModel.push(MapCoordinator(navigationViewModel: navigationViewModel,
-                                                    onMenu: handleMenu))
+                                                    onMenu: handleMenu), withId: "map")
         })
     }
     
@@ -39,7 +39,7 @@ struct ContentView: View {
         }
         .onAppear {
             navigationViewModel.push(MapCoordinator(navigationViewModel: navigationViewModel,
-                                                    onMenu: handleMenu))
+                                                    onMenu: handleMenu), withId: "map")
         }
     }
     

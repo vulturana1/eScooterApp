@@ -11,7 +11,7 @@ struct HistoryTrip: Codable {
     let id: String
     let coordinatesArray: [Coordinates]
     let totalTime: Int
-    let distance: Int
+    let distance: Double
     let cost: Double
     
     enum CodingKeys: String, CodingKey {

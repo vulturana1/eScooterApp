@@ -41,7 +41,7 @@ class MapCoordinatorViewModel: ObservableObject {
     
     func getOngoingTrip(internalId: Int, coordX: Double, coordY: Double) {
         move(internalId: internalId, coordX: coordX, coordY: coordY)
-        
+
         API.getOngoingTrip(internalId: internalId, coordX: coordX, coordY: coordY) { result in
             switch result {
             case .success(let ongoingTrip):
@@ -53,7 +53,7 @@ class MapCoordinatorViewModel: ObservableObject {
             }
         }
     }
-    
+
     func move(internalId: Int, coordX: Double, coordY: Double) {
         API.move(internalId: internalId, coordX: coordX, coordY: coordY) { result in
             switch result {

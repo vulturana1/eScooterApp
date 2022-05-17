@@ -61,7 +61,6 @@ class ScooterCardViewModel: ObservableObject {
         API.startRide(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success( _):
-                //showSuccess(message: message.message)
                 API.getOngoingTrip(internalId: self.scooter.internalId, coordX: self.location[0], coordY: self.location[1]) { result in
                     callback(result)
                 }
@@ -70,7 +69,6 @@ class ScooterCardViewModel: ObservableObject {
                 showError(error: error)
                 break
             }
-            //callback(result)
         }
     }
     
@@ -78,7 +76,7 @@ class ScooterCardViewModel: ObservableObject {
         print("compute address for scooter" + scooter.id)
         if address != nil { return }
         let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(CLLocation(latitude: scooter.location.coordinates[0], longitude: scooter.location.coordinates[1]), completionHandler: { (places, error) in
+        geocoder.reverseGeocodeLocation(CLLocation(latitude: scooter.location.coordinates[1], longitude: scooter.location.coordinates[0]), completionHandler: { (places, error) in
             print("finished computed address")
             if error == nil {
                 self.placemark = places?[0]

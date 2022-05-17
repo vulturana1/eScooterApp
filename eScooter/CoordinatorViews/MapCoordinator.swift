@@ -12,10 +12,9 @@ struct MapCoordinator: View {
     let navigationViewModel: NavigationStack
     let onMenu: () -> Void
     @State var detailShow = false
-    @State var unlockShow = false //setez de pe backend
+    @State var unlockShow = false
     @State var startRideShow = false
     @State var tripDetailsShow = false
-    @State var loading = false
     @StateObject var viewModel = MapCoordinatorViewModel()
     let defaultLocation = [47.25368173443409, 23.881470551690658]
     
@@ -24,13 +23,16 @@ struct MapCoordinator: View {
             onMenu()
         }, showScooter: { scooter in
             viewModel.selectScooter(scooter: scooter)
-            detailShow = true
-            if scooter.locked == false {
+            
+            if scooter.locked == true && scooter.booked == false {
+                detailShow = true
+                startRideShow = false
+                tripDetailsShow = false
+            } else if scooter.locked == false && scooter.booked == false {
                 startRideShow = true
                 detailShow = false
                 tripDetailsShow = false
-            }
-            if scooter.booked == true {
+            } else if scooter.booked == true {
                 startRideShow = false
                 detailShow = false
                 tripDetailsShow = true
@@ -39,15 +41,15 @@ struct MapCoordinator: View {
         .overlay(handleScooter())
         .overlay(showUnlockTypes())
         .overlay(handleStartRide())
-        //        .onTapGesture {
-        //            viewModel.current = nil
-        //        }
+//        .onTapGesture {
+//            detailShow = false
+//        }
         .overlay(handleOngoingRide())
     }
     
     @ViewBuilder
     func handleScooter() -> some View {
-        if detailShow {
+        if self.detailShow {
             if let currentScooter = viewModel.currentScooter {
                 ScooterCardView(viewModel: currentScooter) {
                     self.unlockShow = true
@@ -59,7 +61,7 @@ struct MapCoordinator: View {
     
     @ViewBuilder
     func showUnlockTypes() -> some View {
-        if unlockShow {
+        if self.unlockShow {
             if let currentScooter = viewModel.currentScooter {
                 ScooterUnlockView(viewModel: currentScooter) {
                     self.unlockShow = false
@@ -68,7 +70,7 @@ struct MapCoordinator: View {
                 } onVerifyNfc: {
                     handleNFCUnlock()
                 } onVerifyQr: {
-                    
+                    handleQRUnlock()
                 }
             }
         }
@@ -77,26 +79,38 @@ struct MapCoordinator: View {
     func handleSerialNumberUnlock() {
         if let currentUnlockScooter = viewModel.currentUnlockScooter {
             navigationViewModel.push(UnlockViewSerialNumber(viewModel: currentUnlockScooter, onClose: {
-                navigationViewModel.pop()
-                //navigationViewModel.pop(to: .view(withId: "MapView"))
+                navigationViewModel.pop(to: .view(withId: "map"))
             }, onQr: {
-                
+                handleQRUnlock()
             }, onNFC: {
                 handleNFCUnlock()
             }, onStartRide: {
-                self.startRideShow = true
-                navigationViewModel.pop()
+                navigationViewModel.push(ValidCodeView())
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.startRideShow = true
+                    navigationViewModel.pop(to: .view(withId: "map"))
+                }
             }))
         }
     }
     
+    func handleQRUnlock() {
+        navigationViewModel.push(UnlockViewQr(onClose: {
+            navigationViewModel.pop(to: .view(withId: "map"))
+        }, onSerial: {
+            handleSerialNumberUnlock()
+        }, onNfc: {
+            handleNFCUnlock()
+        }))
+    }
+    
     func handleNFCUnlock() {
         navigationViewModel.push(UnlockViewNFC(onClose: {
-            navigationViewModel.pop()
+            navigationViewModel.pop(to: .view(withId: "map"))
         }, onSerial: {
             handleSerialNumberUnlock()
         }, onQr: {
-            
+            handleQRUnlock()
         }))
     }
     
@@ -120,8 +134,8 @@ struct MapCoordinator: View {
         if self.tripDetailsShow {
             if let currentTrip = viewModel.currentTrip {
                 TripDetailsView(viewModel: currentTrip, onEndRide: { result in
-                handleTripSummary(trip: result.trip)
-            })
+                    handleTripSummary(trip: result.trip)
+                })
             }
         }
     }

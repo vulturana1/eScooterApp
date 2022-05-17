@@ -13,8 +13,9 @@ struct Trip: Codable {
     let scooterId: Int
     let coordinatesArray: [Coordinates]
     let totalTime: Int
-    let distance: Int
+    let distance: Double
     let cost: Double
+    let status: String
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -23,6 +24,7 @@ struct Trip: Codable {
         case distance = "distance"
         case totalTime = "totalTime"
         case cost = "cost"
+        case status = "status"
     }
 }
 

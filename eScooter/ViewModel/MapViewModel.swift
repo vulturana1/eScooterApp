@@ -58,7 +58,6 @@ class MapViewModel: ObservableObject {
         }
     }
     
-    
     func scootersResult() -> [Scooter] {
         getScooters()
         return self.scooters

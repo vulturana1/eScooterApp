@@ -6,7 +6,8 @@
 
 
 import Foundation
+import CodeScanner
 
 class QrUnlockViewModel: ObservableObject {
-   
+    
 }

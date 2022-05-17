@@ -77,6 +77,7 @@
 		09AF946D2832383800C6DB2C /* QRData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AF946C2832383800C6DB2C /* QRData.swift */; };
 		09AF946F283238F200C6DB2C /* QRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AF946E283238F200C6DB2C /* QRScannerViewController.swift */; };
 		09AF947528327F5B00C6DB2C /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 09AF947428327F5B00C6DB2C /* CodeScanner */; };
+		09B77E5B2833B93F00093722 /* BatteryViewExtended.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B77E5A2833B93F00093722 /* BatteryViewExtended.swift */; };
 		09BF6F342817E32800032B0D /* ScooterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BF6F332817E32800032B0D /* ScooterModel.swift */; };
 		09BF6F382817F31100032B0D /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BF6F372817F31100032B0D /* TopBar.swift */; };
 		09BF6F3A2817FA9400032B0D /* BatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09BF6F392817FA9400032B0D /* BatteryView.swift */; };
@@ -169,6 +170,7 @@
 		09A4E5272825206D006EC785 /* TripSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripSummaryView.swift; sourceTree = "<group>"; };
 		09AF946C2832383800C6DB2C /* QRData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRData.swift; sourceTree = "<group>"; };
 		09AF946E283238F200C6DB2C /* QRScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerViewController.swift; sourceTree = "<group>"; };
+		09B77E5A2833B93F00093722 /* BatteryViewExtended.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryViewExtended.swift; sourceTree = "<group>"; };
 		09BF6F332817E32800032B0D /* ScooterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScooterModel.swift; sourceTree = "<group>"; };
 		09BF6F372817F31100032B0D /* TopBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
 		09BF6F392817FA9400032B0D /* BatteryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryView.swift; sourceTree = "<group>"; };
@@ -344,8 +346,8 @@
 				09F4D54A281A6AC200B19962 /* SerialNumberUnlockView.swift */,
 				09F4D552281A9EC900B19962 /* SerialNumberViewModel.swift */,
 				09F4D54E281A6AE400B19962 /* UnlockViewNFC.swift */,
-				099114C2282D7B2A0048A850 /* QrUnlockViewModel.swift */,
 				09A4E51F28225AB1006EC785 /* UnlockViewQr.swift */,
+				099114C2282D7B2A0048A850 /* QrUnlockViewModel.swift */,
 				09DE7743281BDE190008B4E9 /* ScooterUnlockView.swift */,
 				09F4D54C281A6AD400B19962 /* ValidCodeView.swift */,
 				099655B5282107C20079D47F /* StartRideView.swift */,
@@ -374,6 +376,7 @@
 			children = (
 				099114B6282CEE100048A850 /* MapPolylineView.swift */,
 				09BF6F392817FA9400032B0D /* BatteryView.swift */,
+				09B77E5A2833B93F00093722 /* BatteryViewExtended.swift */,
 				09CAB60327FC329700A1735A /* TextFieldView.swift */,
 				0982B2CB27FD8B3D003D8B60 /* SecureTextFieldView.swift */,
 				0982B2D828040D53003D8B60 /* BackButtonTopBar.swift */,
@@ -583,6 +586,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09B77E5B2833B93F00093722 /* BatteryViewExtended.swift in Sources */,
 				09F4D54D281A6AD400B19962 /* ValidCodeView.swift in Sources */,
 				095A18E927F1BE6700A4E7D3 /* OnboardingView.swift in Sources */,
 				09F4D54B281A6AC200B19962 /* SerialNumberUnlockView.swift in Sources */,

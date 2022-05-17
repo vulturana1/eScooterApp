@@ -53,6 +53,7 @@ struct HistoryView: View {
                 .font(.custom("BaiJamjuree-SemiBold", size: 17))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
             Spacer()
+            Text("         ")
         }
         .padding(.top, 20)
     }
@@ -103,7 +104,7 @@ struct Section: View {
                         .font(.custom("BaiJamjuree-Medium", size: 12))
                         .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                         .opacity(0.5)
-                    Text("\(trip.totalTime) min")
+                    Text(String(format: "%02d:%02d min", trip.totalTime / 3600, trip.totalTime / 60))
                         .font(.custom("BaiJamjuree-Bold", size: 14))
                         .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                     Spacer()
@@ -111,7 +112,7 @@ struct Section: View {
                         .font(.custom("BaiJamjuree-Medium", size: 12))
                         .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                         .opacity(0.5)
-                    Text("\(trip.distance) km")
+                    Text(String(format: "%.2f km", trip.distance / Double(1000)))
                         .font(.custom("BaiJamjuree-Bold", size: 14))
                         .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                 }
@@ -122,7 +123,7 @@ struct Section: View {
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.init(red: 0.129, green: 0.043, blue: 0.314))
         )
-        .frame(width: 327, height: 160)
+        .frame(width: 340, height: 160)
     }
     
     func lookUpCurrentLocation(trip: HistoryTrip, location: Coordinates, completionHandler: @escaping (CLPlacemark?)

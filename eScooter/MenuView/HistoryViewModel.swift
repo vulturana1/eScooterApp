@@ -44,4 +44,5 @@ class HistoryViewModel: ObservableObject {
         }
         self.loading = false
     }
+    
 }

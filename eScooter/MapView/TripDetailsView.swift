@@ -25,35 +25,49 @@ struct TripDetailsView: View {
                 extendedView
                     .transition(.slide)
                     .gesture(
-                        DragGesture()
-                            .onChanged { value in
-                                if value.location.y > offset {
-                                    offset = value.location.y
-                                }
-                            }
-                            .onEnded { value in
-                                offset = geometry.size.height - 310
-                            }
+                        maximizeCardGesture(contentHight: geometry.size.height)
                     )
                     .offset(y: offset)
             }
             else {
                 cardContent
                     .transition(.slide)
-                    .gesture(DragGesture()
-                        .onChanged { value in
-                            offset = value.location.y
-                        }
-                        .onEnded { value in
-                            if value.location.y > offset {
-                                offset = geometry.size.height - 310
-                            } else {
-                                offset = 0
-                            }
-                        }
+                    .gesture(
+                        minimizeCardGesture(contentHight: geometry.size.height)
                     )
             }
         }
+    }
+    
+    
+    func minimizeCardGesture(contentHight: CGFloat) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                offset = value.location.y
+            }
+            .onEnded { value in
+                if value.location.y > offset {
+                    withAnimation(.default) {
+                        offset =  contentHight - 310
+                    }
+                } else {
+                    offset = 0
+                }
+            }
+    }
+    
+    func maximizeCardGesture(contentHight: CGFloat) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                if value.location.y > offset {
+                    //withAnimation(.spring()) {
+                        offset = value.location.y
+                    //}
+                }
+            }
+            .onEnded { value in
+                    offset = contentHight - 310
+            }
     }
     
     var cardContent: some View {
@@ -197,7 +211,7 @@ struct TripDetailsView: View {
                     .opacity(0.7)
             }
             HStack {
-                Text(String(format: "%.1f", viewModel.trip.distance))
+                Text(String(format: "%.2f", viewModel.trip.distance / Double(1000)))
                     .font(.custom("BaiJamjuree-Bold", size: 30))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                 Text("  km")
@@ -212,10 +226,16 @@ struct TripDetailsView: View {
             Color.white
                 .ignoresSafeArea()
             VStack {
+                HStack {
+//                    Image("down")
+//                        .onTapGesture {
+//
+//                        }
                 Text("Trip Details")
                     .multilineTextAlignment(.center)
                     .font(.custom("BaiJamjuree-Bold", size: 16))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                }
                 extendedViewContent
                 HStack {
                     if lock {
@@ -231,7 +251,7 @@ struct TripDetailsView: View {
     }
     
     var time: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             HStack {
                 Image("time")
                 Text("Travel time")
@@ -255,13 +275,12 @@ struct TripDetailsView: View {
                     .opacity(0.7)
             }
             
-            Text(String(format: "%.1f", viewModel.trip.distance))
+            Text(String(format: "%.2f", viewModel.trip.distance / Double(1000)))
                 .font(.custom("BaiJamjuree-Bold", size: 44))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
             Text("  km")
                 .font(.custom("BaiJamjuree-Medium", size: 16))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-            
         }
     }
     
@@ -269,7 +288,7 @@ struct TripDetailsView: View {
         VStack {
             RoundedRectangle(cornerRadius: 29)
                 .stroke(Color.black.opacity(0.5), lineWidth: 1)
-                .overlay(BatteryView(batteryLevel: viewModel.scooter.battery))
+                .overlay(BatteryViewExtended(batteryLevel: viewModel.scooter.battery))
                 .padding()
             
             RoundedRectangle(cornerRadius: 29)

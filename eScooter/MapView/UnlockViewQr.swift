@@ -16,7 +16,11 @@ struct UnlockViewQr: View {
     
     var body: some View {
         ZStack {
-            BackgroundView()
+            CodeScannerView(codeTypes: [.qr]) { _ in
+                
+            }
+            .edgesIgnoringSafeArea(.all)
+            
             VStack {
                 CloseButtonTopBar(title: "Unlock scooter", color: .white) {
                     onClose()
@@ -27,10 +31,6 @@ struct UnlockViewQr: View {
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .padding()
-//                QrCodeScannerView()
-//                .found(r: self.viewModel.onFoundQrCode)
-//                .torchLight(isOn: self.viewModel.torchIsOn)
-//                .interval(delay: self.viewModel.scanInterval)
                 Text("You can find it on the scooter's front panel")
                     .font(.custom("BaiJamjuree-Medium", size: 16))
                     .foregroundColor(.white)

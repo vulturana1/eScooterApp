@@ -17,15 +17,13 @@ struct TripSummaryView: View {
     let paymentHandler = PaymentHandler()
     let onNext: () -> Void
     @State var showAlert = false
-    
     let trip: Trip
-    //@ObservedObject var viewModel: TripDetailsViewModel
     
     var body: some View {
         ZStack {
             Color.white
                 .ignoresSafeArea()
-            VStack {
+            VStack(spacing: 20) {
                 Text("Trip Details")
                     .multilineTextAlignment(.center)
                     .font(.custom("BaiJamjuree-Bold", size: 16))
@@ -93,10 +91,7 @@ struct TripSummaryView: View {
                     .opacity(0.7)
             }
             HStack {
-                Text("\(trip.distance)")
-                    .font(.custom("BaiJamjuree-Bold", size: 16))
-                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-                Text("  km")
+                Text(String(format: "%.2f km", trip.distance / Double(1000)))
                     .font(.custom("BaiJamjuree-Bold", size: 16))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
             }
@@ -107,20 +102,21 @@ struct TripSummaryView: View {
     
     var applePayButton: some View {
         Button {
+            showSuccess(message: "Payment succesful of \(trip.cost)")
             onNext()
-//            self.paymentHandler.startPayment(price: "\(trip.cost)") { success in
-//                if success {
-//
-//                    showSuccess(message: "You can find your recipt in your mail")
-//                    onNext()
-//
-//                } else {
-////                    showError(error: Error( "We couln't process your payment"))
-//                    print("Eroare plata")
-//                    showAlert = true
-//                    //onNext()
-//                }
-//            }
+            //            self.paymentHandler.startPayment(price: "\(trip.cost)") { success in
+            //                if success {
+            //
+            //                    showSuccess(message: "You can find your recipt in your mail")
+            //                    onNext()
+            //
+            //                } else {
+            ////                    showError(error: Error( "We couln't process your payment"))
+            //                    print("Eroare plata")
+            //                    showAlert = true
+            //                    //onNext()
+            //                }
+            //            }
         } label: {
             HStack {
                 Text("Pay with Pay")
@@ -135,7 +131,6 @@ struct TripSummaryView: View {
             .background(Color.black)
             .cornerRadius(20)
         }
-        
         .padding()
     }
 }
@@ -182,9 +177,10 @@ struct SectionFromTo: View {
             RoundedRectangle(cornerRadius: 15)
                 .stroke(Color.init(red: 0.129, green: 0.043, blue: 0.314))
         )
-        .frame(width: 327, height: 175)
+        .frame(width: 340, height: 175)
     }
     
+    // TODO: move func in viewModel
     func lookUpCurrentLocation(trip: Trip, location: Coordinates, completionHandler: @escaping (CLPlacemark?)
                                -> Void) {
         let geocoder = CLGeocoder()

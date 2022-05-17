@@ -177,7 +177,7 @@ struct API {
         }
     }
     
-    static func getScooterById(scooterId: String, _ callback: @escaping (Result<Scooter>) -> Void) {
+    static func getScooterById(scooterId: Int, _ callback: @escaping (Result<Scooter>) -> Void) {
         guard let token = Session.shared.authToken else { return }
         let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
         let params = ["id": scooterId]
@@ -208,8 +208,8 @@ struct API {
             return
         }
         let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
-        let params: [String: Any] = ["scooterInternalId": scooterInternalId, "coordX": coordX, "coordY": coordY]
-        AF.request("\(URLString)/scooter/ping", method: .post, parameters: params, headers: header).response { response in
+        let params: [String: Any] = ["internalId": scooterInternalId, "coordX": coordX, "coordY": coordY]
+        AF.request("\(URLString)/scooter/ping", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
             debugPrint(response)
             let result: Result<Message> = handleResponse(response: response)
             callback(result)

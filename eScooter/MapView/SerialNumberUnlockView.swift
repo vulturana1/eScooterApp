@@ -72,7 +72,6 @@ struct UnlockViewSerialNumber: View {
             //hide keyboard
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
-            
     }
     
     var textFields: some View {

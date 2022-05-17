@@ -62,14 +62,14 @@ class TripDetailsViewModel: ObservableObject {
     }
     
     func getOngoingTrip() {
-        //sa nu se mai apeleze dupa end ride
+        // TODO: sa nu se mai apeleze dupa end ride
+        print("ONGOING TRIP")
         API.getOngoingTrip(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success(let ongoingTrip):
                 self.trip = ongoingTrip
                 break
-            case .failure(let error):
-                //showError(error: error)
+            case .failure(_):
                 break
             }
         }
