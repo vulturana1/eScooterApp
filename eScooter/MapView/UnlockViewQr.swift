@@ -10,14 +10,35 @@ import CodeScanner
 
 struct UnlockViewQr: View {
     
+    @ObservedObject var viewModel: SerialNumberViewModel
     let onClose: () -> Void
     let onSerial: () -> Void
     let onNfc: () -> Void
+    let onStartRide: () -> Void
+    
+    init(viewModel: SerialNumberViewModel, onClose: @escaping () -> Void, onSerial: @escaping () -> Void, onNfc: @escaping () -> Void, onStartRide: @escaping () -> Void) {
+        self.viewModel = viewModel
+        self.onClose = onClose
+        self.onSerial = onSerial
+        self.onNfc = onNfc
+        self.onStartRide = onStartRide
+    }
     
     var body: some View {
         ZStack {
-            CodeScannerView(codeTypes: [.qr]) { _ in
-                
+            CodeScannerView(codeTypes: [.qr]) { result in
+                print(result)
+                switch result {
+                case .success(let code):
+                    viewModel.unlockScooterQrCode(qrCode: code.string) { scooter in
+                        onStartRide()
+                    } _: { error in
+                        showError(error: error)
+                    }
+                case .failure:
+                    break
+                }
+               
             }
             .edgesIgnoringSafeArea(.all)
             
@@ -37,6 +58,11 @@ struct UnlockViewQr: View {
                     .multilineTextAlignment(.center)
                     .opacity(0.7)
                     .padding()
+                Spacer()
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(Color.white,lineWidth: 2)
+                    .padding()
+                    .frame(height: 327)
                 Spacer()
                 Text("Alternately you can unlock using")
                     .font(.custom("BaiJamjuree-Medium", size: 16))
@@ -63,8 +89,8 @@ struct UnlockViewQr: View {
     }
 }
 
-struct UnlockViewQr_Previews: PreviewProvider {
-    static var previews: some View {
-        UnlockViewQr(onClose: {}, onSerial: {}, onNfc: {})
-    }
-}
+//struct UnlockViewQr_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UnlockViewQr(onClose: {}, onSerial: {}, onNfc: {})
+//    }
+//}

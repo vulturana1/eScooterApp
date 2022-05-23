@@ -12,9 +12,11 @@ class TripDetailsViewModel: ObservableObject {
     
     let scooter: Scooter
     let location: [Double]
-    @Published var trip: Ongoing
+    @Published var trip: Trip
+    @Published var time = 0
+    var ended = false
     
-    init(scooter: Scooter, trip: Ongoing, location: [Double]) {
+    init(scooter: Scooter, trip: Trip, location: [Double]) {
         self.scooter = scooter
         self.trip = trip
         self.location = location
@@ -22,6 +24,7 @@ class TripDetailsViewModel: ObservableObject {
     }
     
     func endRide(_ callback: @escaping (Result<TripResponse>) -> Void) {
+        self.ended = true
         API.endRide(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success(let response):
@@ -62,14 +65,25 @@ class TripDetailsViewModel: ObservableObject {
     }
     
     func getOngoingTrip() {
-        // TODO: sa nu se mai apeleze dupa end ride
-        print("ONGOING TRIP")
-        API.getOngoingTrip(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
-            switch result {
-            case .success(let ongoingTrip):
-                self.trip = ongoingTrip
-                break
-            case .failure(_):
+//        API.getOngoingTrip(internalId: scooter.internalId) { result in
+//            switch result {
+//            case .success(let ongoingTrip):
+//                self.trip = ongoingTrip
+//                self.ended = false
+//                break
+//            case .failure(_):
+//                self.ended = true
+//                break
+//            }
+//        }
+        
+        API.getCurrentTrip { response in
+            switch response {
+            case .success(let trip):
+                self.trip = trip.trip
+                self.ended = false
+            case .failure:
+                self.ended = true
                 break
             }
         }
@@ -78,7 +92,9 @@ class TripDetailsViewModel: ObservableObject {
     func loadData() {
         self.getOngoingTrip()
         DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
-            self.loadData()
+            if !self.ended {
+                self.loadData()
+            }
         }
     }
 }

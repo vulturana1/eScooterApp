@@ -76,11 +76,11 @@ struct API {
         }
     }
     
-    static func uploadPicture(image: Image, _ callback: @escaping (Result<Bool>) -> Void) {
-        guard let token = Session.shared.authToken else {
-            callback(.failure(APIError.init(message: "Invalid token")))
-            return
-        }
+    static func uploadPicture(token: String, image: Image, _ callback: @escaping (Result<Bool>) -> Void) {
+//        guard let token = Session.shared.authToken else {
+//            callback(.failure(APIError.init(message: "Invalid token")))
+//            return
+//        }
         let header: HTTPHeaders = ["Authorization": "Bearer " + token]
         let uiImage = image.asUIImage()
         let imgData = uiImage.jpegData(compressionQuality: 0.85)
@@ -135,6 +135,19 @@ struct API {
         }
     }
     
+    static func getCurrentTrip(_ callback: @escaping (Result<OngoingResponse>) -> Void) {
+        guard let token = Session.shared.authToken else {
+            callback(.failure(APIError.init(message: "Invalid token")))
+            return
+        }
+        let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
+        AF.request("\(URLString)/scooter/trips/ongoing", method: .get, headers: header).response { response in
+            debugPrint(response)
+            let result: Result<OngoingResponse> = handleResponse(response: response)
+            callback(result)
+        }
+    }
+    
     static func getScooters(_ callback: @escaping (Result<[Scooter]>) -> Void) {
         guard let token = Session.shared.authToken else {
             callback(.failure(APIError.init(message: "Invalid token")))
@@ -180,8 +193,8 @@ struct API {
     static func getScooterById(scooterId: Int, _ callback: @escaping (Result<Scooter>) -> Void) {
         guard let token = Session.shared.authToken else { return }
         let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
-        let params = ["id": scooterId]
-        AF.request("\(URLString)/scooter/device", method: .get, parameters: params, headers: header).response { response in
+        let param = "\(scooterId)"
+        AF.request("\(URLString)/scooter/device?id=\(scooterId)", method: .get, headers: header).response { response in
             debugPrint(response)
             let result: Result<Scooter> = handleResponse(response: response)
             callback(result)
@@ -272,13 +285,13 @@ struct API {
         }
     }
     
-    static func getOngoingTrip(internalId: Int, coordX: Double, coordY: Double,_ callback: @escaping (Result<Ongoing>) -> Void) {
+    static func getOngoingTrip(internalId: Int,_ callback: @escaping (Result<Ongoing>) -> Void) {
         guard let token = Session.shared.authToken else {
             callback(.failure(APIError(message: "Not valid session")))
             return
         }
         let header: HTTPHeaders = ["Authorization": "Bearer " + token]
-        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY]
+        let params: [String: Any] = ["internalId": internalId]
         AF.request("\(URLString)/scooter/ongoing", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
             debugPrint(response)
             let result: Result<Ongoing> = handleResponse(response: response)

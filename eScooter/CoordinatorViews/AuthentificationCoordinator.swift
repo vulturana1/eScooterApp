@@ -23,8 +23,8 @@ struct AuthentificationCoordinator: View {
     func registration() {
         navigationViewModel.push(RegistrationView(onLogin: {
             login()
-        }, onDrivingLicenseVerification: {
-            drivingLicenseVerification()
+        }, onDrivingLicenseVerification: { authResult in
+            drivingLicenseVerification(authResult: authResult)
         }))
     }
     
@@ -35,24 +35,33 @@ struct AuthentificationCoordinator: View {
             forgotPassword()
         }, onMap: {
             onNext()
-        }, onDrivingLicenseVerification: {
-            drivingLicenseVerification()
+        }, onDrivingLicenseVerification: { authResult in
+            drivingLicenseVerification(authResult: authResult)
         }))
     }
     
-    func drivingLicenseVerification() {
+    func drivingLicenseVerification(authResult: Authentication) {
+        guard let token = Session.shared.authToken else {
+            return
+        }
+        Session.shared.invalidateSession()
+        
         navigationViewModel.push(DrivingLicenseView( onVerification: { image in
-            handleVerification(image: image)
+            handleVerification(token: token, image: image, authResult: authResult)
         }))
     }
     
-    func handleVerification(image: Image) {
+    func handleVerification(token: String, image: Image, authResult: Authentication) {
         navigationViewModel.push(DrivingLicensePendingVerification())
-        API.uploadPicture(image: image, { response in
+        
+        API.uploadPicture(token: token, image: image, { response in
             print(response)
             switch response {
             case .success:
                 print("Success")
+                
+                Session.shared.authToken = token  //verificare
+                
                 loadingImage()
                 break
             case .failure(let error):

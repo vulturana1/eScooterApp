@@ -13,7 +13,6 @@ class ScooterCardViewModel: ObservableObject {
     let scooter: Scooter
     let location: [Double]
     @Published var placemark: CLPlacemark?
-    @Published var disablePing = false
     
     var address: String? {
         guard let placemark = placemark else {
@@ -57,13 +56,15 @@ class ScooterCardViewModel: ObservableObject {
         return number * .pi / 180
     }
     
-    func startRide(_ callback: @escaping (Result<Ongoing>) -> Void) {
+    func startRide(_ callback: @escaping (Trip) -> Void) {
         API.startRide(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
-            case .success( _):
-                API.getOngoingTrip(internalId: self.scooter.internalId, coordX: self.location[0], coordY: self.location[1]) { result in
-                    callback(result)
-                }
+            case .success(let ride):
+                //print(ride)
+                callback(ride.trip)
+//                API.getOngoingTrip(internalId: self.scooter.internalId) { result in
+//                    callback(result)
+//                }
                 break
             case .failure(let error):
                 showError(error: error)
@@ -73,7 +74,7 @@ class ScooterCardViewModel: ObservableObject {
     }
     
     func computeAddressIfNeeded() {
-        print("compute address for scooter" + scooter.id)
+        //print("compute address for scooter" + scooter.id)
         if address != nil { return }
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(CLLocation(latitude: scooter.location.coordinates[1], longitude: scooter.location.coordinates[0]), completionHandler: { (places, error) in

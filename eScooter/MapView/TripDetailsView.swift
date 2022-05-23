@@ -12,6 +12,7 @@ struct TripDetailsView: View {
     @ObservedObject var viewModel: TripDetailsViewModel
     @State var offset = CGFloat(200.0)
     @State var lock = false
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     let onEndRide: (TripResponse) -> Void
     
     init(viewModel: TripDetailsViewModel, onEndRide: @escaping (TripResponse) -> Void) {
@@ -39,7 +40,6 @@ struct TripDetailsView: View {
         }
     }
     
-    
     func minimizeCardGesture(contentHight: CGFloat) -> some Gesture {
         DragGesture()
             .onChanged { value in
@@ -60,13 +60,11 @@ struct TripDetailsView: View {
         DragGesture()
             .onChanged { value in
                 if value.location.y > offset {
-                    //withAnimation(.spring()) {
-                        offset = value.location.y
-                    //}
+                    offset = value.location.y
                 }
             }
             .onEnded { value in
-                    offset = contentHight - 310
+                offset = contentHight - 310
             }
     }
     
@@ -121,7 +119,6 @@ struct TripDetailsView: View {
                     break
                 }
             }
-            //onEndRide()
         } label: {
             HStack {
                 Text("End ride")
@@ -191,9 +188,12 @@ struct TripDetailsView: View {
                     .opacity(0.7)
             }
             HStack {
-                Text(String(format: "%02d:%02d", viewModel.trip.time / 3600, viewModel.trip.time / 60))
+                Text(String(format: "%02d:%02d", viewModel.time / 3600, viewModel.time / 60))
                     .font(.custom("BaiJamjuree-Bold", size: 30))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                    .onReceive(timer) { _ in
+                        viewModel.time += 1
+                    }
                 Text("  min")
                     .font(.custom("BaiJamjuree-Bold", size: 20))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
@@ -227,14 +227,14 @@ struct TripDetailsView: View {
                 .ignoresSafeArea()
             VStack {
                 HStack {
-//                    Image("down")
-//                        .onTapGesture {
-//
-//                        }
-                Text("Trip Details")
-                    .multilineTextAlignment(.center)
-                    .font(.custom("BaiJamjuree-Bold", size: 16))
-                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                    //                    Image("down")
+                    //                        .onTapGesture {
+                    //
+                    //                        }
+                    Text("Trip Details")
+                        .multilineTextAlignment(.center)
+                        .font(.custom("BaiJamjuree-Bold", size: 16))
+                        .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                 }
                 extendedViewContent
                 HStack {
@@ -250,7 +250,7 @@ struct TripDetailsView: View {
         }
     }
     
-    var time: some View {
+    var timeView: some View {
         VStack(alignment: .center) {
             HStack {
                 Image("time")
@@ -259,9 +259,12 @@ struct TripDetailsView: View {
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                     .opacity(0.7)
             }
-            Text(String(format: "%02d:%02d:%02d", viewModel.trip.time / 3600, viewModel.trip.time / 60 % 60, viewModel.trip.time % 60))
+            Text(String(format: "%02d:%02d:%02d", viewModel.time / 3600, viewModel.time / 60 % 60, viewModel.time % 60))
                 .font(.custom("BaiJamjuree-Bold", size: 44))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                .onReceive(timer) { _ in
+                    viewModel.time += 1
+                }
         }
     }
     
@@ -293,7 +296,7 @@ struct TripDetailsView: View {
             
             RoundedRectangle(cornerRadius: 29)
                 .stroke(Color.black.opacity(0.5), lineWidth: 1)
-                .overlay(time)
+                .overlay(timeView)
                 .padding()
             
             RoundedRectangle(cornerRadius: 29)

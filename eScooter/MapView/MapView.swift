@@ -13,7 +13,7 @@ struct MapView: View {
     
     @StateObject var mapViewModel: MapViewModel = MapViewModel(locationManager: LocationManager())
     
-    let scooters = [Scooter(id: "knsok1o3k2nrokv", number: 5, battery: 50, locked: false, booked: false, internalId: 1222, location: Location(type: "Point", coordinates: [23.6236, 46.7712]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE", unlockCode: 1234)]
+    let scooters = [Scooter(id: "1234", number: 5, battery: 50, locked: false, booked: false, internalId: 1222, location: Location(type: "Point", coordinates: [23.6236, 46.7712]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE", unlockCode: 1234)]
     
     let onMenu: () -> Void
     let showScooter: (Scooter) -> Void

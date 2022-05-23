@@ -62,7 +62,6 @@ struct LocationTopBar: View {
                             print("Settings opened: \(success)")
                         })
                     }
-                
             }
         }
     }

@@ -23,7 +23,10 @@ struct ScooterCardView: View {
         VStack {
             Spacer()
             ZStack {
-                Image("scooter-background")
+                //Image("scooter-background")
+                RoundedRectangle(cornerRadius: 30)
+                    .foregroundColor(.white)
+                    .frame(width: 250, height: 315)
                 VStack {
                     HStack {
                         Image("scooter")
@@ -81,15 +84,14 @@ struct ScooterCardView: View {
                 .shadow(color: Color.black.opacity(0.20), radius: 13, x: 7, y: 7)
             Image("location")
                 .onTapGesture {
-                    let latitude = viewModel.scooter.location.coordinates[0]
-                    let longitude = viewModel.scooter.location.coordinates[1]
+                    let latitude = viewModel.scooter.location.coordinates[1]
+                    let longitude = viewModel.scooter.location.coordinates[0]
                     let url = URL(string: "comgooglemaps://?saddr=&daddr=\(latitude),\(longitude)&directionsmode=driving")
                     if UIApplication.shared.canOpenURL(url!) {
                         UIApplication.shared.open(url!, options: [:], completionHandler: nil)
                     }
                     else{
                         let urlBrowser = URL(string: "https://www.google.co.in/maps/dir/??saddr=&daddr=\(latitude),\(longitude)&directionsmode=driving")
-                        
                         UIApplication.shared.open(urlBrowser!, options: [:], completionHandler: nil)
                     }
                 }

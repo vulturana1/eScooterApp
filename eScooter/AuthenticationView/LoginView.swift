@@ -19,7 +19,7 @@ struct LoginView: View {
     let onGetStarted: () -> Void
     let onForgotPassword: () -> Void
     let onMap: () -> Void
-    let onDrivingLicenseVerification: () -> Void
+    let onDrivingLicenseVerification: (Authentication) -> Void
     
     var body: some View {
         ZStack {
@@ -78,8 +78,8 @@ struct LoginView: View {
                 onMap()
             } failure: {
                 waiting = false
-            } verification: {
-                onDrivingLicenseVerification()
+            } verification: { authResult in
+                onDrivingLicenseVerification(authResult)
             }
         } label: {
             if waiting {
@@ -95,7 +95,7 @@ struct LoginView: View {
                     Text("Login")
                         .font(.custom("BaiJamjuree-SemiBold", size: 16))
                         .foregroundColor(.white)
-                        .opacity(0.5)
+                        //.opacity(0.5)
                         .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
@@ -155,8 +155,8 @@ struct forgotYourPassword: View {
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView(onGetStarted: {}, onForgotPassword: {}, onMap: {}, onDrivingLicenseVerification: {})
-    }
-}
+//struct LoginView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        LoginView(onGetStarted: {}, onForgotPassword: {}, onMap: {}, onDrivingLicenseVerification: {})
+//    }
+//}

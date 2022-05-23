@@ -21,7 +21,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     private var geoCoder = CLGeocoder()
     
     override init() {
-        self.city = "Allow location"
+        self.city = "Cluj-Napoca"
         self.enabled = false
         super.init()
         self.manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -40,7 +40,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
         self.lastLocation = location
         self.getCityName(location: location)
         //print(self.lastLocation?.coordinate)
-        print(self.city)
+        //print(self.city)
     }
     
     func getCityName(location: CLLocation){
@@ -71,6 +71,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
             enabled = false
         case .denied:
             enabled = false
+            self.city = "Allow location"
             showError(error: APIError(message: "You have denied this app location permission. Go into settings to change it."))
         case .authorizedAlways, .authorizedWhenInUse:
             guard let location = manager.location else { return }

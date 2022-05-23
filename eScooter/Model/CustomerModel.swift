@@ -13,12 +13,14 @@ struct Customer: Codable {
     let username: String
     let drivingLicense: String
     let numberOfTrips: Int
+    let status: String
 
     enum CodingKeys: String, CodingKey {
         case email = "email"
         case username = "username"
         case drivingLicense = "drivingLicense"
         case numberOfTrips = "numberOfTrips"
+        case status = "status"
     }
 
 }

@@ -18,6 +18,13 @@ struct TripSummaryView: View {
     let onNext: () -> Void
     @State var showAlert = false
     let trip: Trip
+    @ObservedObject private var viewModel: TripSummaryViewModel
+    
+    init(onNext: @escaping () -> Void, trip: Trip) {
+        self.onNext = onNext
+        self.trip = trip
+        self.viewModel = TripSummaryViewModel(trip: self.trip, location: self.trip.coordinatesArray)
+    }
     
     var body: some View {
         ZStack {
@@ -35,7 +42,7 @@ struct TripSummaryView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 29))
                     .padding(.horizontal, 22)
                 
-                SectionFromTo(trip: trip)
+                sectionFromTo
                 
                 HStack {
                     detailsLeft
@@ -102,7 +109,7 @@ struct TripSummaryView: View {
     
     var applePayButton: some View {
         Button {
-            showSuccess(message: "Payment succesful of \(trip.cost)")
+            showSuccess(message: "Payment succesful of \(trip.cost) lei")
             onNext()
             //            self.paymentHandler.startPayment(price: "\(trip.cost)") { success in
             //                if success {
@@ -133,14 +140,8 @@ struct TripSummaryView: View {
         }
         .padding()
     }
-}
-
-struct SectionFromTo: View {
-    let trip: Trip
-    @State private var from: String?
-    @State private var to: String?
     
-    var body: some View {
+    var sectionFromTo: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 15)
                 .fill(.black.opacity(0.07))
@@ -149,12 +150,7 @@ struct SectionFromTo: View {
                     .font(.custom("BaiJamjuree-Medium", size: 12))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                     .opacity(0.5)
-                Text(from ?? "no place found")
-                    .onAppear {
-                        lookUpCurrentLocation(trip: trip, location: trip.coordinatesArray[0]) { value in
-                            from = value?.thoroughfare
-                        }
-                    }
+                Text(viewModel.startAddress ?? "N/A")
                     .font(.custom("BaiJamjuree-Bold", size: 14))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                 Spacer()
@@ -162,12 +158,7 @@ struct SectionFromTo: View {
                     .font(.custom("BaiJamjuree-Medium", size: 12))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                     .opacity(0.5)
-                Text(to ?? "no place found")
-                    .onAppear {
-                        lookUpCurrentLocation(trip: trip, location: trip.coordinatesArray[trip.coordinatesArray.count - 1]) { value in
-                            to = value?.thoroughfare
-                        }
-                    }
+                Text(viewModel.endAddress ?? "N/A")
                     .font(.custom("BaiJamjuree-Bold", size: 14))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
             }
@@ -179,23 +170,68 @@ struct SectionFromTo: View {
         )
         .frame(width: 340, height: 175)
     }
-    
-    // TODO: move func in viewModel
-    func lookUpCurrentLocation(trip: Trip, location: Coordinates, completionHandler: @escaping (CLPlacemark?)
-                               -> Void) {
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(CLLocation(latitude: location.latitude, longitude: location.longitude),
-                                        completionHandler: { (placemarks, error) in
-            if error == nil {
-                let firstLocation = placemarks?[0]
-                completionHandler(firstLocation)
-            }
-            else {
-                completionHandler(nil)
-            }
-        })
-    }
 }
+
+//struct SectionFromTo: View {
+//    let trip: Trip
+//    @State private var from: String?
+//    @State private var to: String?
+//    
+//    var body: some View {
+//        ZStack {
+//            RoundedRectangle(cornerRadius: 15)
+//                .fill(.black.opacity(0.07))
+//            VStack(alignment: .leading, spacing: 5) {
+//                Text("From")
+//                    .font(.custom("BaiJamjuree-Medium", size: 12))
+//                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+//                    .opacity(0.5)
+//                Text(from ?? "N/A")
+//                    .onAppear {
+//                        lookUpCurrentLocation(trip: trip, location: trip.coordinatesArray[0]) { value in
+//                            from = value?.thoroughfare
+//                        }
+//                    }
+//                    .font(.custom("BaiJamjuree-Bold", size: 14))
+//                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+//                Spacer()
+//                Text("To")
+//                    .font(.custom("BaiJamjuree-Medium", size: 12))
+//                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+//                    .opacity(0.5)
+//                Text(to ?? "N/A")
+//                    .onAppear {
+//                        lookUpCurrentLocation(trip: trip, location: trip.coordinatesArray[trip.coordinatesArray.count - 1]) { value in
+//                            to = value?.thoroughfare
+//                        }
+//                    }
+//                    .font(.custom("BaiJamjuree-Bold", size: 14))
+//                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+//            }
+//            .padding(20)
+//        }
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 15)
+//                .stroke(Color.init(red: 0.129, green: 0.043, blue: 0.314))
+//        )
+//        .frame(width: 340, height: 175)
+//    }
+//    
+//    func lookUpCurrentLocation(trip: Trip, location: Coordinates, completionHandler: @escaping (CLPlacemark?)
+//                               -> Void) {
+//        let geocoder = CLGeocoder()
+//        geocoder.reverseGeocodeLocation(CLLocation(latitude: location.latitude, longitude: location.longitude),
+//                                        completionHandler: { (placemarks, error) in
+//            if error == nil {
+//                let firstLocation = placemarks?[0]
+//                completionHandler(firstLocation)
+//            }
+//            else {
+//                completionHandler(nil)
+//            }
+//        })
+//    }
+//}
 
 //struct TripSummaryView_Previews: PreviewProvider {
 //    static var previews: some View {

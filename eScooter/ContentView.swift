@@ -10,9 +10,9 @@ import NavigationStack
 
 struct ContentView: View {
     var navigationViewModel: NavigationStack = NavigationStack(easing: Animation.linear)
-    
+
     var body: some View {
-        if Session.shared.isValidSession{
+        if Session.shared.isValidSession {
             handleMap()
                 .onAppear {
                     print(Session.shared.authToken ?? "No token")
@@ -33,7 +33,7 @@ struct ContentView: View {
         })
     }
     
-    func handleMap() -> some View{
+    func handleMap() -> some View {
         NavigationStackView(transitionType: .default, navigationStack: navigationViewModel) {
             handleAuthentification()
         }

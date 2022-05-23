@@ -55,14 +55,14 @@ class RegisterViewModel: ObservableObject {
         }
     }
     
-    func register(callbackSuccess: @escaping () -> Void, callbackFailure: @escaping () -> Void) {
+    func register(callbackSuccess: @escaping (Authentication) -> Void, callbackFailure: @escaping () -> Void) {
         if validateUser(email: email, password: password) == true {
             waiting = true
             API.register(email: self.email, username: self.username, password: self.password) { (result) in
                 switch result {
                 case .success(let authResult):
                     Session.shared.authToken = authResult.token
-                    callbackSuccess()
+                    callbackSuccess(authResult)
                 case .failure(let error):
                     showError(error: error)
                     callbackFailure()

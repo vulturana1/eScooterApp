@@ -9,7 +9,8 @@ import SwiftUI
 import SafariServices
 
 struct RegistrationView: View {
-    @ObservedObject var registerViewModel = RegisterViewModel()
+    
+    @StateObject var registerViewModel = RegisterViewModel()
     @State var error: String = ""
     @State private var showError: Bool = false
     @State var waiting = false
@@ -20,7 +21,7 @@ struct RegistrationView: View {
     @FocusState private var focusedField: Field?
     
     let onLogin: () -> Void
-    let onDrivingLicenseVerification: () -> Void
+    let onDrivingLicenseVerification: (Authentication) -> Void
     
     var body: some View {
         ZStack {
@@ -84,9 +85,8 @@ struct RegistrationView: View {
                     showError = true
                 } else {
                     waiting = true
-                    registerViewModel.register(callbackSuccess: {
-                        onDrivingLicenseVerification()
-                        
+                    registerViewModel.register(callbackSuccess: { authResult in
+                        onDrivingLicenseVerification(authResult)
                     }
                                                , callbackFailure: {
                         waiting = false
@@ -106,7 +106,7 @@ struct RegistrationView: View {
                         Text("Get started")
                             .font(.custom("BaiJamjuree-SemiBold", size: 16))
                             .foregroundColor(.white)
-                            .opacity(0.6)
+                            //.opacity(0.6)
                             .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56, alignment: .center)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
