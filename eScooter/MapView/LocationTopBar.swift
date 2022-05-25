@@ -12,6 +12,7 @@ struct LocationTopBar: View {
     let enabled: Bool
     
     let onMenu: () -> Void
+    let onLocation: () -> Void
     
     var body: some View {
         ZStack {
@@ -49,6 +50,7 @@ struct LocationTopBar: View {
     var locationButton: some View {
         Button {
             //self.enabled.toggle()
+            onLocation()
         } label: {
             if enabled {
                 Image("gps")
@@ -66,9 +68,9 @@ struct LocationTopBar: View {
         }
     }
 }
-
-struct LocationTopBar_Previews: PreviewProvider {
-    static var previews: some View {
-        LocationTopBar(location: "Allow location", enabled: true, onMenu: {})
-    }
-}
+//
+//struct LocationTopBar_Previews: PreviewProvider {
+//    static var previews: some View {
+//        LocationTopBar(location: "Allow location", enabled: true, onMenu: {})
+//    }
+//}

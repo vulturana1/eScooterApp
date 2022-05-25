@@ -12,26 +12,47 @@ import MapKit
 
 class MapViewModel: ObservableObject {
     
-    @Published var locationManager: LocationManager
+    @Published var locationManager = LocationManager.shared
     @Published var city: String = ""
-    var disposeBag: [AnyCancellable] = []
     var currentLocation: CLLocationCoordinate2D?
+    var disposeBag: [AnyCancellable] = []
     var scooters: [Scooter] = []
+    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 46.7712, longitude: 23.6236),
+                                               latitudinalMeters: CLLocationDistance.init(400),
+                                               longitudinalMeters: CLLocationDistance.init(400))
+    var regionDebounce: AnyCancellable?
     
-    init(locationManager: LocationManager) {
-        self.locationManager = locationManager
+    init() {
+        regionDebounce = $region.debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
+            .sink(receiveValue: { region in
+                self.getCityName(location: CLLocation(latitude: region.center.latitude, longitude: region.center.longitude))
+            })
         
-        locationManager.objectWillChange.sink { [weak self] in
-            guard let self = self else {
-                return
-            }
-            self.currentLocation = self.locationManager.lastLocation?.coordinate
-            if let lastLocation = self.locationManager.lastLocation {
-                self.locationManager.getCityName(location: lastLocation)
-                self.city = self.locationManager.city
-            }
-        }.store(in: &disposeBag)
+        self.currentLocation = self.locationManager.lastLocation?.coordinate
         self.loadData()
+    }
+    
+    func centerRegion() {
+        if currentLocation == nil {
+            currentLocation = locationManager.lastLocation?.coordinate
+        }
+        guard let currentLocation = currentLocation else { return }
+        region.center = currentLocation
+    }
+    
+    func getCityName(location: CLLocation) {
+        if locationManager.enabled == false {
+            self.city = "Allow location"
+        } else {
+            let geoCoder = CLGeocoder()
+            geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
+                guard let placemark = placemarks?.last else { return }
+                if let cityName = placemark.locality {
+                    self.city = cityName
+                }
+            })
+            print(self.city)
+        }
     }
     
     func getScooters()  {
@@ -65,10 +86,9 @@ class MapViewModel: ObservableObject {
     
     func loadData() {
         self.getScooters()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             self.loadData()
         }
     }
-    
 }
 

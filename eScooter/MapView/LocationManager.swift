@@ -12,16 +12,19 @@ import Combine
 
 class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     
-    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 46.7712, longitude: 23.6236), latitudinalMeters: CLLocationDistance.init(4000), longitudinalMeters: CLLocationDistance.init(4000))
+    static let shared = LocationManager()
     
-    var manager = CLLocationManager()
-    @Published var city: String
+    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 46.7712, longitude: 23.6236),
+                                               latitudinalMeters: CLLocationDistance.init(4000),
+                                               longitudinalMeters: CLLocationDistance.init(4000))
+    @Published var debouncedRegion: MKCoordinateRegion?
     @Published var lastLocation: CLLocation?
     @Published var enabled: Bool
+    private var manager = CLLocationManager()
     private var geoCoder = CLGeocoder()
+    private var subscriptions = Set<AnyCancellable>()
     
-    override init() {
-        self.city = "Cluj-Napoca"
+    override private init() {
         self.enabled = false
         super.init()
         self.manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -30,26 +33,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
         self.manager.startUpdatingLocation()
         self.manager.delegate = self
         self.checkLocationAuthotization()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.setCurrentLocation()
-        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         self.lastLocation = location
-        self.getCityName(location: location)
-        //print(self.lastLocation?.coordinate)
-        //print(self.city)
     }
     
-    func getCityName(location: CLLocation){
-        geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
-            guard let placemark = placemarks?.last else { return }
-            if let cityName = placemark.locality {
-                self.city = cityName
-            }
-        })
+    func setCurrentLocation() {
+        if let location = self.lastLocation {
+            self.region = MKCoordinateRegion(center: location.coordinate , latitudinalMeters: 400, longitudinalMeters: 400)
+        }
+        print(self.region)
     }
     
     func checkIfLocationServicesIsEnabled(){
@@ -71,11 +66,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
             enabled = false
         case .denied:
             enabled = false
-            self.city = "Allow location"
             showError(error: APIError(message: "You have denied this app location permission. Go into settings to change it."))
         case .authorizedAlways, .authorizedWhenInUse:
-            guard let location = manager.location else { return }
-            getCityName(location: location)
             enabled = true
         @unknown default:
             break
@@ -85,12 +77,5 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationAuthotization()
     }
-    
-    func setCurrentLocation() {
-        if let location = self.lastLocation {
-            self.region = MKCoordinateRegion(center: location.coordinate , latitudinalMeters: 400, longitudinalMeters: 400)
-        }
-    }
-    
     
 }

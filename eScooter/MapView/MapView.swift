@@ -11,7 +11,7 @@ import Combine
 
 struct MapView: View {
     
-    @StateObject var mapViewModel: MapViewModel = MapViewModel(locationManager: LocationManager())
+    @StateObject var mapViewModel: MapViewModel = MapViewModel()
     
     let scooters = [Scooter(id: "1234", number: 5, battery: 50, locked: false, booked: false, internalId: 1222, location: Location(type: "Point", coordinates: [23.6236, 46.7712]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE", unlockCode: 1234)]
     
@@ -21,7 +21,7 @@ struct MapView: View {
     
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $mapViewModel.locationManager.region, interactionModes: .all, showsUserLocation: true, annotationItems: mapViewModel.scooters) { scooter in
+            Map(coordinateRegion: $mapViewModel.region, interactionModes: .all, showsUserLocation: true, annotationItems: mapViewModel.scooters) { scooter in
                 MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: scooter.location.coordinates[1], longitude: scooter.location.coordinates[0])) {
                     Image("pin-map")
                         .onTapGesture {
@@ -33,10 +33,15 @@ struct MapView: View {
             .ignoresSafeArea()
             .onAppear {
                 mapViewModel.locationManager.checkIfLocationServicesIsEnabled()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    mapViewModel.centerRegion()
+                }
             }
             VStack {
                 LocationTopBar(location: self.mapViewModel.city, enabled: self.mapViewModel.locationManager.enabled) {
                     onMenu()
+                } onLocation: {
+                    mapViewModel.centerRegion()
                 }
                 Spacer()
             }

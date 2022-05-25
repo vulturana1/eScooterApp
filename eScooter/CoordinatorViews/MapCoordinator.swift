@@ -11,13 +11,7 @@ import NavigationStack
 struct MapCoordinator: View {
     let navigationViewModel: NavigationStack
     let onMenu: () -> Void
-    
-    //    @State var detailShow = false
-    //    @State var unlockShow = false
-    //    @State var startRideShow = false
-    //    @State var tripDetailsShow = false
-    
-    
+
     @StateObject var viewModel = MapCoordinatorViewModel()
     
     var body: some View {

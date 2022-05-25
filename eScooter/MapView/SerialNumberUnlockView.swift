@@ -15,6 +15,7 @@ struct UnlockViewSerialNumber: View {
     let onQr: () -> Void
     let onNFC: () -> Void
     let onStartRide: () -> Void
+    @State var waiting = false
     
     init(viewModel: SerialNumberViewModel, onClose: @escaping () -> Void, onQr: @escaping () -> Void, onNFC: @escaping () -> Void, onStartRide: @escaping () -> Void) {
         self.viewModel = viewModel
@@ -67,9 +68,18 @@ struct UnlockViewSerialNumber: View {
             }
             .padding(.top, 30)
             .padding()
+            if waiting {
+                Rectangle()
+                    .foregroundColor(.black)
+                    .opacity(0.4)
+                    .ignoresSafeArea()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .scaleEffect(3)
+            }
         }
         .onTapGesture {
-            //hide keyboard
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
     }
@@ -82,13 +92,16 @@ struct UnlockViewSerialNumber: View {
             TextFieldNumber(number: $viewModel.forth, isFirstResponder: (!viewModel.first.isEmpty && !viewModel.second.isEmpty && !viewModel.third.isEmpty && viewModel.forth.isEmpty))
                 .onChange(of: viewModel.forth, perform: { _ in
                     if !(viewModel.first.isEmpty && viewModel.second.isEmpty && viewModel.third.isEmpty && viewModel.forth.isEmpty) {
+                        waiting = true
                         viewModel.unlockScooterSerialNumber({ scooter in
+                            waiting = false
                             onStartRide()
                         }, { error in
                             viewModel.first = ""
                             viewModel.second = ""
                             viewModel.third = ""
                             viewModel.forth = ""
+                            waiting = false
                             showError(error: error)
                         })
                     }

@@ -15,6 +15,7 @@ struct ScooterUnlockView: View {
     let onVerifyNfc: () -> Void
     let onVerifyQr: () -> Void
     @State var offset = CGFloat(200.0)
+    @State var waiting = false
     
     init(viewModel: ScooterCardViewModel, dragDown: @escaping () -> Void, onVerifySerialNumber: @escaping () -> Void, onVerifyNfc: @escaping () -> Void, onVerifyQr: @escaping () -> Void) {
         self.viewModel = viewModel
@@ -115,10 +116,21 @@ struct ScooterUnlockView: View {
                     .frame(width: 36, height: 36)
                     .cornerRadius(12)
                     .shadow(color: Color.black.opacity(0.20), radius: 13, x: 7, y: 7)
-                Image("ring1")
-                    .onTapGesture {
-                        viewModel.pingScooter()
+                Button {
+                    waiting = true
+                    viewModel.pingScooter {
+                        
+                    } failure: {
+                        waiting = false
                     }
+                } label: {
+                    if waiting {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color.init(red: 0.898, green: 0.188, blue: 0.384)))
+                    } else {
+                       Image("ring1")
+                    }
+                }
             }
             Text("Ring")
                 .font(.custom("BaiJamjuree-Medium", size: 14))

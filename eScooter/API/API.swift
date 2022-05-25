@@ -155,7 +155,7 @@ struct API {
         }
         let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
         AF.request("\(URLString)/scooter", method: .get, headers: header).response { response in
-            debugPrint(response)
+            //debugPrint(response)
             let result: Result<[Scooter]> = handleResponse(response: response)
             callback(result)
         }
@@ -193,7 +193,6 @@ struct API {
     static func getScooterById(scooterId: Int, _ callback: @escaping (Result<Scooter>) -> Void) {
         guard let token = Session.shared.authToken else { return }
         let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
-        let param = "\(scooterId)"
         AF.request("\(URLString)/scooter/device?id=\(scooterId)", method: .get, headers: header).response { response in
             debugPrint(response)
             let result: Result<Scooter> = handleResponse(response: response)
@@ -229,13 +228,13 @@ struct API {
         }
     }
     
-    static func unlockScooterSerialNumber(internalId: Int, coordX: Double, coordY: Double, unlockCode: Int, callback: @escaping (Result<UnlockResponse>) -> Void) {
+    static func unlockScooterSerialNumber(internalId: Int, coordX: Double, coordY: Double, unlockCode: Int, qrCode: Bool, callback: @escaping (Result<UnlockResponse>) -> Void) {
         guard let token = Session.shared.authToken else {
             callback(.failure(APIError.init(message: "Invalid token")))
             return
         }
         let header: HTTPHeaders = ["Authorization" : "Bearer " + token]
-        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY, "unlockCode": unlockCode]
+        let params: [String: Any] = ["internalId": internalId, "coordX": coordX, "coordY": coordY, "unlockCode": unlockCode, "qrCode": qrCode]
         AF.request("\(URLString)/scooter/unlock", method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).response { response in
             debugPrint(response)
             let result: Result<UnlockResponse> = handleResponse(response: response)

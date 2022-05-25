@@ -13,6 +13,7 @@ struct ScooterCardView: View {
     
     @ObservedObject var viewModel: ScooterCardViewModel
     let onUnlock: () -> Void
+    @State var waiting = false
     
     init(viewModel: ScooterCardViewModel, onUnlock: @escaping () -> Void) {
         self.viewModel = viewModel
@@ -23,7 +24,6 @@ struct ScooterCardView: View {
         VStack {
             Spacer()
             ZStack {
-                //Image("scooter-background")
                 RoundedRectangle(cornerRadius: 30)
                     .foregroundColor(.white)
                     .frame(width: 250, height: 315)
@@ -66,12 +66,21 @@ struct ScooterCardView: View {
                 .frame(width: 36, height: 36)
                 .cornerRadius(12)
                 .shadow(color: Color.black.opacity(0.20), radius: 13, x: 7, y: 7)
-            Image("ring1")
-                .onTapGesture {
-                    //if viewModel.checkDistance() <= 0.4 {
-                        viewModel.pingScooter()
-                    //}
+            Button {
+                waiting = true
+                viewModel.pingScooter {
+                    waiting = false
+                } failure: {
+                    waiting = false
                 }
+            } label: {
+                if waiting {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color.init(red: 0.898, green: 0.188, blue: 0.384)))
+                } else {
+                   Image("ring1")
+                }
+            }
         }
     }
     

@@ -28,14 +28,16 @@ class ScooterCardViewModel: ObservableObject {
         self.location = location
     }
     
-    func pingScooter() {
+    func pingScooter(success callbackSuccess: @escaping () -> Void, failure callbackFailure: @escaping () -> Void) {
         API.pingScooter(scooterInternalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success(let message):
                 showSuccess(message: message.message)
+                callbackSuccess()
                 break
             case .failure(let error):
                 showError(error: error)
+                callbackFailure()
                 break
             }
         }
@@ -60,11 +62,7 @@ class ScooterCardViewModel: ObservableObject {
         API.startRide(internalId: scooter.internalId, coordX: location[0], coordY: location[1]) { result in
             switch result {
             case .success(let ride):
-                //print(ride)
                 callback(ride.trip)
-//                API.getOngoingTrip(internalId: self.scooter.internalId) { result in
-//                    callback(result)
-//                }
                 break
             case .failure(let error):
                 showError(error: error)
@@ -74,14 +72,11 @@ class ScooterCardViewModel: ObservableObject {
     }
     
     func computeAddressIfNeeded() {
-        //print("compute address for scooter" + scooter.id)
         if address != nil { return }
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(CLLocation(latitude: scooter.location.coordinates[1], longitude: scooter.location.coordinates[0]), completionHandler: { (places, error) in
-            print("finished computed address")
             if error == nil {
                 self.placemark = places?[0]
-                print("succesfully retrieved placemark")
             }
             if let error = error {
                 print(error.localizedDescription)
