@@ -11,7 +11,7 @@ import NavigationStack
 struct MapCoordinator: View {
     let navigationViewModel: NavigationStack
     let onMenu: () -> Void
-
+    
     @StateObject var viewModel = MapCoordinatorViewModel()
     
     var body: some View {
@@ -24,10 +24,9 @@ struct MapCoordinator: View {
         .overlay(showUnlockTypes())
         .overlay(handleStartRide())
         .overlay(handleOngoingRide())
-        //                .onTapGesture {
-        //                    self.viewModel.detailShow = false
-        //                }
-        //
+//        .onTapGesture {
+//            self.viewModel.detailShow = false
+//        }
         .onAppear {
             viewModel.getCurrentTrip()
         }
@@ -39,6 +38,8 @@ struct MapCoordinator: View {
             if let currentScooter = viewModel.currentScooter {
                 ScooterCardView(viewModel: currentScooter) {
                     viewModel.unlockShow = true
+                    viewModel.detailShow = false
+                } onClose: {
                     viewModel.detailShow = false
                 }
             }

@@ -13,11 +13,13 @@ struct ScooterCardView: View {
     
     @ObservedObject var viewModel: ScooterCardViewModel
     let onUnlock: () -> Void
+    let onClose: () -> Void
     @State var waiting = false
     
-    init(viewModel: ScooterCardViewModel, onUnlock: @escaping () -> Void) {
+    init(viewModel: ScooterCardViewModel, onUnlock: @escaping () -> Void, onClose: @escaping () -> Void) {
         self.viewModel = viewModel
         self.onUnlock = onUnlock
+        self.onClose = onClose
     }
     
     var body: some View {
@@ -43,6 +45,13 @@ struct ScooterCardView: View {
     
     var details: some View {
         VStack(alignment: .trailing) {
+            Image("close-circle")
+                .renderingMode(.template)
+                .foregroundColor(.black)
+                .opacity(0.5)
+                .onTapGesture {
+                    onClose()
+                }
             Text("Scooter")
                 .font(.custom("BaiJamjuree-Medium", size: 14))
                 .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
@@ -144,8 +153,8 @@ struct ScooterCardView: View {
     }
 }
 
-//struct ScooterCardView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ScooterCardView(scooter: Scooter(id: "knsok1o3k2nrokv", number: 5, battery: 50, locked: false, booked: false, internalId: 1222, location: Location(type: "Point", coordinates: [23.5, 45.1]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE"), currentLocation: [], onRing: {}, onUnlock: {}, onLocation: {})
-//    }
-//}
+struct ScooterCardView_Previews: PreviewProvider {
+    static var previews: some View {
+        ScooterCardView(viewModel: ScooterCardViewModel(scooter: Scooter(id: "1234", number: 1, battery: 0, locked: false, booked: false, internalId: 0000, location: Location(type: "Point", coordinates: [23.5, 45.1]), lastSeen: "2022-04-26T06:24:07.550Z", status: "ACTIVE", unlockCode: 0000), location: [12.3, 12.5]), onUnlock: {}, onClose: {})
+    }
+}
