@@ -20,6 +20,7 @@ class TripDetailsViewModel: ObservableObject {
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "time")
+            objectWillChange.send()
         }
     }
     
@@ -29,7 +30,7 @@ class TripDetailsViewModel: ObservableObject {
         self.scooter = scooter
         self.trip = trip
         self.location = location
-        self.time = 0
+        
         self.loadData()
     }
     
@@ -46,6 +47,7 @@ class TripDetailsViewModel: ObservableObject {
             }
             callback(result)
         }
+        self.time = 0
     }
     
     func lockScooter() {
@@ -101,7 +103,7 @@ class TripDetailsViewModel: ObservableObject {
     
     func loadData() {
         self.getOngoingTrip()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 30) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
             if !self.ended {
                 self.loadData()
             }

@@ -23,16 +23,16 @@ struct HistoryView: View {
                     ForEach(viewModel.trips, id: \.id) { trip in
                         Section(trip: trip)
                     }
-                    if viewModel.trips.count > 10 {
-                        Button {
-                            viewModel.loadMore()
-                        } label: {
-                            Text("Load more")
-                                .font(.custom("BaiJamjuree-SemiBold", size: 16))
-                                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-                                .padding()
-                        }
+                    
+                    Button {
+                        viewModel.loadMore()
+                    } label: {
+                        Text("Load more")
+                            .font(.custom("BaiJamjuree-SemiBold", size: 16))
+                            .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                            .padding()
                     }
+                    
                 }
             }
             .padding()
@@ -104,6 +104,7 @@ struct Section: View {
                         .font(.custom("BaiJamjuree-Medium", size: 12))
                         .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
                         .opacity(0.5)
+                    
                     Text(String(format: "%02d:%02d min", trip.totalTime / 3600, trip.totalTime / 60))
                         .font(.custom("BaiJamjuree-Bold", size: 14))
                         .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))

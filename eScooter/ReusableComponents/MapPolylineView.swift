@@ -20,7 +20,7 @@ struct MapPolylineView: UIViewRepresentable {
         let polyline = MKPolyline(coordinates: locations, count: locations.count)
         print(locations)
     
-        mapView.setRegion(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 2200, longitudinalMeters: 2200), animated: false)
+        mapView.setRegion(MKCoordinateRegion(center: centerCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000), animated: false)
         mapView.delegate = context.coordinator
         mapView.addOverlay(polyline)
         

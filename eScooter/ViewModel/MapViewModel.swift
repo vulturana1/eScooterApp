@@ -37,7 +37,10 @@ class MapViewModel: ObservableObject {
             currentLocation = locationManager.lastLocation?.coordinate
         }
         guard let currentLocation = currentLocation else { return }
-        region.center = currentLocation
+        //region.center = currentLocation
+        region = MKCoordinateRegion(center: currentLocation,
+                                                   latitudinalMeters: CLLocationDistance.init(400),
+                                                   longitudinalMeters: CLLocationDistance.init(400))
     }
     
     func getCityName(location: CLLocation) {

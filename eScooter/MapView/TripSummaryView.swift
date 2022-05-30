@@ -76,10 +76,7 @@ struct TripSummaryView: View {
                     .opacity(0.7)
             }
             HStack {
-                Text(String(format: "%02d:%02d", trip.totalTime / 3600, trip.totalTime / 60))
-                    .font(.custom("BaiJamjuree-Bold", size: 16))
-                    .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-                Text("  min")
+                Text(String(format: "%02d:%02d min", trip.totalTime / 3600, trip.totalTime / 60))
                     .font(.custom("BaiJamjuree-Bold", size: 16))
                     .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
             }
@@ -109,7 +106,8 @@ struct TripSummaryView: View {
     
     var applePayButton: some View {
         Button {
-            showSuccess(message: "Payment succesful of \(trip.cost) lei")
+            let price = String(format: "%.2f ", trip.cost / Double(10000))
+            showSuccess(message: "Payment succesful of \(price) lei")
             onNext()
             //            self.paymentHandler.startPayment(price: "\(trip.cost)") { success in
             //                if success {
