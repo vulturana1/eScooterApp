@@ -24,9 +24,6 @@ struct MapCoordinator: View {
         .overlay(showUnlockTypes())
         .overlay(handleStartRide())
         .overlay(handleOngoingRide())
-//        .onTapGesture {
-//            self.viewModel.detailShow = false
-//        }
         .onAppear {
             viewModel.getCurrentTrip()
         }

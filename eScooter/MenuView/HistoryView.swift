@@ -27,12 +27,14 @@ struct HistoryView: View {
                     Button {
                         viewModel.loadMore()
                     } label: {
-                        Text("Load more")
-                            .font(.custom("BaiJamjuree-SemiBold", size: 16))
-                            .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
-                            .padding()
+                        let trips = viewModel.customer?.customer.numberOfTrips ?? 0
+                        if trips > 10 {
+                            Text("Load more")
+                                .font(.custom("BaiJamjuree-SemiBold", size: 16))
+                                .foregroundColor(.init(red: 0.129, green: 0.043, blue: 0.314))
+                                .padding()
+                        }
                     }
-                    
                 }
             }
             .padding()

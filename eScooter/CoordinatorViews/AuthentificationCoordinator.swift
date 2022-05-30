@@ -59,9 +59,7 @@ struct AuthentificationCoordinator: View {
             switch response {
             case .success:
                 print("Success")
-                
-                Session.shared.authToken = token  //verificare
-                
+                Session.shared.authToken = token
                 loadingImage()
                 break
             case .failure(let error):

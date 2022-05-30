@@ -9,6 +9,8 @@ import Foundation
 
 class HistoryViewModel: ObservableObject {
     
+    @Published var customer: CustomerData?
+    
     @Published var loading: Bool = false {
         didSet {
             if oldValue == false && loading == true {
@@ -22,6 +24,7 @@ class HistoryViewModel: ObservableObject {
     
     init() {
         getAllTrips()
+        getUser()
     }
     
     func loadMore() {
@@ -42,6 +45,19 @@ class HistoryViewModel: ObservableObject {
             }
         }
         self.loading = false
+    }
+    
+    func getUser() {
+        API.getCurrentCustomer({ result in
+            switch result {
+            case .success(let customer):
+                self.customer = customer
+                break
+            case .failure(let error):
+                showError(error: error)
+                break
+            }
+        })
     }
     
 }
